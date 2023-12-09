@@ -3,6 +3,7 @@ const app = express();
 const cors =require("cors")
 const connectDB=require("./db/conn")
 const userRoutes=require("./routes/userRoutes")
+const addressRoutes=require("./routes/addressRoutes")
 require('dotenv').config();
 
 const port = process.env.PORT || 8880;
@@ -16,6 +17,7 @@ app.get('/', function (req, res) {
 app.use(express.json());
 app.use(cors());
 app.use(userRoutes);
+app.use(addressRoutes);
 
 app.listen(port, function () {
   console.log(`Listening on port ${port}`);
