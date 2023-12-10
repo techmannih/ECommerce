@@ -1,6 +1,11 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 // schemas
-const addressSchema = new mongoose.Schema({
+const addressSchema = new mongoose.Schema(
+  {
+    addressId: {
+      required: true,
+      type: String,
+    },
     addressLine1: {
       required: true,
       type: String,
@@ -25,10 +30,10 @@ const addressSchema = new mongoose.Schema({
       type: String,
     },
   },
-  { timestamps: true }  
+  { timestamps: true }
 );
 
 // models
-const Address = mongoose.model('address', addressSchema)
+const Address = mongoose.model("address", addressSchema);
 
-module.exports = { Address }
+module.exports = { Address };
