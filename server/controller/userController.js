@@ -63,3 +63,20 @@ module.exports.login = async (req, res) => {
         res.status(500).send({"error" : errors})
     }
 }
+
+module.exports.deleteUserProfile = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const deletedUserProfile = await User.findOneAndDelete({email});
+        if (!deletedUserProfile) {
+            return res.status(404).json({  success: false,  error: "User profile not found",
+            });
+        }
+        res.status(200).json({   success: true,    message: "User profile deleted successfully",    data: deletedUserProfile,
+        });
+    } catch (error) {
+        console.error("Error deleting user profile:", error);
+        res.status(500).json({ success: false, error: "Internal Server Error",
+        });
+    }
+};
