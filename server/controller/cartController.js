@@ -2,24 +2,39 @@ const { Cart} =require("../models/cartmodel")
 
 module.exports.createCart = async (req, res) => {
     try {
-        const { cartId } = req.body;
-        const existingCart = await Cart.findOne({ cartId });
+        const { cartId, items, totalItems, totalPrice } = req.body;
+        // Check if cartId is provided in the request
+        if (!cartId) {
+            return res.status(400).json({  success: false,  error: "cartId is required in the request body",
+            });
+        }
+        const existingCart = await Cart.findOne({ çartId: cartId });
         if (existingCart) {
             return res.status(200).json({  success: true,  message: "Existing cart found",  data: existingCart,
             });
+        } else {
+            const newCart = await Cart.create({
+               çartId: cartId,
+                items: items || [], // You can provide default values or adjust as needed
+                totalItems: totalItems || 0, // Default to 0 if not provided
+                totalPrice: totalPrice || 0, // Default to 0 if not provided
+            });
+            const savedCart = await newCart.save();
+            res.status(200).json({   success: true,   message: "Cart created successfully",   data: savedCart,
+            });
         }
-        const newCart = new Cart({
-            cartId,
-        });
-        const savedCart = await newCart.save();
-        res.status(200).json({ success: true,  message: "Cart created successfully",data: savedCart,
-        });
     } catch (error) {
         console.error("Error creating or retrieving cart:", error);
-        res.status(500).json({success: false,error: "Internal Server Error",
+        // Check if the error is a validation error related to çartId
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({   success: false,   error: error.message,
+            });
+        }
+        res.status(500).json({  success: false,  error: "Internal Server Error",
         });
     }
 };
+
 
 module.exports.getAllCart = async (req, res) => {
     try {
@@ -38,51 +53,44 @@ module.exports.getAllCart = async (req, res) => {
 
 module.exports.removeItemInCart = async (req, res) => {
     try {
-        const { cartId, itemId } = req.body;
-        // Find the cart by its ID and update the items array using $pull
-        const updatedCart = await Cart.findOneAndUpdate(
-            cartId,
-            {
-                $pull: { items: { _id: mongoose.Types.ObjectId(itemId) } },
-            },
-            { new: true } // Return the updated document
-        );
-        if (!updatedCart) {
-            return res.status(404).json({   success: false,   error: "Cart not found",
-            });
-        }
-        // Recalculate totalItems and totalPrice based on the updated items array
-        updatedCart.totalItems = updatedCart.items.reduce((total, item) => total + item.quantity, 0);
-        updatedCart.totalPrice = updatedCart.items.reduce((total, item) => total + item.quantity * item.price, 0);
-        await updatedCart.save();       // Save the updated cart
-        res.status(200).json({ success: true, message: "Item removed from cart successfully", data: updatedCart,
-        });
-    } catch (error) {
-        console.error("Error removing item from cart:", error);
-        res.status(500).json({  success: false,  error: "Internal Server Error",
-        });
-    }
-};
-
-module.exports.clearCart = async (req, res) => {
-    try {
-        const { cartId } = req.body;
-        const cart = await Cart.findOneAndDelete({cartId});
+        const { cartId } = req.body.cartId;
+        const deletedcart = await Cart.findOneAndDelete({cartId});
         // Check if the cart exists
-        if (!cart) {
-            return res.status(404).json({  success: false,  error: "Cart not found",
-            });
+        if (deletedcart) {
+            res.status(200).send({ status: true, message: 'cart deleted successfully', chat: deletedcart });
+        } else {
+            res.status(404).send({ status: false, message: 'cart not found' });
         }
         // Clear the items array, totalItems, and totalPrice
-        cart.items = [];
-        cart.totalItems = 0;
-        cart.totalPrice = 0;
-        const updatedCart = await cart.save();      // Save the updated cart
-        res.status(200).json({  success: true, message: "Cart cleared successfully", data: updatedCart,
-        });
+        // cart.items = [];
+        // cart.totalItems = 0;
+        // cart.totalPrice = 0;
+        // const updatedCart = await cart.save();      // Save the updated cart
+        // res.status(200).json({  success: true, message: "Cart cleared successfully", data: updatedCart,
+        // });
     } catch (error) {
         console.error("Error clearing cart:", error);
         res.status(500).json({ success: false, error: "Internal Server Error",
         });
     }
 };
+module.exports.clearAllCart = async (req, res) => {
+    try {
+        // Delete all carts
+        const result = await Cart.deleteMany({});
+
+        res.status(200).json({
+            success: true,
+            message: "All Carts cleared successfully",
+            data: result, // You can customize the response data as needed
+        });
+    } catch (error) {
+        console.error("Error clearing carts:", error);
+        res.status(500).json({
+            success: false,
+            error: "Internal Server Error",
+        });
+    }
+};
+
+
