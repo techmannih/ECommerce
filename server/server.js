@@ -5,6 +5,7 @@ const connectDB=require("./db/conn")
 const userRoutes=require("./routes/userRoutes")
 const addressRoutes=require("./routes/addressRoutes")
 const cartRoutes=require("./routes/cartRoutes")
+const orderRoutes=require("./routes/orderRoutes")
 require('dotenv').config();
 
 const port = process.env.PORT || 8880;
@@ -20,6 +21,7 @@ app.use(cors());
 app.use(userRoutes);
 app.use(addressRoutes);
 app.use(cartRoutes);
+app.use(orderRoutes)
 
 app.listen(port, function () {
   console.log(`Listening on port ${port}`);
