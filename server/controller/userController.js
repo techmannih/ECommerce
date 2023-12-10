@@ -41,12 +41,12 @@ module.exports.signup = async (req, res) => {
     console.log("signing up")
     try {
         const user = await User.create({ fullName, email, password })
-        res.status(201).send({ "success": "signed up successfully"})
+        res.status(200).send({ "success": "signed up successfully"})
     }
     catch (err) {
         console.log("error signing up", err)
         const errors = handleErrors(err)
-        res.status(400).send({ "errors": errors })
+        res.status(500).send({ "errors": errors })
     }
 }
 
@@ -55,11 +55,11 @@ module.exports.login = async (req, res) => {
     console.log("logging in")
     try{
         const user = await User.login(email, password)
-        res.status(202).send({"success": getToken(user._id)})
+        res.status(200).send({"success": getToken(user._id)})
     }
     catch(err){
         console.log("error logging in : ", err)
         const errors = handleErrors(err)
-        res.status(401).send({"error" : errors})
+        res.status(500).send({"error" : errors})
     }
 }

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const Schema = require('mongoose').Schema
 // schemas
 const addressSchema = new mongoose.Schema({
     addressLine1: {

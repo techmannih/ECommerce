@@ -19,7 +19,7 @@ module.exports.createAddress = async (req, res) => {
             state,
         });
         const savedAddress = await newAddress.save();
-        res.status(201).json({ success: true, message: "Address created successfully", data: savedAddress,
+        res.status(200).json({ success: true, message: "Address created successfully", data: savedAddress,
         });
     } catch (error) {
         console.error("Error creating address:", error);
