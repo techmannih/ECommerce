@@ -3,6 +3,11 @@ const mongoose = require('mongoose')
 
 // schemas
 const cartSchema = new mongoose.Schema( {
+  çartId: {
+    required: true,
+    type: String,
+  },
+  
     items: {
       type: [
         {
