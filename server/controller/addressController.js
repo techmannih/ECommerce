@@ -72,7 +72,7 @@ module.exports.getAllAddress = async (req, res) => {
 module.exports.deleteAddress = async (req, res) => {
     try {
         const addressId = req.params.id;
-        const deletedAddress = await Address.findOneAndDelete({addressId});
+        const deletedAddress = await Address.findOneAndDelete(addressId);
         if (!deletedAddress) {
             return res.status(404).json({
                 success: false,
