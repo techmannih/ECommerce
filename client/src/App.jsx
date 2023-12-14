@@ -1,14 +1,16 @@
-
-
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./Pages/Home/Home";
 function App() {
-
   return (
     <>
-    <h1 className="text-3xl font-bold underline underline-offset-8 text-yellow-400">
-    Hello world!
-  </h1>
+      <BrowserRouter>
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+        </Routes>
+      </BrowserRouter>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
