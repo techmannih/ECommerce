@@ -1,67 +1,44 @@
-import React, { useEffect, useState } from "react";
-import Navbar from "../Navbar/Navbar.jsx";
+import React, { useEffect, useState } from 'react';
 
 export default function Home() {
-  const [container, setContainer] = useState(null);
-  const [endPoint, setEndPoint] = useState("");
-
-  const onChangeHandler = (e) => {
-    setEndPoint(e.target.value);
-  };
-
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
-    fetchData();
-  };
-
-  const fetchData = async () => {
-    const url = `https://real-time-amazon-data.p.rapidapi.com/search?query=${endPoint}&page=1&country=IN&sort_by=NEWEST&brand=SAMSUNG&product_condition=COLLECTIBLE`;
-    const options = {
-      method: "GET",
-      headers: {
-        "X-RapidAPI-Key": "2325209de5msh8583d7122f13e25p108b70jsnfa29cf256b28",
-        "X-RapidAPI-Host": "real-time-amazon-data.p.rapidapi.com",
-      },
-    };
-
-    try {
-      const response = await fetch(url, options);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setContainer(data);
-    } catch (error) {
-      console.error("Error fetching data:", error.message);
-    }
-  };
+  const [apiData, setApiData] = useState(null);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    const fetchData = async () => {
+      const url = `https://real-time-amazon-data.p.rapidapi.com/search?query=${process.env.REACT_APP_QUERIES}`;
+      const options = {
+        method: 'GET',
+        headers: {
+          'X-RapidAPI-Key': process.env.REACT_APP_RAPIDAPI_KEY,
+          'X-RapidAPI-Host': process.env.REACT_APP_RAPIDAPI_HOST,
+        },
+      };
+
+try {
+  const response = await fetch(url, options);
+
+  // Check if the response status is 429 (Too Many Requests)
+  if (response.status === 429) {
+    const retryAfter = parseInt(response.headers.get('Retry-After')) || 5; // Default to 5 seconds if no Retry-After header
+    console.log(`Rate limit exceeded. Retrying after ${retryAfter} seconds.`);
+    await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+    return fetchData(); // Retry the request
+  }
+
+  const result = await response.json();
+  console.log(result);
+} catch (error) {
+  console.error(error);
+}
+    };
+
+    fetchData(); // Call the fetchData function when the component mounts
+  }, []); // The empty dependency array ensures that this effect runs once when the component mounts
 
   return (
     <>
-      <Navbar />
-      <form onSubmit={onSubmitHandler}>
-        <input
-          type="text"
-          className="border p-2 rounded w-96 text-black"
-          placeholder="Search amazon.in"
-          value={endPoint}
-          onChange={onChangeHandler}
-        />
-        <button type="submit" className="bg-blue-500 px-4 py-2 rounded">
-          Search
-        </button>
-      </form>
-      {container &&
-        container.products &&
-        container.products.map((item) => (
-          <p key={item.product_id}>{item.product_title}</p>
-        ))}
+      {/* You can use the 'apiData' state in your component */}
+      <div>{apiData}</div>
     </>
   );
 }
