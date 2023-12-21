@@ -9,7 +9,7 @@ const connectDB =async () =>{
     
 
     } catch(err){
-        console.log(err.message);
+        console.log("error in connection db",err.message);
 
     }
 }
