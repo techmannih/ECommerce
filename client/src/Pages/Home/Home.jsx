@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import data from "../Data/data";
 import image from "../images/1sr.jpg";
+import Navbar from "../Navbar/navbar"
 export default function Home() {
   return (
     <div>
+<Navbar/>
       <div>
-        <div className="flex justify-center ">
+        <div className="flex justify-center  my-8">
           <div className="flex flex-wrap justify-center">
             {data.data.products.map((product, index) => (
               <div
