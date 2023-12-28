@@ -60,11 +60,28 @@ export default function App() {
       {apiData && (
   <div>
     <h2>Data from API</h2>
-    {apiData.data.products.map(product => (
-      <div key={product.asin}>
-        <p>{product.product_title}</p>
-        <img src={product.product_photo} alt={product.product_title} />
-        {/* Add more details as needed */}
+    {apiData.data.products.map((product, index) => (
+      <div
+        key={index}
+        className="p-5 border border-gray-300 w-72 flex flex-col items-center m-2"
+      >
+        <div className="flex justify-center">
+          <img src={product.product_photo} alt={product.product_title} className="w-32 h-32 object-cover" />
+        </div>
+        <p className="pt-2 font-bold text-gray-800 p-1 m-1">
+          {product.product_title}
+        </p>
+        <p className="p-1 m-1 text-gray-700">
+          Price: {product.product_price || "N/A"}
+        </p>
+        <div className="flex flex-col">
+          <button className="bg-yellow-400 m-1 p-2 rounded-2xl text-white">
+            Add to Cart
+          </button>
+          <button className="bg-orange-400 m-1 p-2 rounded-2xl text-white">
+            Buy Now
+          </button>
+        </div>
       </div>
     ))}
   </div>
