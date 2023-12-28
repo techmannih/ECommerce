@@ -9,12 +9,14 @@ export default function App() {
   const fetchData = async () => {
     setIsLoading(true);
 
-    const url = `https://real-time-amazon-data.p.rapidapi.com/search?query=${encodeURIComponent(searchQuery)}`;
+    const url = `https://real-time-amazon-data.p.rapidapi.com/search?query=${encodeURIComponent(
+      searchQuery
+    )}`;
     const options = {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'X-RapidAPI-Key': import.meta.env.VITE_APP_RAPIDAPI_KEY,
-        'X-RapidAPI-Host':import.meta.env.VITE_APP_RAPIDAPI_HOST,
+        "X-RapidAPI-Key": import.meta.env.VITE_APP_RAPIDAPI_KEY,
+        "X-RapidAPI-Host": import.meta.env.VITE_APP_RAPIDAPI_HOST,
       },
     };
 
@@ -23,9 +25,11 @@ export default function App() {
 
       // Check if the response status is 429 (Too Many Requests)
       if (response.status === 429) {
-        const retryAfter = parseInt(response.headers.get('Retry-After')) || 5; // Default to 5 seconds if no Retry-After header
-        console.log(`Rate limit exceeded. Retrying after ${retryAfter} seconds.`);
-        await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+        const retryAfter = parseInt(response.headers.get("Retry-After")) || 5; // Default to 5 seconds if no Retry-After header
+        console.log(
+          `Rate limit exceeded. Retrying after ${retryAfter} seconds.`
+        );
+        await new Promise((resolve) => setTimeout(resolve, retryAfter * 1000));
         return fetchData(); // Retry the request
       }
 
@@ -58,34 +62,41 @@ export default function App() {
       {isLoading && <p>Loading...</p>}
       {error && <p>Error: {error.message}</p>}
       {apiData && (
-  <div>
-    <h2>Data from API</h2>
-    {apiData.data.products.map((product, index) => (
-      <div
-        key={index}
-        className="p-5 border border-gray-300 w-72 flex flex-col items-center m-2"
-      >
-        <div className="flex justify-center">
-          <img src={product.product_photo} alt={product.product_title} className="w-32 h-32 object-cover" />
+        <div className="flex justify-center  my-8">
+          <div className="flex flex-wrap justify-center">
+            {apiData.data.products.map((product, index) => (
+              <div
+                key={index}
+                className="p-5 border border-gray-300 w-72 flex justify-center  flex-col  m-2"
+              >
+                <div className="flex justify-center">
+                  <img
+                    src={product.product_photo}
+                    alt={product.product_title}
+                    className="w-36 h-48 object-cover"
+                  />
+                </div>
+                <p className="pt-2 font-bold text-gray-800 p-1 m-1">
+                  {product.product_title}
+                </p>
+                <p className="p-1 m-1 text-gray-700">
+                  Price: {product.product_price || "N/A"}
+                </p>
+                <div className="flex flex-col">
+                 
+                    <button className="bg-yellow-400 m-1 p-2 rounded-2xl text-black">
+                      Add to Cart
+                    </button>
+                    <button className="bg-orange-400 m-1 p-2 rounded-2xl text-black">
+                      Buy Now
+                    </button>
+                  </div>
+                </div>
+              
+            ))}
+          </div>
         </div>
-        <p className="pt-2 font-bold text-gray-800 p-1 m-1">
-          {product.product_title}
-        </p>
-        <p className="p-1 m-1 text-gray-700">
-          Price: {product.product_price || "N/A"}
-        </p>
-        <div className="flex flex-col">
-          <button className="bg-yellow-400 m-1 p-2 rounded-2xl text-white">
-            Add to Cart
-          </button>
-          <button className="bg-orange-400 m-1 p-2 rounded-2xl text-white">
-            Buy Now
-          </button>
-        </div>
-      </div>
-    ))}
-  </div>
-)}
+      )}
     </div>
   );
 }
