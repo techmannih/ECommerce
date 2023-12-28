@@ -58,12 +58,17 @@ export default function App() {
       {isLoading && <p>Loading...</p>}
       {error && <p>Error: {error.message}</p>}
       {apiData && (
-        <div>
-          <h2>Data from API</h2>
-          {/* Display your data here */}
-          <pre>{JSON.stringify(apiData, null, 2)}</pre>
-        </div>
-      )}
+  <div>
+    <h2>Data from API</h2>
+    {apiData.data.products.map(product => (
+      <div key={product.asin}>
+        <p>{product.product_title}</p>
+        <img src={product.product_photo} alt={product.product_title} />
+        {/* Add more details as needed */}
+      </div>
+    ))}
+  </div>
+)}
     </div>
   );
 }
