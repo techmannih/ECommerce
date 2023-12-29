@@ -1,6 +1,12 @@
 import React from "react";
 import logo from "../images/amazonLogo.jpg";
-const Navbar = () => {
+import { useState } from "react";
+const Navbar = ({ searchQuery, setSearchQuery, onClick }) => {
+  const handleForm = (e) => {
+    e.preventDefault();
+    onClick(); // Call the provided onClick prop
+  };
+  // const [searchQuery, setSearchQuery] = useState("");
   return (
     <>
       <div className="  w-full">
@@ -28,7 +34,26 @@ const Navbar = () => {
             </button>
           </div>
           <div id="nav-search mx-2">
-            <SearchForm />
+            <form className="" name="site-search" role="search">
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  name="search"
+                  id="searchQuery"
+                  placeholder="Search Amazon.in"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="text-black p-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-500 w-96 "
+                />
+                <button
+                  onClick={handleForm}
+                  type="submit"
+                  className="bg-yellow-500 text-black font-semibold px-4 py-2 rounded-md hover:bg-yellow-600 focus:outline-none focus:bg-yellow-600"
+                >
+                  Search
+                </button>
+              </div>
+            </form>
           </div>
 
           <div className="language font-semibold mx-2">
@@ -50,28 +75,6 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-const SearchForm = () => {
-  return (
-    <form className="" name="site-search" role="search">
-      <div className="flex items-center">
-        <input
-          type="text"
-          name="search"
-          id="search"
-          placeholder="Search Amazon.in"
-          className="text-black p-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-500 w-96 "
-        />
-        <button
-          type="submit"
-          className="bg-yellow-500 text-black font-semibold px-4 py-2 rounded-md hover:bg-yellow-600 focus:outline-none focus:bg-yellow-600"
-        >
-          Search
-        </button>
-      </div>
-    </form>
-  );
-};
 
 const LanguageSelector = () => {
   const languageOptions = [

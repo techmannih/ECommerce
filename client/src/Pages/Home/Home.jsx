@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-
+import Navbar from "../../Pages/Navbar/navbar";
 export default function App() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("phone");
   const [apiData, setApiData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -48,42 +48,38 @@ export default function App() {
   };
 
   return (
-    <div>
+    <>
       <div>
-        <label htmlFor="searchQuery">Search:</label>
-        <input
-          type="text"
-          id="searchQuery"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+        {" "}
+        <Navbar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          onClick={handleSearch}
         />
-        <button onClick={handleSearch}>Search</button>
-      </div>
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
-      {apiData && (
-        <div className="flex justify-center  my-8">
-          <div className="flex flex-wrap justify-center">
-            {apiData.data.products.map((product, index) => (
-              <div
-                key={index}
-                className="p-5 border border-gray-300 w-72 flex justify-center  flex-col  m-2"
-              >
-                <div className="flex justify-center">
-                  <img
-                    src={product.product_photo}
-                    alt={product.product_title}
-                    className="w-36 h-48 object-cover"
-                  />
-                </div>
-                <p className="pt-2 font-bold text-gray-800 p-1 m-1">
-                  {product.product_title}
-                </p>
-                <p className="p-1 m-1 text-gray-700">
-                  Price: {product.product_price || "N/A"}
-                </p>
-                <div className="flex flex-col">
-                 
+        {isLoading && <p>Loading...</p>}
+        {error && <p>Error: {error.message}</p>}
+        {apiData && (
+          <div className="flex justify-center  my-8">
+            <div className="flex flex-wrap justify-center">
+              {apiData.data.products.map((product, index) => (
+                <div
+                  key={index}
+                  className="p-5 border border-gray-300 w-72 flex justify-center  flex-col  m-2"
+                >
+                  <div className="flex justify-center">
+                    <img
+                      src={product.product_photo}
+                      alt={product.product_title}
+                      className="w-36 h-48 object-cover"
+                    />
+                  </div>
+                  <p className="pt-2 font-bold text-gray-800 p-1 m-1">
+                    {product.product_title}
+                  </p>
+                  <p className="p-1 m-1 text-gray-700">
+                    Price: {product.product_price || "N/A"}
+                  </p>
+                  <div className="flex flex-col">
                     <button className="bg-yellow-400 m-1 p-2 rounded-2xl text-black">
                       Add to Cart
                     </button>
@@ -92,11 +88,11 @@ export default function App() {
                     </button>
                   </div>
                 </div>
-              
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 }
