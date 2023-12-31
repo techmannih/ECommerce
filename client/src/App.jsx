@@ -6,7 +6,8 @@ import Address from "./Pages/address/address";
 import Login from "./Pages/Login/Login";
 import Signup from "./Pages/Signup/signup";
 import Order from "./Pages/order/order";
-import Profile from "./Pages/userprofile/profile"
+import Profile from "./Pages/userprofile/profile";
+import Product from "./Pages/productDetails/product";
 function App() {
   return (
     <>
@@ -19,6 +20,7 @@ function App() {
           <Route exact path="/cart" element={<Cart />} />
           <Route exact path="/orders" element={<Order />} />
           <Route exact path="/profile" element={<Profile />} />
+          <Route exact path="/product" element={<Product />} />
         </Routes>
       </BrowserRouter>
     </>
