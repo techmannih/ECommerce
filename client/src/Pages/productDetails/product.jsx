@@ -47,7 +47,7 @@ export default function ProductDetails() {
 
       {productData && (
         <div>
-          <h2 className="font-bold">Product Details</h2>
+          <h2>Product Details</h2>
           <p>Title: {productData.data.product_information["Item model number"]}</p>
           <p>Description: {productData.data.product_description}</p>
 

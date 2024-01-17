@@ -1,14 +1,17 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "../../Pages/Navbar/navbar";
+import ProductDetails from "../productDetails/product";
+
 export default function App() {
   const [searchQuery, setSearchQuery] = useState("phone");
   const [apiData, setApiData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [selectedAsin, setSelectedAsin] = useState(null);
 
   const fetchData = async () => {
     setIsLoading(true);
-
     const url = `https://real-time-amazon-data.p.rapidapi.com/search?query=${encodeURIComponent(
       searchQuery
     )}`;
@@ -19,10 +22,8 @@ export default function App() {
         "X-RapidAPI-Host": import.meta.env.VITE_APP_RAPIDAPI_HOST,
       },
     };
-
     try {
       const response = await fetch(url, options);
-
       // Check if the response status is 429 (Too Many Requests)
       if (response.status === 429) {
         const retryAfter = parseInt(response.headers.get("Retry-After")) || 5; // Default to 5 seconds if no Retry-After header
@@ -32,7 +33,6 @@ export default function App() {
         await new Promise((resolve) => setTimeout(resolve, retryAfter * 1000));
         return fetchData(); // Retry the request
       }
-
       const result = await response.json();
       setApiData(result);
       setIsLoading(false);
@@ -45,6 +45,10 @@ export default function App() {
 
   const handleSearch = () => {
     fetchData(); // Fetch data with the updated searchQuery
+  };
+
+  const handleProductClick = (asin) => {
+    setSelectedAsin(asin);
   };
 
   return (
@@ -63,9 +67,13 @@ export default function App() {
             <div className="flex flex-wrap justify-center">
               {apiData.data.products.map((product, index) => (
                 <div
-                  key={index}
-                  className="p-5 border border-gray-300 w-72 flex justify-center  flex-col  m-2"
+                  onClick={() => handleProductClick(product.asin)}
+                  className="p-5 border border-gray-300 w-72 flex justify-center  flex-col  m-2 cursor-pointer"
                 >
+                  <Link key={index} to={`/product`}>
+                    link{" "}
+                    <ProductDetails/>
+                  </Link>
                   <div className="flex justify-center">
                     <img
                       src={product.product_photo}
@@ -93,6 +101,7 @@ export default function App() {
           </div>
         )}
       </div>
+      {selectedAsin && <ProductDetails asin={selectedAsin} />}
     </>
   );
 }

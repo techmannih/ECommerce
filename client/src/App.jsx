@@ -21,6 +21,7 @@ function App() {
           <Route exact path="/orders" element={<Order />} />
           <Route exact path="/profile" element={<Profile />} />
           <Route exact path="/product" element={<Product />} />
+          <Route path="/product/:asin" element={<Product />} />
         </Routes>
       </BrowserRouter>
     </>
