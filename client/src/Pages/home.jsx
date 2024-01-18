@@ -1,10 +1,12 @@
 import React from "react";
-import Navbar from "../Components/navbar";
-
+import Product from "./product";
 export default function Home() {
   return (
     <>
-     home
+      <div className="">
+        {" "}
+        <Product />
+      </div>
     </>
   );
 }
