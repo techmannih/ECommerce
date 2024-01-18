@@ -1,56 +1,95 @@
-import React from "react";
-const ContactPage = () => {
-  return (
-    <>
-      <div className="container my-3 py-3">
-        <h1 className="text-center">Contact Us</h1>
-        <hr />
+import React, { useState } from "react";
 
-        <div class="row my-4 h-100">
-          <div className="col-md-4 col-lg-4 col-sm-8 mx-auto">
-            <form>
-              <div class="form my-3">
-                <label for="Name">Name</label>
-                <input
-                  type="email"
-                  class="form-control"
-                  id="Name"
-                  placeholder="Enter your name"
-                />
-              </div>
-              <div class="form my-3">
-                <label for="Email">Email</label>
-                <input
-                  type="email"
-                  class="form-control"
-                  id="Email"
-                  placeholder="name@example.com"
-                />
-              </div>
-              <div class="form  my-3">
-                <label for="Password">Message</label>
-                <textarea
-                  rows={5}
-                  class="form-control"
-                  id="Password"
-                  placeholder="Enter your message"
-                />
-              </div>
-              <div className="text-center">
-                <button
-                  class="my-2 px-4 mx-auto btn btn-dark"
-                  type="submit"
-                  disabled
-                >
-                  Send
-                </button>
-              </div>
-            </form>
-          </div>
+const ContactForm = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Add your form submission logic here
+    console.log("Form submitted:", formData);
+  };
+
+  return (
+    <div className=" m-8 ">
+      <h2 className="text-3xl font-semibold mb-4 text-center">Contact Us</h2>
+      <hr />
+      <form onSubmit={handleSubmit} className="max-w-md mx-auto ">
+        <div className="mb-4">
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-gray-600"
+          >
+            Name
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className="mt-1 p-2 w-full border rounded-md"
+            placeholder="Your Name"
+            required
+          />
         </div>
-      </div>
-    </>
+        <div className="mb-4">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-600"
+          >
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="mt-1 p-2 w-full border rounded-md"
+            placeholder="Your Email"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label
+            htmlFor="message"
+            className="block text-sm font-medium text-gray-600"
+          >
+            Message
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            rows="4"
+            className="mt-1 p-2 w-full border rounded-md"
+            placeholder="Your Message"
+            required
+          ></textarea>
+        </div>
+        <div className="text-center">
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
-export default ContactPage;
+export default ContactForm;
