@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom"
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 const Products = () => {
@@ -29,100 +30,126 @@ const Products = () => {
   const Loading = () => {
     return (
       <>
-        <div className="col-12 py-5 text-center">
-          <Skeleton height={40} width={560} />
+        <div className="">
+          <Skeleton height="1300px" width="1300px" />
         </div>
-        <div className="col-md-4 mb-4">
+        <div className="">
           <Skeleton height={592} />
         </div>
-        <div className="col-md-4 mb-4">
+        <div className="">
           <Skeleton height={592} />
         </div>
-        <div className="col-md-4 mb-4">
+        <div className="">
           <Skeleton height={592} />
         </div>
-        <div className="col-md-4 mb-4">
+        <div className="">
           <Skeleton height={592} />
         </div>
-        <div className="col-md-4 mb-4">
+        <div className="">
           <Skeleton height={592} />
         </div>
-        <div className="col-md-4 mb-4">
+        <div className="">
           <Skeleton height={592} />
         </div>
       </>
     );
   };
 
-  const filterProduct = (cat) =>{
+  const filterProduct = (cat) => {
     const updatedList = data.filter((item) => item.category === cat);
     setFilter(updatedList);
-//   }
+    //   }
     // return setFilter(data.filter((item) => item.category === cat));
-  }
+  };
   const ShowProducts = () => {
     return (
-      <>
-        <div className="buttons col-12 d-flex justify-content-center py-5">
-          <button className="btn btn-outline-dark mx-2" onClick={()=>setFilter(data)}>All</button>
-          <button className="btn btn-outline-dark mx-2" onClick={()=>filterProduct("men's clothing")}>Men's Clothing</button>
-          <button className="btn btn-outline-dark mx-2" onClick={()=>filterProduct("women's clothing")}>
+      <><div className="flex justify-center items-center ">
+        <div className="buttons py-5 text-lg ">
+          <button
+            className="btn btn-outline-dark px-3 py-2 hover:border-2 hover:border-gray-400 "
+            onClick={() => setFilter(data)}
+          >
+            All
+          </button>
+          <button
+            className="btn btn-outline-dark px-3 py-2 hover:border-2 hover:border-gray-400"
+            onClick={() => filterProduct("men's clothing")}
+          >
+            Men's Clothing
+          </button>
+          <button
+            className="btn btn-outline-dark px-3 py-2 hover:border-2 hover:border-gray-400"
+            onClick={() => filterProduct("women's clothing")}
+          >
             Women's Clothing
           </button>
-          <button className="btn btn-outline-dark mx-2" onClick={()=>filterProduct("jewelery")}>Jewelery</button>
-          <button className="btn btn-outline-dark mx-2" onClick={()=>filterProduct("electronics")}>Electronics</button>
-        </div>
-
-        {filter.map((product) => {
-          return (
-            <>
-              <div id={product.id} className="col-md-4 mb-4">
-                <div class="card text-center h-100" key={product.id}>
-                  <img
-                    class="card-img-top p-3"
-                    src={product.image}
-                    alt="Card"
-                    height={300}
-                  />
-                  <div class="card-body">
-                    <h5 class="card-title">
-                      {product.title.substring(0, 12)}...
-                    </h5>
-                    <p class="card-text">
-                      {product.description.substring(0, 90)}...
-                    </p>
-                  </div>
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item lead">$ {product.price}</li>
-                    {/* <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Vestibulum at eros</li> */}
-                  </ul>
-                  <div class="card-body">
-                    <a href="/" class="btn btn-dark m-1">
-                      Buy Now
-                    </a>
-                    <a href="/" class="btn btn-dark m-1">
-                      Add to Cart
-                    </a>
+          <button
+            className="btn btn-outline-dark px-3 py-2 hover:border-2 hover:border-gray-400"
+            onClick={() => filterProduct("jewelery")}
+          >
+            Jewelery
+          </button>
+          <button
+            className="btn btn-outline-dark px-3 py-2 hover:border-2 hover:border-gray-400"
+            onClick={() => filterProduct("electronics")}
+          >
+            Electronics
+          </button>
+        </div></div>
+        <div className="flex flex-wrap">
+          {filter.map((product) => {
+            return (
+              <>
+                <div className="flex justify-center ">
+                  <div className="mb-4 flex-col border-black border-2 p-4 h-auto w-72 m-6 max-sm:m-2 ">
+                    <div className="card text-center " key={product.id}>
+                      <img
+                        className="card-img-top p-2 h-72 w-64"
+                        src={product.image}
+                        alt="Card"
+                        height={300}
+                      />
+                      <div className="card-body">
+                        <h5 className="card-title font-semibold">
+                          {product.title.substring(0, 12)}...
+                        </h5>
+                        <p className="card-text ">
+                          {product.description.substring(0, 90)}...
+                        </p>
+                      </div>
+                      <ul className="list-group  font-semibold">
+                        <li className="list-group-item lead">
+                          $ {product.price}
+                        </li>
+                      </ul>
+                      <div className="card-body flex flex-col">
+                        <Link href="/" className="btn btn-dark m-1 bg-yellow-400 p-2 rounded-xl hover:bg-yellow-500">
+                          Buy Now
+                        </Link>
+                        <Link href="/" className="btn btn-dark m-1 bg-yellow-400 p-2 rounded-xl hover:bg-yellow-500">
+                          Add to Cart
+                        </Link>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </>
-          );
-        })}
+              </>
+            );
+          })}
+        </div>
       </>
     );
   };
   return (
     <>
-      <div className="container my-3 py-3">
-        <div className="row">
-          <div className="col-12">
-            <h2 className="display-5 text-center">Latest Products</h2>
+      <div className=" my-3 py-3">
+        <div className="">
+          <div className="">
+            <h2 className=" text-center font-bold text-2xl">Latest Products</h2>
             <hr />
           </div>
         </div>
-        <div className="row justify-content-center">
+        <div className=" flex flex-wrap ">
           {loading ? <Loading /> : <ShowProducts />}
         </div>
       </div>
