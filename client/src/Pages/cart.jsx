@@ -10,12 +10,15 @@ const Cart = () => {
 
   const EmptyCart = () => {
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-md-12 py-5 bg-light text-center">
-            <h4 className="p-3 display-5">Your Cart is Empty</h4>
-            <Link to="/" className="btn  btn-outline-dark mx-4">
-              <i className="fa fa-arrow-left"></i> Continue Shopping
+      <div className="t">
+        <div className="">
+          <div className=" py-5  text-center">
+            <h4 className="p-3 text-2xl">Your Cart is Empty</h4>
+            <Link
+              to="/products"
+              className="underline underline-offset-8 hover:text-blue-400 my-3"
+            >
+              <i className=""></i> Continue Shopping
             </Link>
           </div>
         </div>
@@ -43,116 +46,100 @@ const Cart = () => {
     });
     return (
       <>
-        <section className="h-100 gradient-custom">
-          <div className="container py-5">
-            <div className="row d-flex justify-content-center my-4">
-              <div className="col-md-8">
-                <div className="card mb-4">
-                  <div className="card-header py-3">
-                    <h5 className="mb-0">Item List</h5>
-                  </div>
-                  <div className="card-body">
-                    {state.map((item) => {
-                      return (
-                        <div key={item.id}>
-                          <div className="row d-flex align-items-center">
-                            <div className="col-lg-3 col-md-12">
-                              <div
-                                className="bg-image rounded"
-                                data-mdb-ripple-color="light"
-                              >
-                                <img
-                                  src={item.image}
-                                  // className="w-100"
-                                  alt={item.title}
-                                  width={100}
-                                  height={75}
-                                />
-                              </div>
-                            </div>
-
-                            <div className="col-lg-5 col-md-6">
-                              <p>
-                                <strong>{item.title}</strong>
-                              </p>
-                              {/* <p>Color: blue</p>
-                              <p>Size: M</p> */}
-                            </div>
-
-                            <div className="col-lg-4 col-md-6">
-                              <div
-                                className="d-flex mb-4"
-                                style={{ maxWidth: "300px" }}
-                              >
-                                <button
-                                  className="btn px-3"
-                                  onClick={() => {
-                                    removeItem(item);
-                                  }}
-                                >
-                                  <i className="fas fa-minus"></i>
-                                </button>
-
-                                <p className="mx-5">{item.qty}</p>
-
-                                <button
-                                  className="btn px-3"
-                                  onClick={() => {
-                                    addItem(item);
-                                  }}
-                                >
-                                  <i className="fas fa-plus"></i>
-                                </button>
-                              </div>
-
-                              <p className="text-start text-md-center">
-                                <strong>
-                                  <span className="text-muted">{item.qty}</span>{" "}
-                                  x ${item.price}
-                                </strong>
-                              </p>
-                            </div>
-                          </div>
-
-                          <hr className="my-4" />
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+        <section className="h-auto">
+          <div className="py-5 flex justify-between my-4 max-md:flex-col max-md:items-center">
+            <div className="card rounded-lg border-2 w-2/3 max-md:w-72 m-2 ">
+              <div className=" mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold ">
+                <h5 className="mb-0">Item List</h5>
               </div>
-              <div className="col-md-4">
-                <div className="card mb-4">
-                  <div className="card-header py-3 bg-light">
-                    <h5 className="mb-0">Order Summary</h5>
-                  </div>
-                  <div className="card-body">
-                    <ul className="list-group list-group-flush">
-                      <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                        Products ({totalItems})<span>${Math.round(subtotal)}</span>
-                      </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center px-0">
-                        Shipping
-                        <span>${shipping}</span>
-                      </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
-                        <div>
-                          <strong>Total amount</strong>
+              <div className="card-body">
+                {state.map((item) => {
+                  return (
+                    <div key={item.id}>
+                      <div className="flex justify-between items-center m-3 px-4 max-md:flex-col">
+                        <div className=" rounded-xl m-1 p-1">
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            width={100}
+                            height={75}
+                          />
                         </div>
-                        <span>
-                          <strong>${Math.round(subtotal + shipping)}</strong>
-                        </span>
-                      </li>
-                    </ul>
 
-                    <Link
-                      to="/checkout"
-                      className="btn btn-dark btn-lg btn-block"
-                    >
-                      Go to checkout
-                    </Link>
-                  </div>
-                </div>
+                        <div className="m-1 p-1">
+                          <p className="text-xl font-semibold ">{item.title}</p>
+                        </div>
+
+                        <div className="flex flex-col">
+                          <div
+                            className="flex mb-4 m-1"
+                            style={{ maxWidth: "300px" }}
+                          >
+                            <button
+                              className="px-3"
+                              onClick={() => {
+                                removeItem(item);
+                              }}
+                            >
+                              -
+                            </button>
+
+                            <p className="mx-5">{item.qty}</p>
+
+                            <button
+                              className=" px-3"
+                              onClick={() => {
+                                addItem(item);
+                              }}
+                            >
+                              +
+                            </button>
+                          </div>
+                          <div className=" m-1 p-1">
+                            <p className="text-xl font-semibold">
+                              <span className="">{item.qty}</span> x $
+                              {item.price}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <hr className="my-3" />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="card rounded-lg border-2 w-1/3 max-md:w-72  m-2">
+              <div className=" mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold ">
+                <h5 className="mb-0">Order Summary</h5>
+              </div>
+              <div className="card-body">
+                <ul className="p-2 py-4 text-xl">
+                  <li className=" flex justify-between items-center border-0 px-6 pb-2">
+                    Products ({totalItems})<span>${Math.round(subtotal)}</span>
+                  </li>
+                  <li className=" flex justify-between items-center border-0 px-6 pb-2">
+                    Shipping
+                    <span>${shipping}</span>
+                  </li>
+                  <li className=" flex justify-between items-center border-0 px-6 pb-2 font-semibold">
+                    <div>
+                      <strong>Total amount</strong>
+                    </div>
+                    <span>
+                      <strong>${Math.round(subtotal + shipping)}</strong>
+                    </span>
+                  </li>
+                </ul>
+
+                <Link
+                  to="/checkout"
+                  className=" flex justify-center items-center border-2 m-6 text-2xl p-3 rounded-xl bg-black text-white hover:bg-gray-500 font-semibold"
+                >
+                  Go to checkout
+                </Link>
               </div>
             </div>
           </div>
@@ -163,13 +150,15 @@ const Cart = () => {
 
   return (
     <>
-      {/* <Navbar /> */}
-      <div className="container my-3 py-3">
-        <h1 className="text-center">Cart</h1>
-        <hr />
-        {state && state.length > 0 ? <ShowCart /> : <EmptyCart />}
+      <div className=" my-3 py-3 mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div className=" font-light">
+          <p className="text-center text-6xl max-md:text-3xl max-lg:text-5xl">
+            Cart
+          </p>
+          <hr className="my-9" />
+          {state && state.length > 0 ? <ShowCart /> : <EmptyCart />}
+        </div>{" "}
       </div>
-      {/* <Footer /> */}
     </>
   );
 };
