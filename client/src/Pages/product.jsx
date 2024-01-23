@@ -36,10 +36,27 @@ const Products = () => {
   const Loading = () => {
     return (
       <>
-        <div className="">
-          <Skeleton height="1300px" width="1300px" />
+       <div className="col-12 py-5 text-center">
+          <Skeleton height={40}/>
         </div>
-        {/* ... (rest of the Loading component) */}
+        <div className="">
+          <Skeleton height={592} />
+        </div>
+        <div className="">
+          <Skeleton height={592} />
+        </div>
+        <div className="">
+          <Skeleton height={592} />
+        </div>
+        <div className="">
+          <Skeleton height={592} />
+        </div>
+        <div className="">
+          <Skeleton height={592} />
+        </div>
+        <div className="">
+          <Skeleton height={592} />
+        </div>
       </>
     );
   };
@@ -108,15 +125,15 @@ const Products = () => {
                   <ul className="list-group font-semibold">
                     <li className="list-group-item lead">$ {product.price}</li>
                   </ul>
-                  <div className="card-body flex flex-col">
+                  <div className="card-body flex-col">
                     <Link
                       href="/"
-                      className="btn btn-dark m-1 bg-yellow-400 p-2 rounded-xl hover:bg-yellow-500"
+                      className="m-1 p-3 bg-black text-white rounded-xl "
                     >
                       Buy Now
                     </Link>
                     <button
-                      className="btn btn-dark m-1 bg-yellow-400 p-2 rounded-xl hover:bg-yellow-500"
+                      className=" m-1 p-3 bg-black text-white rounded-xl"
                       onClick={() => addToCartHandler(product)}
                     >
                       Add to Cart
@@ -133,11 +150,11 @@ const Products = () => {
 
   return (
     <>
-      <div className="my-3 py-3">
+      <div className="my-3 py-3 mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="">
-          <div className="">
-            <h2 className="text-center font-bold text-2xl">Latest Products</h2>
-            <hr />
+          <div className=" font-light">
+            <p className="text-center text-6xl max-md:text-3xl max-lg:text-5xl">Latest Products</p>
+            <hr className="my-9"/>
           </div>
         </div>
         <div className="flex flex-wrap">
