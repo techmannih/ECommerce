@@ -21,8 +21,8 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="container mx-auto mt-8">
-      <h2 className="text-3xl font-semibold mb-4 text-center">Login</h2>
+    <div className="max-sm:mx-6 mt-24">
+      <h2 className="text-4xl font-semibold mb-4 text-center">Login</h2>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
         <div className="mb-4">
           <label htmlFor="email" className="block text-sm font-medium text-gray-600">
@@ -57,7 +57,7 @@ const LoginForm = () => {
         <div className="text-center">
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
+            className="bg-black text-white m-7 px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:shadow-outline-blue active:bg-gray-800"
           >
             Login
           </button>
