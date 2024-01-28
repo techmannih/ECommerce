@@ -3,15 +3,8 @@ import { Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "../redux/store";
 import Navbar from "../Components/navbar";
-import Home from "../Pages/home";
-import ContactUs from "../Pages/contact";
-import AboutUs from "../Pages/about";
-import Product from "../Pages/product";
-import Login from "../Auth/Login";
-import Register from "../Auth/Register";
-import Cart from "../Pages/cart";
-import Checkout from "../Pages/checkout";
-
+import {Login ,Register}from "../Auth"
+import { Home, Product, AboutPage, ContactPage, Cart, Checkout} from "../Pages"
 export default function MainRoutes() {
   return (
     <Provider store={store}>
@@ -19,8 +12,8 @@ export default function MainRoutes() {
         <Navbar />
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route exact path="/contact" element={<ContactUs />} />
-          <Route exact path="/about" element={<AboutUs />} />
+          <Route exact path="/contact" element={<ContactPage />} />
+          <Route exact path="/about" element={<AboutPage />} />
           <Route exact path="/products" element={<Product />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
