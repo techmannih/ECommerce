@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
+  const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
@@ -28,8 +30,22 @@ const LoginForm = () => {
         body: JSON.stringify(loginData),
       });
 
+      // Clear the form fields
+      setLoginData({
+        fullName: "",
+        email: "",
+        password: "",
+      });
       if (response.ok) {
         // Authentication successful, you can redirect or perform other actions
+        // Registration successful, display success message
+        setSuccessMessage("User Logged In  successfully!");
+
+        // Clear success message and navigate after 2 seconds
+        setTimeout(() => {
+          setSuccessMessage(null);
+          navigate("/");
+        }, 1000);
         console.log("User authenticated successfully!");
       } else {
         // Authentication failed, handle errors
@@ -41,6 +57,10 @@ const LoginForm = () => {
         ) {
           // Display an error message to the user indicating invalid credentials
           setError("Invalid email or password. Please try again.");
+          setTimeout(() => {
+            setError(null);
+            navigate("/login");
+          }, 1000);
         } else {
           console.error("Authentication failed:", response.statusText);
         }
@@ -52,6 +72,9 @@ const LoginForm = () => {
 
   return (
     <div className="max-sm:mx-6 mt-24">
+        {successMessage && (
+              <div className="text-green-500 text-center p-2">{successMessage}</div>
+            )}
       <h2 className="text-4xl font-semibold mb-4 text-center">Login</h2>
       <form onSubmit={handleLogin} className="max-w-md mx-auto">
         <div className="mb-4">

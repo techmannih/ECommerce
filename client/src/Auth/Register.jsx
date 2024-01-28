@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignupForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
   });
+  const [successMessage, setSuccessMessage] = useState(null);
+
+  const [errorExist, setErrorExist] = useState(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,20 +32,48 @@ const SignupForm = () => {
         body: JSON.stringify(formData),
       });
 
+      // Clear the form fields
+      setFormData({
+        fullName: "",
+        email: "",
+        password: "",
+      });
       if (response.ok) {
         // Registration successful, you can redirect or perform other actions
+
+        setSuccessMessage("User registered successfully!"); // Registration successful, display success message
+        // Clear success message and navigate after 2 seconds
+        setTimeout(() => {
+          setSuccessMessage(null);
+          navigate("/login");
+        }, 1000);
         console.log("User registered successfully!");
-        console.log(formData)
+        console.log(formData);
       } else {
         // Registration failed, handle errors
         console.error("Registration failed:", response.statusText);
+        setErrorExist(
+          "Email is already in use. Please choose a different email."
+        );
+        setTimeout(() => {
+          setErrorExist(null);
+          navigate("/register");
+        }, 1000);
       }
     } catch (error) {
       console.error("Error during registration:", error.message);
     }
   };
+
   return (
     <div className="max-sm:mx-6 m-24 ">
+         {errorExist && (
+              <div className="text-red-500 text-center">{errorExist}</div>
+            )}
+            
+        {successMessage && (
+              <div className="text-green-500 text-center">{successMessage}</div>
+            )}
       <h2 className="text-4xl font-semibold mb-4 text-center">Sign Up</h2>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
         <div className="mb-4">
@@ -111,8 +143,9 @@ const SignupForm = () => {
             type="submit"
             className="bg-black text-white m-7 px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:shadow-outline-blue active:bg-gray-800"
           >
-            Sign Up
+            Register
           </button>
+
         </div>
       </form>
     </div>
