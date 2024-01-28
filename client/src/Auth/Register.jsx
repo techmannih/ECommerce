@@ -3,42 +3,59 @@ import { Link } from "react-router-dom";
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
-    name: "",
+    fullName: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your signup logic here
-    console.log("Signup submitted:", formData);
-    // You can send the data to your backend for user registration
-  };
 
+    try {
+      // Add logic to send the form data to your backend for user registration
+      console.log("Form data submitted:", formData);
+
+      // Make an API call to your server to handle user registration
+      const response = await fetch("http://localhost:8880/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        // Registration successful, you can redirect or perform other actions
+        console.log("User registered successfully!");
+        console.log(formData)
+      } else {
+        // Registration failed, handle errors
+        console.error("Registration failed:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error during registration:", error.message);
+    }
+  };
   return (
     <div className="max-sm:mx-6 m-24 ">
       <h2 className="text-4xl font-semibold mb-4 text-center">Sign Up</h2>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
         <div className="mb-4">
           <label
-            htmlFor="name"
+            htmlFor="fullName"
             className="block text-sm font-medium text-gray-600"
           >
-            Name
+            fullName
           </label>
           <input
             type="text"
-            id="name"
-            name="name"
-            value={formData.name}
+            id="fullName"
+            name="fullName"
+            value={formData.fullName}
             onChange={handleChange}
             className="mt-1 p-2 w-full border rounded-md"
             placeholder="Your Name"

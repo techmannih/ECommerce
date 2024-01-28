@@ -2,29 +2,58 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const LoginForm = () => {
-  const [formData, setFormData] = useState({
+  const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setLoginData({ ...loginData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Add your login logic here
-    console.log("Login submitted:", formData);
-    // You can send the data to your authentication server or perform client-side authentication
+
+    try {
+      // Add logic to send the login data to your backend for authentication
+      console.log("Login data submitted:", loginData);
+
+      // Make an API call to your server to handle user authentication
+      const response = await fetch("http://localhost:8880/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      if (response.ok) {
+        // Authentication successful, you can redirect or perform other actions
+        console.log("User authenticated successfully!");
+      } else {
+        // Authentication failed, handle errors
+        const responseBody = await response.json();
+        if (
+          responseBody.errors &&
+          (responseBody.errors.email ||
+            responseBody.errors.password === "Invalid credentials")
+        ) {
+          // Display an error message to the user indicating invalid credentials
+          setError("Invalid email or password. Please try again.");
+        } else {
+          console.error("Authentication failed:", response.statusText);
+        }
+      }
+    } catch (error) {
+      console.error("Error during authentication:", error.message);
+    }
   };
 
   return (
     <div className="max-sm:mx-6 mt-24">
       <h2 className="text-4xl font-semibold mb-4 text-center">Login</h2>
-      <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+      <form onSubmit={handleLogin} className="max-w-md mx-auto">
         <div className="mb-4">
           <label
             htmlFor="email"
@@ -36,7 +65,7 @@ const LoginForm = () => {
             type="email"
             id="email"
             name="email"
-            value={formData.email}
+            value={loginData.email}
             onChange={handleChange}
             className="mt-1 p-2 w-full border rounded-md"
             placeholder="Your Email"
@@ -54,13 +83,14 @@ const LoginForm = () => {
             type="password"
             id="password"
             name="password"
-            value={formData.password}
+            value={loginData.password}
             onChange={handleChange}
             className="mt-1 p-2 w-full border rounded-md"
             placeholder="Your Password"
             required
           />
         </div>
+        <p className="text-red-500">{error}</p>
         <div className="flex justify-between items-center mb-4">
           <Link
             to="/"
