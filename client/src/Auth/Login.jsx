@@ -8,6 +8,7 @@ const LoginForm = () => {
     password: "",
   });
   const [error, setError] = useState(null);
+  const [error1, setError1] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
   const handleChange = (e) => {
@@ -56,13 +57,18 @@ const LoginForm = () => {
             responseBody.errors.password === "Invalid credentials")
         ) {
           // Display an error message to the user indicating invalid credentials
-          setError("Invalid email or password. Please try again.");
+          setError("Invalid email. Please try again.");
           setTimeout(() => {
             setError(null);
             navigate("/login");
           }, 1000);
         } else {
           console.error("Authentication failed:", response.statusText);
+          setError1("Invalid email or password. Please try again.");
+          setTimeout(() => {
+            setError1(null);
+            navigate("/");
+          }, 1000);
         }
       }
     } catch (error) {
@@ -113,7 +119,8 @@ const LoginForm = () => {
             required
           />
         </div>
-        <p className="text-red-500">{error}</p>
+        <p className="text-red-500 m-2 p-2">{error}</p>
+        <p className="text-red-500 m-2 p-2">{error1}</p>
         <div className="flex justify-between items-center mb-4">
           <Link
             to="/"
