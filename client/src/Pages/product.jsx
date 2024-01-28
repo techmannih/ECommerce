@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { addToCart } from "../redux/actions/cartAction";
 import Cart from "./cart"; // Make sure to use this component if needed
-import Marquee from "react-fast-marquee"; // Import or replace with the appropriate marquee component
+// import Marquee from "react-fast-marquee"; // Import or replace with the appropriate marquee component
 
 const Products = () => {
-  const { id } = useParams();
-  const [product, setProduct] = useState({});
-  const [filter, setFilter] = useState([]);
+  const [data, setData] = useState([]);
+  const [filter, setFilter] = useState(data);
   const [loading, setLoading] = useState(false);
-  const [similarProducts, setSimilarProducts] = useState([]);
   const dispatch = useDispatch();
-
+  let componentMounted = true;
   const addToCartHandler = (product) => {
     dispatch(addToCart(product));
     console.log("add ", product);
@@ -23,21 +21,19 @@ const Products = () => {
   useEffect(() => {
     const getProducts = async () => {
       setLoading(true);
-      const response = await fetch(`https://fakestoreapi.com/products/${id}`);
-      const data = await response.json();
-      setProduct(data);
-
-      const response2 = await fetch(
-        `https://fakestoreapi.com/products/category/${data.category}`
-      );
-      const data2 = await response2.json();
-      setSimilarProducts(data2);
-
-      setLoading(false);
+      const response = await fetch("https://fakestoreapi.com/products/");
+      if (componentMounted) {
+        setData(await response.clone().json());
+        setFilter(await response.json());
+        setLoading(false);
+      }
+      return () => {
+        componentMounted = false;
+      };
     };
 
     getProducts();
-  }, [id]);
+  }, []);
 
   const Loading = () => {
     return (
@@ -48,101 +44,61 @@ const Products = () => {
         <div className="">
           <Skeleton height={592} />
         </div>
-        {/* ... (repeat for other skeletons) */}
+        <div className="">
+          <Skeleton height={592} />
+        </div>
+        <div className="">
+          <Skeleton height={592} />
+        </div>
+        <div className="">
+          <Skeleton height={592} />
+        </div>
+        <div className="">
+          <Skeleton height={592} />{" "}
+        </div>
       </>
     );
   };
 
   const filterProduct = (cat) => {
-    const updatedList = product.filter((item) => item.category === cat);
+    const updatedList = data.filter((item) => item.category === cat);
     setFilter(updatedList);
   };
-
-  const ShowSimilarProduct = () => {
-    return (
-      <>
-        <div className="my-5 py-2">
-          <div className="">
-            <div className=" py-3">
-              <img
-                className=""
-                src={product.image}
-                alt={product.title}
-                width="400px"
-                height="400px"
-              />
-            </div>
-            <div className="c py-5">
-              <h4 className="">{product.category}</h4>
-              <h1 className="">{product.title}</h1>
-              <p className="l">
-                {product.rating && product.rating.rate}{" "}
-                <i className="fa fa-star"></i>
-              </p>
-              <h3 className="  my-4">${product.price}</h3>
-              <p className="lead">{product.description}</p>
-              <button
-                className=""
-                onClick={() => addProduct(product)}
-              >
-                Add to Cart
-              </button>
-              <Link to="/cart" className="mx-3">
-                Go to Cart
-              </Link>
-            </div>
-          </div>
-        </div>
-      </>
-    );
-   };
-  
-
   const ShowProducts = () => {
     return (
       <>
         <div className="flex justify-center items-center ">
-          <div className="buttons py-5 text-lg flex justify-center items-center flex-wrap ">
-            <div className="">
-              <button
-                className=" px-3 py-2 hover:border-2 hover:border-gray-400 m-2"
-                onClick={() => setFilter(product)}
-              >
-                All
-              </button>{" "}
-            </div>
-            <div className="">
-              <button
-                className=" px-3 py-2 hover:border-2 hover:border-gray-400 m-2"
-                onClick={() => filterProduct("men's clothing")}
-              >
-                Men's Clothing
-              </button>{" "}
-            </div>
-            <div className="">
-              <button
-                className=" px-3 py-2 hover:border-2 hover:border-gray-400 m-2"
-                onClick={() => filterProduct("women's clothing")}
-              >
-                Women's Clothing
-              </button>{" "}
-            </div>
-            <div className="">
-              <button
-                className=" px-3 py-2 hover:border-2 hover:border-gray-400 m-2"
-                onClick={() => filterProduct("jewelery")}
-              >
-                Jewelery
-              </button>{" "}
-            </div>
-            <div className="">
-              <button
-                className=" px-3 py-2 hover:border-2 hover:border-gray-400 m-2"
-                onClick={() => filterProduct("electronics")}
-              >
-                Electronics
-              </button>{" "}
-            </div>
+          <div className="buttons py-5 text-lg ">
+            <button
+              className="btn btn-outline-dark px-3 py-2 hover:border-2 hover:border-gray-400 "
+              onClick={() => setFilter(data)}
+            >
+              All
+            </button>
+            <button
+              className="btn btn-outline-dark px-3 py-2 hover:border-2 hover:border-gray-400"
+              onClick={() => filterProduct("men's clothing")}
+            >
+              Men's Clothing
+            </button>
+            <button
+              className="btn btn-outline-dark px-3 py-2 hover:border-2 hover:border-gray-400"
+              onClick={() => filterProduct("women's clothing")}
+            >
+              Women's Clothing
+            </button>
+            <button
+              className="btn btn-outline-dark px-3 py-2 hover:border-2 hover:border-gray-400"
+              onClick={() => filterProduct("jewelery")}
+            >
+              Jewelery
+            </button>
+            <button
+              className="btn btn-outline-dark px-3 py-2 hover:border-2 hover:border-gray-400"
+              onClick={() => filterProduct("electronics")}
+            >
+              Electronics
+            </button>
           </div>
         </div>
         <div className="flex flex-wrap">
@@ -166,13 +122,13 @@ const Products = () => {
                     </p>
                   </div>
                   <ul className="font-semibold">
-                    <hr className="m-2"/>
+                    <hr className="m-2" />
                     <li className="">$ {product.price}</li>
                     <hr className="m-2" />
                   </ul>
                   <div className="card-body flex-col">
                     <Link
-                       to="/"
+                      to="/"
                       className="m-1 p-3 bg-black text-white rounded-xl hover:bg-gray-700 "
                     >
                       Buy Now
@@ -205,19 +161,7 @@ const Products = () => {
           </div>
         </div>
         <div className="flex flex-wrap">
-          {loading ? <Loading /> : <ShowSimilarProduct />}
-        </div>
-        <div className=" my-5 py-5">
-          <div className="hidden ">
-            <h2 className="">You may also Like</h2>
-            <Marquee
-              pauseOnHover={true}
-              pauseOnClick={true}
-              speed={50}
-            >
-              {loading ? <Loading /> :  <ShowProducts /> }
-            </Marquee>
-          </div>
+          {loading ? <Loading /> : <ShowProducts />}a
         </div>
         <Cart></Cart>
       </div>
