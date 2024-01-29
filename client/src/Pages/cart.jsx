@@ -1,7 +1,11 @@
 import React from "react";
 // import { Footer, Navbar } from "../components";
 import { useSelector, useDispatch } from "react-redux";
-import { addToCart, removeFromCart } from "../redux/actions/cartAction";
+import {
+  addToCart,
+  removeFromCart,
+  deleteCartById,
+} from "../redux/actions/cartAction";
 import { Link } from "react-router-dom";
 
 const Cart = () => {
@@ -32,7 +36,9 @@ const Cart = () => {
   const removeItem = (product) => {
     dispatch(removeFromCart(product));
   };
-
+  const deleteById = (product) => {
+    dispatch(deleteCartById(product));
+  };
   const ShowCart = () => {
     let subtotal = 0;
     let shipping = 30.0;
@@ -55,59 +61,76 @@ const Cart = () => {
               <div className="card-body">
                 {state.map((item) => {
                   return (
-                    <div key={item.id}>
-                      <div className="flex justify-between items-center m-3 px-4 max-md:flex-col">
-                        <div className=" rounded-xl m-1 p-1">
-                          <img
-                            src={item.image}
-                            alt={item.title}
-                            width={100}
-                            height={75}
-                          />
-                        </div>
-
-                        <div className="m-1 p-1">
-                          <p className="text-xl font-semibold ">{item.title}</p>
-                        </div>
-
-                        <div className="flex flex-col">
-                          <div
-                            className="flex mb-4 m-1"
-                            style={{ maxWidth: "300px" }}
-                          >
-                            <button
-                              className="px-3"
-                              onClick={() => {
-                                removeItem(item);
-                              }}
-                            >
-                              -
-                            </button>
-
-                            <p className="mx-5">{item.qty}</p>
-
-                            <button
-                              className=" px-3"
-                              onClick={() => {
-                                addItem(item);
-                              }}
-                            >
-                              +
-                            </button>
+                    <>
+                      <div key={item.id}>
+                        <div className="flex justify-between items-center m-3 px-4 max-md:flex-col">
+                          <div className=" rounded-xl m-1 p-1">
+                            <img
+                              src={item.image}
+                              alt={item.title}
+                              width={100}
+                              height={75}
+                            />
                           </div>
-                          <div className=" m-1 p-1">
-                            <p className="text-xl font-semibold">
-                              <span className="">{item.qty}</span> x $
-                              {item.price}
+
+                          <div className="m-1 p-1">
+                            <p className="text-xl font-semibold ">
+                              {item.title}
                             </p>
                           </div>
+
+                          <div className="flex flex-col">
+                            <div
+                              className="flex mb-4 m-1"
+                              style={{ maxWidth: "300px" }}
+                            >
+                              <button
+                                className="px-3"
+                                onClick={() => {
+                                  removeItem(item);
+                                }}
+                              >
+                                -
+                              </button>
+
+                              <p className="mx-5">{item.qty}</p>
+
+                              <button
+                                className=" px-3"
+                                onClick={() => {
+                                  addItem(item);
+                                }}
+                              >
+                                +
+                              </button>
+                            </div>
+                            <div className=" m-1 p-1">
+                              <p className="text-xl font-semibold">
+                                <span className="">{item.qty}</span> x $
+                                {item.price}
+                              </p>
+                            </div>
+                          </div>
                         </div>
+                        <div className="">
+                          {" "}
+                          <button
+                            className=" flex justify-center items-center border-2 m-6 text-xl p-2 rounded-xl bg-gray-200 font-normal"
+                            onClick={() => {
+                              deleteById(item);
+                            }}
+                          >
+                            delete items
+                          </button>
+                        </div>
+                        <hr className="my-3" />
                       </div>
 
-                      <hr className="my-3" />
-                    </div>
+                    
+                    </>
                   );
                 })}
+                
               </div>
             </div>
 

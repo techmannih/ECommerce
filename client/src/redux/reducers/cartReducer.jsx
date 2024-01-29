@@ -27,7 +27,8 @@ const handleCart = (state = cart, action) => {
           x.id === product.id ? { ...x, qty: x.qty - 1 } : x
         );
       }
-
+      case "DELITEMBYID":
+        return state.filter((x) => x.id !== product.id);
     default:
       return state;
   }
