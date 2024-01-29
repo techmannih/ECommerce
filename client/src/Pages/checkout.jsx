@@ -3,7 +3,7 @@
   import { Link } from "react-router-dom";
 
   const Checkout = () => {
-    
+    const [error, setError] = useState(null);
   const [billingAddress, setBillingAddress] = useState({
     firstName: "",
     lastName: "",
@@ -30,6 +30,11 @@
     if (!billingAddress || !billingAddress.address1 || !billingAddress.city || !billingAddress.zipCode) {
       // Handle invalid address, perhaps show an error message
       console.error("Invalid billing address. Please fill in all required fields.");
+      setError("Invalid billing address. Please fill in all required fields.");
+      setTimeout(() => {
+        setError(null);
+   
+      }, 1000);
       return;
     }
 
@@ -139,7 +144,7 @@
                   onChange={(e) => setBillingAddress({ ...billingAddress, firstName: e.target.value })}
                   placeholder="jonh"
                   className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-                  required
+                  required="true"
                 />
               </div>
               <div className="mb-4">
@@ -307,6 +312,7 @@
                 />
               </div>
             </div>
+            <p className="text-red-500 font-bold text-lg m-2 p-2">{error}</p>
             <div className=" items-center m-2 p-2">
               {" "}
               <button
