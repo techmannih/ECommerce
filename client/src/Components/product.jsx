@@ -160,7 +160,7 @@ const Products = () => {
           </div>
         </div>
         <div className="flex flex-wrap">
-          {loading ? <Loading /> : <ShowProducts />}a
+          {loading ? <Loading /> : <ShowProducts />}
         </div>
         <Cart></Cart>
       </div>
