@@ -1,32 +1,77 @@
-  import React from "react";
+  import React ,{useState} from "react";
   import { useSelector } from "react-redux";
   import { Link } from "react-router-dom";
 
   const Checkout = () => {
-    const savedAddresses = [
-      {
-        id: 1,
-        firstName: "John",
-        lastName: "Doe",
-        email: "john@example.com",
-        phone: "+91-7461240",
-        address1: "Main street 12",
-        address2: "near railway road union colony",
-        city: "City",
-        state: "State",
-        zipCode: "12345",
-        country: "Country",
-      },
-      // Add more addresses as needed
-    ];
+    
+  const [billingAddress, setBillingAddress] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    country: "",
+  });
+
+  const [savedAddresses, setSavedAddresses] = useState([]);
+
+  const handleSaveBillingAddress = (e) => {
+    e.preventDefault();
+    console.log("Billing address state:", billingAddress);
+  
+    // Assuming billingAddress is the new address to be saved
+    // You may want to add validation checks here
+
+    // Example: Check if the billingAddress object has required fields
+    if (!billingAddress || !billingAddress.address1 || !billingAddress.city || !billingAddress.zipCode) {
+      // Handle invalid address, perhaps show an error message
+      console.error("Invalid billing address. Please fill in all required fields.");
+      return;
+    }
+
+    // Check if the address already exists in savedAddresses
+    const addressExists = savedAddresses.some(savedAddress =>
+      isEqual(savedAddress, billingAddress)
+    );
+
+    if (addressExists) {
+      // Handle case where the address already exists, perhaps show a warning
+      console.warn("Billing address already exists in saved addresses.");
+      return;
+    }
+
+    // If validation checks pass, update the state to include the new billing address
+    setSavedAddresses([...savedAddresses, billingAddress]);
+
+    // Optionally, you can clear the form fields or perform additional actions after saving the address
+    setBillingAddress({
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      address1: "",
+      address2: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      country: "",
+    });
+  };
     const SavedAddresses = () => {
       return (
         <div className="card rounded-lg border-2 md:w-2/3 m-2">
           <div className="mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
             <p className="">Saved Addresses</p>
           </div>
-  
-          {savedAddresses.map((address) => (
+          <div className="card-body">
+          {savedAddresses.length === 0 ? (
+              <p className="p-4 text-gray-500">No addresses saved yet.</p>
+            ) : (
+              savedAddresses.map((address, index) => (
             <div key={address.id} className="p-2 m-2 border-b-2 border-gray-200">
               <p className="text-sm font-semibold text-gray-600">
                 {address.firstName} {address.lastName}
@@ -37,8 +82,9 @@
               </p>
               <p>{address.country}</p>
             </div>
-          ))}
-        </div>
+          )))
+        }
+        </div>     </div>
       );
     };
     const state = useSelector((state) => state.handleCart);
@@ -89,6 +135,8 @@
                   type="text"
                   id="firstName"
                   name="firstName"
+                  value={billingAddress.firstName}
+                  onChange={(e) => setBillingAddress({ ...billingAddress, firstName: e.target.value })}
                   placeholder="jonh"
                   className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                   required
@@ -105,6 +153,8 @@
                   type="text"
                   id="lastName"
                   name="lastName"
+                  value={billingAddress.lastName}
+                  onChange={(e) => setBillingAddress({ ...billingAddress, lastName: e.target.value })}
                   placeholder="deo"
                   className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                   required
@@ -122,6 +172,8 @@
                 type="text"
                 id="email"
                 name="email"
+                value={billingAddress.email}
+                onChange={(e) => setBillingAddress({ ...billingAddress, email: e.target.value })}
                 placeholder="jonh123@gmail.com"
                 className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                 required
@@ -129,15 +181,17 @@
             </div>
             <div className="mb-4 p-2 m-2">
               <label
-                htmlFor="Phone No"
+                htmlFor="Phone"
                 className="block text-sm font-semibold text-gray-600"
               >
                 Phone No
               </label>
               <input
                 type="text"
-                id="Phone No"
-                name="Phone No"
+                id="Phone"
+                name="Phone"
+                value={billingAddress.Phone}
+                onChange={(e) => setBillingAddress({ ...billingAddress, Phone: e.target.value })}
                 placeholder="+91-7461240"
                 className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                 required
@@ -153,7 +207,9 @@
               <input
                 type="text"
                 id="address1"
-                name="address1"
+                name="address1" 
+                value={billingAddress.address1}
+                onChange={(e) => setBillingAddress({ ...billingAddress, address1: e.target.value })}
                 placeholder="Main street 12"
                 className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                 required
@@ -170,6 +226,8 @@
                 type="text"
                 id="address2"
                 name="address2"
+                value={billingAddress.address2}
+                onChange={(e) => setBillingAddress({ ...billingAddress, address2: e.target.value })}
                 placeholder="near railway road unio colony"
                 className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                 required
@@ -188,6 +246,8 @@
                   type="text"
                   id="city"
                   name="city"
+                  value={billingAddress.city}
+                  onChange={(e) => setBillingAddress({ ...billingAddress, city: e.target.value })}
                   className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                   required
                 />
@@ -203,6 +263,8 @@
                   type="text"
                   id="state"
                   name="state"
+                  value={billingAddress.state}
+                  onChange={(e) => setBillingAddress({ ...billingAddress, state: e.target.value })}
                   className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                   required
                 />
@@ -221,8 +283,8 @@
                   type="text"
                   id="zipCode"
                   name="zipCode"
-                  // value={formData.zipCode}
-                  // onChange={handleChange}
+                  value={billingAddress.zipCode}
+                  onChange={(e) => setBillingAddress({ ...billingAddress, zipCode: e.target.value })}
                   className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                   required
                 />
@@ -238,6 +300,8 @@
                   type="text"
                   id="country"
                   name="country"
+                  value={billingAddress.country}
+                  onChange={(e) => setBillingAddress({ ...billingAddress, country: e.target.value })}
                   className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                   required
                 />
@@ -247,7 +311,7 @@
               {" "}
               <button
                 type="submit"
-                // onClick={handleSubmit}
+                onClick={handleSaveBillingAddress}
                 className="mt-4 bg-black text-white p-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring focus:border-gray-300 "
               >
                 Save
@@ -292,7 +356,6 @@
           <hr className="my-9" />
           {state.length ? (
           <>
-           
             <ShowCheckout />
              <SavedAddresses />
           </>
