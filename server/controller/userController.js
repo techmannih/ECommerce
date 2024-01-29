@@ -67,25 +67,25 @@ module.exports.signup = async (req, res) => {
   }
 };
 module.exports.login = async (req, res) => {
-    const { email, password } = req.body;
-    console.log("logging in");
-    try {
-      const user = await User.login(email, password);
-  
-      if (!user) {
-        // User not found or invalid credentials
-        throw new Error("invalid credentials");
-      }
-  
-      // Authentication successful
-      res.status(200).json({ success: getToken(user._id) });
-      console.log("logged data", user);
-    } catch (err) {
-      console.log("error logging in:", err.message);
-      const errors = handleErrors(err);
-      res.status(401).json({ errors, message: err.message }); // Include the error message in the response
+  const { email, password } = req.body;
+  console.log("logging in");
+  try {
+    const user = await User.login(email, password);
+
+    if (!user) {
+      // User not found or invalid credentials
+      throw new Error("invalid credentials");
     }
-  };
+
+    // Authentication successful
+    res.status(200).json({ success: getToken(user._id) });
+    console.log("logged data", user);
+  } catch (err) {
+    console.log("error logging in:", err.message);
+    const errors = handleErrors(err);
+    res.status(401).json({ errors, message: err.message }); // Include the error message in the response
+  }
+};
 
 module.exports.deleteUserProfile = async (req, res) => {
   try {
