@@ -1,23 +1,42 @@
 const { Cart } = require("../models/cartmodel");
 
-module.exports.createCart = async (req, res) => {
+module.exports.createOrUpdateCart = async (req, res) => {
   try {
-    const {productId,Quantty,itemPrice } = req.body;
-    // Check if cartId is provided in the request
-    const newCart = await Cart.create({
-    productId,Quantty,itemPrice// You can provide default values or adjust as needed
- 
-    });
-    const savedCart = await newCart.save();
-    res
-      .status(200)
-      .json({
+    const { productId, quantity, itemPrice } = req.body;
+
+    // Check if the product is already in the cart
+    const existingCartItem = await Cart.findOne({ productId });
+
+    if (existingCartItem) {
+      // Product already in the cart, update the quantity and total price
+      existingCartItem.quantity += quantity;
+      existingCartItem.itemPrice = existingCartItem.quantity * itemPrice;
+      const updatedCart = await existingCartItem.save();
+
+      res.status(200).json({
         success: true,
-        message: "item added in Cart  successfully",
+        message: "Quantity updated in Cart successfully",
+        data: updatedCart,
+      });
+    } else {
+      // Product not in the cart, add a new entry with calculated total price
+      const totalPrice = quantity * itemPrice;
+      const newCart = await Cart.create({
+        productId,
+        quantity,
+        itemPrice,
+        totalPrice,
+      });
+      const savedCart = await newCart.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Item added to Cart successfully",
         data: savedCart,
       });
+    }
   } catch (error) {
-    console.error("Error creating or retrieving cart:", error);
+    console.error("Error creating or updating cart:", error);
 
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
