@@ -30,15 +30,38 @@ const Cart = () => {
     );
   };
 
-  const addItem = (product) => {
-    dispatch(addToCart(product));
+   const IncreaseItem = async (product) => {
+      dispatch(addToCart(product));
+  
   };
-  const removeItem = (product) => {
+  const decreaseItem = (product) => {
     dispatch(removeFromCart(product));
+  };const deleteById = async (product) => {
+    try {
+      const cartItem = {
+        productId: product.id,
+      };
+  
+      const response = await fetch("http://localhost:8880/cart/remove", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cartItem),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to delete item from the cart");
+      }
+  
+      // Assuming you have a 'deleteCartById' action
+      dispatch(deleteCartById(product));
+      console.log("Item deleted from the cart:", product);
+    } catch (error) {
+      console.error("Error deleting item from the cart:", error.message);
+    }
   };
-  const deleteById = (product) => {
-    dispatch(deleteCartById(product));
-  };
+  
   const ShowCart = () => {
     let subtotal = 0;
     let shipping = 30.0;
@@ -87,7 +110,7 @@ const Cart = () => {
                               <button
                                 className="px-3"
                                 onClick={() => {
-                                  removeItem(item);
+                                  decreaseItem(item);
                                 }}
                               >
                                 -
@@ -98,7 +121,7 @@ const Cart = () => {
                               <button
                                 className=" px-3"
                                 onClick={() => {
-                                  addItem(item);
+                                  IncreaseItem(item);
                                 }}
                               >
                                 +
