@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { addToCart } from "../redux/actions/cartAction";
-import Cart from "../Pages/cart";
+import Cart from "../Pages/cart"; 
 
 const Products = () => {
   const [data, setData] = useState([]);
@@ -16,7 +16,7 @@ const Products = () => {
     try {
       const cartItem = {
         productId: product.id,
-        Quantty: 1, // Adjust the quantity as needed
+        quantity: Number(product.qty) || 1, // Ensure it's a valid number, default to 1 if not provided
         itemPrice: product.price,
       };
 
@@ -38,7 +38,7 @@ const Products = () => {
       console.error("Error adding item to the cart:", error.message);
     }
   };
-
+  
   useEffect(() => {
     const getProducts = async () => {
       setLoading(true);
