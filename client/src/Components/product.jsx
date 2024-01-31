@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { addToCart } from "../redux/actions/cartAction";
-import Cart from "../Pages/cart"; 
+import Cart from "../Pages/cart";
 
 const Products = () => {
   const [data, setData] = useState([]);
@@ -12,9 +12,31 @@ const Products = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   let componentMounted = true;
-  const addToCartHandler = (product) => {
-    dispatch(addToCart(product));
-    console.log("add ", product);
+  const addToCartHandler = async (product) => {
+    try {
+      const cartItem = {
+        productId: product.id,
+        Quantty: 1, // Adjust the quantity as needed
+        itemPrice: product.price,
+      };
+
+      const response = await fetch("http://localhost:8880/cart/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cartItem), // Send cartItem directly, not wrapped in an object
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add item to the cart");
+      }
+
+      dispatch(addToCart(product));
+      console.log("Item added to the cart:", product);
+    } catch (error) {
+      console.error("Error adding item to the cart:", error.message);
+    }
   };
 
   useEffect(() => {
