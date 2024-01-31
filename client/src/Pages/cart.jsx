@@ -30,13 +30,65 @@ const Cart = () => {
     );
   };
 
-   const IncreaseItem = async (product) => {
-      dispatch(addToCart(product));
   
-  };
-  const decreaseItem = (product) => {
+const IncreaseItem = async (product) => {
+  try {
+    const cartItem = {
+      productId: product.id,
+      quantity: Number(product.qty) || 1, // Ensure it's a valid number, default to 1 if not provided
+      itemPrice: product.price,
+    };
+    // Make API call to increase the quantity of the item in the cart
+    const response = await fetch("http://localhost:8880/cart/create/increase", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cartItem),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to increase quantity in the cart");
+    }
+
+    // Dispatch the addToCart action to update the local Redux state
+    dispatch(addToCart(product));
+
+    console.log("Quantity increased in the cart:", product);
+  } catch (error) {
+    console.error("Error increasing quantity in the cart:", error.message);
+  }
+};
+
+const decreaseItem = async (product) => {
+  try {
+    const cartItem = {
+      productId: product.id,
+      quantity: Number(product.qty) || 1, // Ensure it's a valid number, default to 1 if not provided
+      itemPrice: product.price,
+    };
+    // Make API call to decrease the quantity of the item in the cart
+    const response = await fetch("http://localhost:8880/cart/create/decrease", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cartItem)
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to decrease quantity in the cart");
+    }
+
+    // Dispatch the removeFromCart action to update the local Redux state
     dispatch(removeFromCart(product));
-  };const deleteById = async (product) => {
+
+    console.log("Quantity decreased in the cart:", product);
+  } catch (error) {
+    console.error("Error decreasing quantity in the cart:", error.message);
+  }
+};
+  const deleteById = async (product) => {
     try {
       const cartItem = {
         productId: product.id,
