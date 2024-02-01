@@ -2,8 +2,16 @@ const mongoose = require("mongoose");
 // schemas
 const addressSchema = new mongoose.Schema(
   {
-    addressId: {
-      required: true,
+    firstName: {
+      type: String,
+    },
+    lastName: {
+      type: String,
+    },
+    email: {
+      type: String,
+    },
+    phoneNo: {
       type: String,
     },
     addressLine1: {
