@@ -1,48 +1,58 @@
-const { Address } =require("../models/addressmodel")
+const { Address } = require("../models/addressmodel");
 
 module.exports.createAddress = async (req, res) => {
-    try {
-        const { addressId, addressLine1, addressLine2, city, country, pincode, state } = req.body;
-       const allAddresses = await Address.find(); // Fetch all existing addresses
-       const existingAddress = allAddresses.find(address => address.addressId === addressId);      // Check if an address with the given addressId already exists
-        if (existingAddress) {
-            return res.status(400).json({success: false,error: "Address with the given ID already exists",existingAddress,
-            });
-        }
-        const newAddress = new Address({
-            addressId,
-            addressLine1,
-            addressLine2,
-            city,
-            country,
-            pincode,
-            state,
-        });
-        const savedAddress = await newAddress.save();
-        res.status(200).json({ success: true, message: "Address created successfully", data: savedAddress,
-        });
-    } catch (error) {
-        console.error("Error creating address:", error);
-        if (error.name === 'ValidationError') {
-            return res.status(400).json({ success: false, error: "Validation Error",messages: validationErrors,
-            });
-        }
-        res.status(500).json({ success: false, error: "Internal Server Error",
-        });
-    }
+  try {
+    const {
+      firstName,
+      lastName,
+      phoneNo,
+      email,
+      addressLine1,
+      addressLine2,
+      city,
+      country,
+      pincode,
+      state,
+    } = req.body;
+ 
+    const newAddress = new Address({
+      firstName,
+      lastName,
+      phoneNo,
+      email,
+      addressLine1,
+      addressLine2,
+      city,
+      country,
+      pincode,
+      state,
+    });
+    const savedAddress = await newAddress.save();
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "Address created successfully",
+        data: savedAddress,
+      });
+  } catch (error) {
+    console.error("Error creating address:", error);
+
+    res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
 };
 
 module.exports.getAllAddress = async (req, res) => {
-    try {
-        // Fetch all addresses from the database
-        const allAddresses = await Address.find();
-        
-        // Respond with the list of addresses
-        res.status(200).json({ success: true, data: allAddresses,});
-    } catch (error) {
-        console.error("Error getting all addresses:", error);
-        res.status(500).json({  success: false,  error: "Internal Server Error", });
-    }
+  try {
+    // Fetch all addresses from the database
+    const allAddresses = await Address.find();
+
+    // Respond with the list of addresses
+    res.status(200).json({ success: true, data: allAddresses });
+  } catch (error) {
+    console.error("Error getting all addresses:", error);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
 };
 
 // module.exports.getAddressById = async (req, res) => {
@@ -67,46 +77,53 @@ module.exports.getAllAddress = async (req, res) => {
 //         });
 //     }
 // };
-
-
 module.exports.deleteAddress = async (req, res) => {
-    try {
-        const addressId = req.params.id;
-        const deletedAddress = await Address.findOneAndDelete(addressId);
-        if (!deletedAddress) {
-            return res.status(404).json({
-                success: false,
-                error: "Address not found",
-            });
-        }
-        res.status(200).json({
-            success: true, message: "Address deleted successfully",data: deletedAddress,
-        });
-    } catch (error) {
-        console.error("Error deleting address by ID:", error);
-        res.status(500).json({success: false, error: "Internal Server Error",
-        });
+  try {
+    const addressId = req.params.id; // Use req.params.id to get the address ID from the URL parameter
+    // Check if the address exists
+    const existingAddress = await Address.findById(addressId);
+    if (!existingAddress) {
+      return res.status(404).json({
+        success: false,
+        error: "Address not found",
+      });
     }
+    // Perform the deletion
+    await Address.findByIdAndDelete(addressId);
+    res.status(200).json({
+      success: true,
+      message: "Address deleted successfully",
+      data: existingAddress,
+    });
+  } catch (error) {
+    console.error("Error deleting address by ID:", error);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
 };
 
-module.exports.updateAddress = async (req, res) => {
-    try {
-        const addressId = req.params.id;
-        const updates = req.body;
-        // Find the address by its ID and update all fields
-        const updatedAddress = await Address.findOneAndUpdate(addressId, updates, {
-            new: true, 
-            runValidators: true, // Run validators to check for validation errors
-        });
-        if (!updatedAddress) {
-            return res.status(404).json({ success: false,   error: "Address not found",
-            });
-        }
-            res.status(200).json({ success: true, message: "Address updated successfully", data: updatedAddress,
-        });
-    } catch (error) {
-        console.error("Error updating address by ID:", error);
-        res.status(500).json({ success: false, error: "Internal Server Error",
-        });
-    }
-};
+// module.exports.updateAddress = async (req, res) => {
+//   try {
+//     const addressId = req.params.id;
+//     const updates = req.body;
+//     // Find the address by its ID and update all fields
+//     const updatedAddress = await Address.findOneAndUpdate(addressId, updates, {
+//       new: true,
+//       runValidators: true, // Run validators to check for validation errors
+//     });
+//     if (!updatedAddress) {
+//       return res
+//         .status(404)
+//         .json({ success: false, error: "Address not found" });
+//     }
+//     res
+//       .status(200)
+//       .json({
+//         success: true,
+//         message: "Address updated successfully",
+//         data: updatedAddress,
+//       });
+//   } catch (error) {
+//     console.error("Error updating address by ID:", error);
+//     res.status(500).json({ success: false, error: "Internal Server Error" });
+//   }
+// };
