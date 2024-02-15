@@ -19,6 +19,7 @@ const Products = () => {
         quantity: Number(product.qty) || 1, // Ensure it's a valid number, default to 1 if not provided
         itemPrice: product.price,
       };
+      console.log("cartItem:", data);
 
       const response = await fetch("http://localhost:8880/cart/create", {
         method: "POST",
