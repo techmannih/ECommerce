@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 
 const Checkout = () => {
   const [error, setError] = useState(null);
+
+  const [loading, setLoading] = useState(false);
   const [billingaddress, setBillingaddress] = useState({
     firstName: "",
     lastName: "",
@@ -79,19 +81,22 @@ const Checkout = () => {
   };
   const deleteaddrsesshandler = async (addressId) => {
     try {
-      console.log(addressId)
+      console.log(addressId);
       if (!addressId) {
         console.error("Invalid addressId");
         return;
       }
-  
-      const response = await fetch(`http://localhost:8880/address/delete/${addressId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-  
+
+      const response = await fetch(
+        `http://localhost:8880/address/delete/${addressId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       if (!response.ok) {
         throw new Error("Failed to delete billing addressLine");
       } else {
@@ -101,8 +106,53 @@ const Checkout = () => {
       console.error("Error deleting address by ID:", error);
     }
   };
+  const handlePayment = async () => {
+    try {
+      setLoading(true);
   
+      const { totalItems, subtotal, shipping } = calculateOrderSummary();
+  
+      const response = await fetch("http://localhost:8880/payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          totalItems,
+          subtotal,
+          shipping,
+        }),
+      });
+  
+      const responseData = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(responseData.message || "Failed to make payment");
+      }
+  
+      // Redirect the user to the Stripe Checkout page for payment
+      window.location.href = responseData.url;
+    } catch (error) {
+      console.error("Error making payment:", error.message);
+      // Add user-friendly error handling/notification
+    } finally {
+      setLoading(false);
+    }
+  };
+   
 
+  const calculateOrderSummary = () => {
+    let subtotal = 0;
+    let shipping = 30.0;
+    let totalItems = 0;
+
+    state.forEach((item) => {
+      subtotal += item.price * item.qty;
+      totalItems += item.qty;
+    });
+
+    return { totalItems, subtotal, shipping };
+  };
   const SavedaddressLinees = () => {
     return (
       <div className="card rounded-lg border-2 md:w-2/3 m-2">
@@ -132,7 +182,14 @@ const Checkout = () => {
                     <p>{address.country}</p>
                   </div>
                   <div className=" my-2">
-                    <button className="text-sm font-normal bg-gray-600 text-white p-2 rounded-l-xl hover:bg-black">Continue with address</button>
+                    <button
+                      onClick={handlePayment}
+                      disabled={loading}
+                      className="text-sm font-normal bg-gray-600 text-white p-2 rounded-l-xl hover:bg-black"
+                    >
+                      {" "}
+                      {loading ? "Processing..." : "Proceed to Payment"}
+                    </button>
                     <button
                       className="text-sm font-normal bg-gray-600 text-white p-2 rounded-r-xl hover:bg-black"
                       onClick={() => deleteaddrsesshandler(address._id)}
