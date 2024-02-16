@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const LoginForm = () => {
+const LoginForm =({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     email: "",
@@ -10,7 +10,11 @@ const LoginForm = () => {
   const [error, setError] = useState(null);
   const [error1, setError1] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/", { replace: true });
+    }
+  }, [isLoggedIn]);
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
   };
@@ -47,8 +51,10 @@ const LoginForm = () => {
           setSuccessMessage(null);
           navigate("/");
         }, 1000);
+        setIsLoggedIn(true);
         console.log("User authenticated successfully!");
       } else {
+        setIsLoggedIn(false);
         // Authentication failed, handle errors
         const responseBody = await response.json();
         if (
@@ -72,6 +78,7 @@ const LoginForm = () => {
         }
       }
     } catch (error) {
+      setIsLoggedIn(false);
       console.error("Error during authentication:", error.message);
     }
   };
