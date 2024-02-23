@@ -29,9 +29,13 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example() {
-  const [userLoggedIn] = useState(false); // Set to true if the user is logged in
-
+export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
+  const handleLogout = () => {
+    // Implement your logout logic here
+    // For simplicity, let's clear the token from local storage
+    localStorage.removeItem("userToken");
+    setIsLoggedIn(false);
+  };
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -79,7 +83,7 @@ export default function Example() {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                {userLoggedIn ? (
+                {isLoggedIn ? (
                   // User is logged in, show profile dropdown
                   <Menu as="div" className="relative ml-3">
                     <div>
@@ -136,6 +140,7 @@ export default function Example() {
                                 active ? "bg-gray-100" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
+                              onClick={handleLogout}
                             >
                               Log out
                             </a>
