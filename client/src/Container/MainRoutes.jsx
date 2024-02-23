@@ -25,7 +25,7 @@ export default function MainRoutes() {
   return (
     <Provider store={store}>
       <>
-        <Navbar />
+      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/contact" element={<ContactPage />} />
