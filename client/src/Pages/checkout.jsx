@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const Checkout = () => {
   const [error, setError] = useState(null);
-
+  const state = useSelector((state) => state.handleCart);
   const [loading, setLoading] = useState(false);
+  const [cartData, setCartData] = useState([]);
   const [billingaddress, setBillingaddress] = useState({
     firstName: "",
     lastName: "",
@@ -106,22 +107,56 @@ const Checkout = () => {
       console.error("Error deleting address by ID:", error);
     }
   };
+
+  const fetchAddressesFromDatabase = async () => {
+    try {
+      const response = await fetch("http://localhost:8880/address"); // Adjust the URL based on your API
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setSavedaddresses(data.data); // Assuming the response data is an array of addresses
+
+          console.log("Fetched Addresses:", data.data);
+          // setSavedaddresses(data.data);
+        } else {
+          console.error("Error fetching addresses:", data.message);
+          setError("Error fetching addresses");
+        }
+      } else {
+        console.error(
+          "Server responded with an error:",
+          response.status,
+          response.statusText
+        );
+        setError("Server error");
+      }
+    } catch (error) {
+      console.error("Error fetching addresses:", error.message);
+      setError("Error fetching addresses");
+    }
+  };
+
+  useEffect(() => {
+    fetchAddressesFromDatabase(); // Fetch addresses when the component mounts
+  }, []); // Empty dependency array ensures it only runs once on mount
   const handlePayment = async () => {
     try {
       setLoading(true);
   
-      const { totalItems, subtotal, shipping } = calculateOrderSummary();
+      const { totalItems, subtotal, shipping } = await calculateOrderSummaryFromDB();
+      const orderDetails = {
+        totalItems,
+        subtotal,
+        shipping,
+        // Include additional order details here (e.g., order ID, customer information)
+      };
   
       const response = await fetch("http://localhost:8880/payment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          totalItems,
-          subtotal,
-          shipping,
-        }),
+        body: JSON.stringify(orderDetails),
       });
   
       const responseData = await response.json();
@@ -139,98 +174,47 @@ const Checkout = () => {
       setLoading(false);
     }
   };
-   
+  
 
-  const calculateOrderSummary = () => {
+  const calculateOrderSummaryFromDB = async () => {
     let subtotal = 0;
     let shipping = 30.0;
     let totalItems = 0;
-
-    state.forEach((item) => {
-      subtotal += item.price * item.qty;
-      totalItems += item.qty;
-    });
-
-    return { totalItems, subtotal, shipping };
+  
+    try {
+      const response = await fetch("http://localhost:8880/cart");
+      if (!response.ok) {
+        throw new Error("Failed to fetch cart items");
+      }
+  
+      const cartItems = await response.json();
+      console.log("Cart Items:", cartItems.data); // Log the cart items
+  
+      if (!Array.isArray(cartItems.data)) {
+        throw new Error("Cart items response is not an array");
+      }
+  
+      cartItems.data.forEach((item) => {
+        subtotal += item.itemPrice * item.quantity;
+        totalItems += item.quantity;
+      });
+      setCartData(cartItems.data);
+      console.log("Cart Data:", cartData);
+      return { totalItems, subtotal, shipping };
+    } catch (error) {
+      console.error("Error fetching order summary from database:", error);
+      throw new Error("Failed to fetch order summary from database");
+    }
   };
-  const SavedaddressLinees = () => {
-    return (
-      <div className="card rounded-lg border-2 md:w-2/3 m-2">
-        <div className="mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
-          <p className="">Saved addresses</p>
-        </div>
-        <div className="card-body">
-          <div className="">
-            {savedaddresses.length === 0 ? (
-              <p className="p-4 text-gray-500">No addresses saved yet.</p>
-            ) : (
-              savedaddresses.map((address, index) => (
-                <div
-                  key={address._id}
-                  className="p-2 m-2 border-b-2 border-gray-200 flex justify-between max-sm:flex-col"
-                >
-                  <div className="">
-                    <p className="text-sm font-semibold text-gray-600">
-                      {address.firstName} {address.lastName}
-                    </p>
-                    <p>
-                      {address.addressLine1}, {address.addressLine2}
-                    </p>
-                    <p>
-                      {address.city}, {address.state}, {address.pincode}
-                    </p>
-                    <p>{address.country}</p>
-                  </div>
-                  <div className=" my-2">
-                    <button
-                      onClick={handlePayment}
-                      disabled={loading}
-                      className="text-sm font-normal bg-gray-600 text-white p-2 rounded-l-xl hover:bg-black"
-                    >
-                      {" "}
-                      {loading ? "Processing..." : "Proceed to Payment"}
-                    </button>
-                    <button
-                      className="text-sm font-normal bg-gray-600 text-white p-2 rounded-r-xl hover:bg-black"
-                      onClick={() => deleteaddrsesshandler(address._id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>{" "}
-      </div>
-    );
-  };
-  const state = useSelector((state) => state.handleCart);
-
-  const EmptyCart = () => {
-    return (
-      <div className="text-center mt-24">
-        <p className="text-4xl m-6">No Item In Cart</p>
-        <Link
-          to="/"
-          className=" underline underline-offset-8 hover:text-blue-500 text-4xl m-4 "
-        >
-          Continue Shopping
-        </Link>
-      </div>
-    );
-  };
-
+  
+  
   const ShowCheckout = () => {
     let subtotal = 0;
     let shipping = 30.0;
     let totalItems = 0;
-    state.map((item) => {
-      return (subtotal += item.price * item.qty);
-    });
-
-    state.map((item) => {
-      return (totalItems += item.qty);
+    cartData.forEach((item) => {
+      subtotal += item.itemPrice * item.quantity;
+      totalItems += item.quantity;
     });
 
     return (
@@ -515,7 +499,71 @@ const Checkout = () => {
       </div>
     );
   };
-
+  const SavedaddressLinees = () => {
+    return (
+      <div className="card rounded-lg border-2 md:w-2/3 m-2">
+        <div className="mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
+          <p className="">Saved addresses</p>
+        </div>
+        <div className="card-body">
+          <div className="">
+            {savedaddresses.length === 0 ? (
+              <p className="p-4 text-gray-500">No addresses saved yet.</p>
+            ) : (
+              savedaddresses.map((address, index) => (
+                <div
+                  key={address._id}
+                  className="p-2 m-2 border-b-2 border-gray-200 flex justify-between max-sm:flex-col"
+                >
+                  <div className="">
+                    <p className="text-sm font-semibold text-gray-600">
+                      {address.firstName} {address.lastName}
+                    </p>
+                    <p>
+                      {address.addressLine1}, {address.addressLine2}
+                    </p>
+                    <p>
+                      {address.city}, {address.state}, {address.pincode}
+                    </p>
+                    <p>{address.country}</p>
+                  </div>
+                  <div className=" my-2">
+                    <button
+                      onClick={handlePayment}
+                      disabled={loading}
+                      className="text-sm font-normal bg-gray-600 text-white p-2 rounded-l-xl hover:bg-black"
+                    >
+                      {" "}
+                      {loading ? "Processing..." : "Proceed to Payment"}
+                    </button>
+                    <button
+                      className="text-sm font-normal bg-gray-600 text-white p-2 rounded-r-xl hover:bg-black"
+                      onClick={() => deleteaddrsesshandler(address._id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>{" "}
+      </div>
+    );
+  };
+  const EmptyCart = () => {
+    return (
+      <div className="text-center mt-24">
+        <p className="text-4xl m-6">No Item In Cart</p>
+        <Link
+          to="/"
+          className=" underline underline-offset-8 hover:text-blue-500 text-4xl m-4 "
+        >
+          Continue Shopping
+        </Link>
+      </div>
+    );
+  };
   return (
     <div className=" my-3 py-3 mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div className=" font-light">
@@ -523,7 +571,7 @@ const Checkout = () => {
           Checkout
         </p>
         <hr className="my-9" />
-        {state.length ? (
+        {savedaddresses.length ? (
           <>
             <ShowCheckout />
             <SavedaddressLinees />
