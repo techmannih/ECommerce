@@ -10,7 +10,7 @@ module.exports.createOrUpdateCart = async (req, res) => {
     if (existingCartItem) {
       // Product already in the cart, update the quantity and total price
       existingCartItem.quantity += quantity;
-      existingCartItem.itemPrice = existingCartItem.quantity * itemPrice;
+      existingCartItem.itemPrice = itemPrice;
       const updatedCart = await existingCartItem.save();
 
       res.status(200).json({
@@ -42,15 +42,15 @@ module.exports.createOrUpdateCart = async (req, res) => {
 
 module.exports.IncreaseItem = async (req, res) => {
   try {
-    const { productId, quantity, itemPrice } = req.body;
+    const { productId, quantity} = req.body;
 
     // Check if the product is already in the cart
     const existingCartItem = await Cart.findOne({ productId });
 
     if (existingCartItem) {
       // Product already in the cart, update the quantity and total price
-      existingCartItem.quantity += quantity;
-      existingCartItem.itemPrice = existingCartItem.quantity * itemPrice;
+      existingCartItem.quantity = quantity +1;
+      // existingCartItem.itemPrice = existingCartItem.quantity * itemPrice;
       const updatedCart = await existingCartItem.save();
 
       res.status(200).json({
@@ -63,7 +63,7 @@ module.exports.IncreaseItem = async (req, res) => {
       const newCart = await Cart.create({
         productId,
         quantity,
-        itemPrice,
+        // itemPrice,
       });
       const savedCart = await newCart.save();
 
@@ -81,7 +81,7 @@ module.exports.IncreaseItem = async (req, res) => {
 };
 module.exports.DecreaseItem = async (req, res) => {
   try {
-    const { productId, quantity, itemPrice } = req.body;
+    const { productId, quantity } = req.body;
 
     // Check if the product is already in the cart
     const existingCartItem = await Cart.findOne({ productId });
@@ -89,7 +89,7 @@ module.exports.DecreaseItem = async (req, res) => {
     if (existingCartItem) {
       // Update the quantity and total price
       existingCartItem.quantity -= quantity;
-      existingCartItem.itemPrice -= itemPrice;
+      // existingCartItem.itemPrice -= itemPrice;
 
       // If the new quantity is less than or equal to 0, remove the item from the cart
       if (existingCartItem.quantity <= 0) {
