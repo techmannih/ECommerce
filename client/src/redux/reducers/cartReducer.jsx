@@ -11,20 +11,20 @@ const handleCart = (state = cart, action) => {
       if (existingProduct) {
         // Increase the quantity
         return state.map((x) =>
-          x.id === product.id ? { ...x, qty: x.qty + 1 } : x
+          x.id === product.id ? { ...x, quantity: x.quantity + 1 } : x
         );
       } else {
-        return state.concat({ ...product, qty: 1 });
+        return state.concat({ ...product, quantity: 1 });
       }
 
     case "DELITEM":
       const existingProduct2 = state.find((x) => x.id === product.id);
 
-      if (existingProduct2.qty === 1) {
+      if (existingProduct2.quantity === 1) {
         return state.filter((x) => x.id !== existingProduct2.id);
       } else {
         return state.map((x) =>
-          x.id === product.id ? { ...x, qty: x.qty - 1 } : x
+          x.id === product.id ? { ...x, quantity: x.quantity - 1 } : x
         );
       }
       case "DELITEMBYID":
