@@ -520,6 +520,7 @@ const Checkout = () => {
                   className="p-2 m-2 border-b-2 border-gray-200 flex justify-between max-sm:flex-col"
                 >
                   <div className="">
+                    <p>{address._id}</p>
                     <p className="text-sm font-semibold text-gray-600">
                       {address.firstName} {address.lastName}
                     </p>

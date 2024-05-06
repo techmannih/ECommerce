@@ -11,6 +11,7 @@ const Cart = () => {
   const dispatch = useDispatch();
   const [cartData, setCartData] = useState([]);
   const [error, setError] = useState(null);
+  const [cartId, setCartId] = useState(null);
 
   const EmptyCart = () => {
     return (
@@ -145,7 +146,7 @@ const Cart = () => {
         setError("Error fetching cart");
         return;
       }
-
+      setCartId(data.data[0]._id);
       setCartData(data.data[0].items);
     } catch (error) {
       console.error("Error fetching cart data:", error.message);
@@ -183,7 +184,8 @@ const Cart = () => {
           <div className="py-5 flex justify-between my-4 max-md:flex-col max-md:items-center">
             <div className="card rounded-lg border-2 w-2/3 max-md:w-72 m-2 ">
               <div className=" mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold ">
-                <h5 className="mb-0">Item List</h5>
+                <h5 className="mb-0">Item List </h5>
+                <p className="text-sm">{cartId}</p>
               </div>
               <div className="card-body">
                 {cartData.map((item) => (
