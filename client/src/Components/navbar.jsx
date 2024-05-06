@@ -33,7 +33,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   const handleLogout = () => {
     // Implement your logout logic here
     // For simplicity, let's clear the token from local storage
-    localStorage.removeItem("userToken");
+    localStorage.removeItem("userId");
     setIsLoggedIn(false);
   };
   return (
@@ -141,6 +141,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
                               onClick={handleLogout}
+                              
                             >
                               Log out
                             </a>

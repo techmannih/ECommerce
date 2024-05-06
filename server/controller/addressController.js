@@ -5,7 +5,7 @@ module.exports.createAddress = async (req, res) => {
     const {
       firstName,
       lastName,
-      phoneNo,
+      phoneNumber,
       email,
       addressLine1,
       addressLine2,
@@ -14,11 +14,11 @@ module.exports.createAddress = async (req, res) => {
       pincode,
       state,
     } = req.body;
- 
+
     const newAddress = new Address({
       firstName,
       lastName,
-      phoneNo,
+      phoneNumber,
       email,
       addressLine1,
       addressLine2,

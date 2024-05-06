@@ -1,12 +1,14 @@
-const { Router } = require('express')
+const { Router } = require("express");
 const {
-    getAllOrder,
-    cancelOrder,
-    createOrder,
-  } = require('../controller/orderController');
-const router = Router()
+  createOrder,
+  cancelOrder,
+  getOrderByUserId,
+  getOrderById,
+} = require("../controller/orderController");
+const router = Router();
 
-router.route('/order/create').post(createOrder);
-router.route("/order").get(getAllOrder)
-router.route('/order/:orderId/cencel').put(cancelOrder);
-module.exports = router
+router.route("/order/create").post(createOrder);
+router.route("/order/:userId").get(getOrderByUserId);
+router.route("/order/:Id").get(getOrderById);
+router.route("/order/cencel/:orderId").put(cancelOrder);
+module.exports = router;

@@ -8,13 +8,14 @@ import { Home, Product, AboutPage, ContactPage, Cart, Checkout } from "../Pages"
 
 export default function MainRoutes() {
   // Assuming you have some authentication state
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   // Function to simulate authentication (replace this with your actual authentication logic)
   useEffect(() => {
     // Implement your authentication check here
     // For simplicity, let's use a local storage variable as an example
-    const storedToken = localStorage.getItem("userToken");
+    const storedToken = localStorage.getItem("userId");
+    console.log("useridtoken", storedToken);
     if (storedToken) {
       setIsLoggedIn(true);
     } else {
@@ -25,7 +26,9 @@ export default function MainRoutes() {
   return (
     <Provider store={store}>
       <>
-      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+
+        {/* Routes */}
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/contact" element={<ContactPage />} />
@@ -36,6 +39,7 @@ export default function MainRoutes() {
             element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />}
           />
           <Route exact path="/register" element={<Register />} />
+          
           {/* Use Navigate to redirect unauthenticated users */}
           <Route
             path="/cart"

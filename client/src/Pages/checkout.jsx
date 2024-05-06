@@ -182,19 +182,23 @@ const Checkout = () => {
     let totalItems = 0;
   
     try {
-      const response = await fetch("http://localhost:8880/cart");
+      const userId = localStorage.getItem("userId");
+      console.log("User ID:", userId);
+
+      const response = await fetch(`http://localhost:8880/cart/${userId}`);
+
       if (!response.ok) {
         throw new Error("Failed to fetch cart items");
       }
   
       const cartItems = await response.json();
-      console.log("Cart Items:", cartItems.data); // Log the cart items
+      console.log("Cart Items:", cartItems.data[0].items); // Log the cart items
   
-      if (!Array.isArray(cartItems.data)) {
+      if (!Array.isArray(cartItems.data[0].items)) {
         throw new Error("Cart items response is not an array");
       }
   
-      cartItems.data.forEach((item) => {
+      cartItems.data[0].items.forEach((item) => {
         subtotal += item.itemPrice * item.quantity;
         totalItems += item.quantity;
       });

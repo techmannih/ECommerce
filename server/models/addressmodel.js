@@ -1,47 +1,56 @@
+// address.js
 const mongoose = require("mongoose");
-// schemas
+
 const addressSchema = new mongoose.Schema(
   {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      // required: true
+    },
     firstName: {
       type: String,
+      required: true,
     },
     lastName: {
       type: String,
+      required: true,
     },
     email: {
       type: String,
+      required: true,
     },
-    phoneNo: {
+    phoneNumber: {
       type: String,
+      required: true,
     },
     addressLine1: {
-      required: true,
       type: String,
+      required: true,
     },
     addressLine2: {
       type: String,
     },
     city: {
-      required: true,
       type: String,
+      required: true,
     },
     country: {
-      required: true,
       type: String,
+      required: true,
     },
     pincode: {
-      required: true,
       type: String,
+      required: true,
     },
     state: {
-      required: true,
       type: String,
+      required: true,
     },
   },
   { timestamps: true }
 );
 
-// models
-const Address = mongoose.model("address", addressSchema);
+const Address = mongoose.model("Address", addressSchema);
 
-module.exports = { Address };
+module.exports = {Address};

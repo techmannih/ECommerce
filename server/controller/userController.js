@@ -11,23 +11,23 @@ function getToken(userID) {
 }
 
 const handleErrors = (err) => {
-  const errors = { name: "", email: "", password: "" };
+  const errors = { email: "", password: "" };
 
   // error code
   if (err.code == 11000) {
-    errors["email"] = "email already used";
+    errors["email"] = "Email is already in use. Please choose a different email.";
   }
 
   // invalid email OR password - login
-  if (err.message == "invalid email") {
-    errors.email = "invalid email";
+  if (err.message == "Invalid email") {
+    errors.email = "Invalid email";
   }
-  if (err.message == "invalid password") {
-    errors.password = "invalid password";
+  if (err.message == "Invalid password") {
+    errors.password = "Invalid password";
   }
 
   // validation of email & password - signup
-  if (err.message.includes("user validation failed")) {
+  if (err.message.includes("User validation failed")) {
     Object.values(err.errors).forEach(({ properties }) => {
       errors[properties.path] = properties.message;
     });
@@ -42,7 +42,7 @@ module.exports.signup = async (req, res) => {
   try {
     // Check if user with the same email already exists
     const existingUser = await User.findOne({ email });
-    console.log("exist user", existingUser);
+    console.log("existing user", existingUser);
     if (existingUser) {
       // User with the same email already exists
       return res.status(400).json({
@@ -66,22 +66,23 @@ module.exports.signup = async (req, res) => {
     res.status(500).json({ errors });
   }
 };
+
 module.exports.login = async (req, res) => {
   const { email, password } = req.body;
-  console.log("logging in");
+  console.log("Logging in");
   try {
     const user = await User.login(email, password);
 
     if (!user) {
       // User not found or invalid credentials
-      throw new Error("invalid credentials");
+      throw new Error("Invalid credentials");
     }
 
     // Authentication successful
-    res.status(200).json({ success: getToken(user._id) });
-    console.log("logged data", user);
+    res.status(200).json({ success: user._id });
+    console.log("Logged data", user);
   } catch (err) {
-    console.log("error logging in:", err.message);
+    console.error("Error logging in:", err.message);
     const errors = handleErrors(err);
     res.status(401).json({ errors, message: err.message }); // Include the error message in the response
   }
@@ -92,9 +93,7 @@ module.exports.deleteUserProfile = async (req, res) => {
     const { email } = req.body;
     const deletedUserProfile = await User.findOneAndDelete({ email });
     if (!deletedUserProfile) {
-      return res
-        .status(404)
-        .json({ success: false, error: "User profile not found" });
+      return res.status(404).json({ success: false, error: "User profile not found" });
     }
     res.status(200).json({
       success: true,

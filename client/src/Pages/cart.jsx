@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {  useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   addToCart,
   removeFromCart,
@@ -34,7 +34,7 @@ const Cart = () => {
     try {
       const cartItem = {
         productId: product.productId,
-        quantity: Number(product.quantity)  || 1, // Ensure it's a valid number, default to 1 if not provided
+        quantity: Number(product.quantity) || 1, // Ensure it's a valid number, default to 1 if not provided
         // itemPrice: product.itemPrice,
       };
       // Make API call to increase the quantity of the item in the cart
@@ -66,7 +66,7 @@ const Cart = () => {
     try {
       const cartItem = {
         productId: product.productId,
-        quantity: Number(product.quantity)  || 1,  // Ensure it's a valid number, default to 1 if not provided
+        quantity: Number(product.quantity) || 1, // Ensure it's a valid number, default to 1 if not provided
         // itemPrice: product.itemPrice,
       };
       console.log("cartItem", cartItem);
@@ -81,20 +81,19 @@ const Cart = () => {
           body: JSON.stringify(cartItem),
         }
       );
-  
+
       if (!response.ok) {
         throw new Error("Failed to decrease quantity in the cart");
       }
-  
+
       // Dispatch the removeFromCart action to update the local Redux state
       dispatch(removeFromCart(product));
-  
+
       console.log("Quantity decreased in the cart:", product);
     } catch (error) {
       console.error("Error decreasing quantity in the cart:", error.message);
     }
   };
-  
 
   const deleteById = async (product) => {
     try {
@@ -124,7 +123,10 @@ const Cart = () => {
 
   const fetchCartFromDatabase = async () => {
     try {
-      const response = await fetch("http://localhost:8880/cart");
+      const userId = localStorage.getItem("userId");
+      console.log("User ID:", userId);
+
+      const response = await fetch(`http://localhost:8880/cart/${userId}`);
 
       if (!response.ok) {
         console.error(
@@ -137,15 +139,14 @@ const Cart = () => {
       }
 
       const data = await response.json();
-
+      console.log("datvyvy", data.data[0].items);
       if (!data.success) {
         console.error("Error fetching cart:", data.message);
         setError("Error fetching cart");
         return;
       }
 
-      setCartData(data.data);
-      console.log("Fetched Cart Data:", data.data);
+      setCartData(data.data[0].items);
     } catch (error) {
       console.error("Error fetching cart data:", error.message);
       setError("Error fetching cart");
