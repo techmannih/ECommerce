@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+
 
 const Checkout = () => {
   const [error, setError] = useState(null);
   const state = useSelector((state) => state.handleCart);
   const [loading, setLoading] = useState(false);
   const [cartData, setCartData] = useState([]);
+  const navigate = useNavigate();
+
   const [billingaddress, setBillingaddress] = useState({
     firstName: "",
     lastName: "",
@@ -139,48 +143,59 @@ const Checkout = () => {
   useEffect(() => {
     fetchAddressesFromDatabase(); // Fetch addresses when the component mounts
   }, []); // Empty dependency array ensures it only runs once on mount
-  const handlePayment = async () => {
-    try {
-      setLoading(true);
-  
-      const { totalItems, subtotal, shipping } = await calculateOrderSummaryFromDB();
-      const orderDetails = {
-        totalItems,
-        subtotal,
-        shipping,
-        // Include additional order details here (e.g., order ID, customer information)
-      };
-  
-      const response = await fetch("http://localhost:8880/payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderDetails),
-      });
-  
-      const responseData = await response.json();
-  
-      if (!response.ok) {
-        throw new Error(responseData.message || "Failed to make payment");
-      }
-  
-      // Redirect the user to the Stripe Checkout page for payment
-      window.location.href = responseData.url;
-    } catch (error) {
-      console.error("Error making payment:", error.message);
-      // Add user-friendly error handling/notification
-    } finally {
-      setLoading(false);
-    }
-  };
-  
+  // const handleOrder = async () => {
+  //   try {
+  //     setLoading(true);
+
+  //     // Calculate order summary
+  //     const { subtotal, shipping, cartId } = await calculateOrderSummaryFromDB(); // Await for the asynchronous function
+  //     console.log("Cart ID:", cartId); // Corrected console log statement
+  //     console.log("Subtotal22:",savedaddresses );
+  // //  const {addressId} = savedaddresses[0];
+  // //  console.log("Address ID22:", addressId);
+  //    // Assuming the first address is the one to be used for the order
+  //     // Prepare order details
+  //     const orderDetails = {
+  //       cart: cartId,
+  //       user: localStorage.getItem("userId"),
+  //       shippingPrice: shipping,
+  //       totalPrice: subtotal + shipping,
+  //       paymentInfo: "Payment method details", // You can replace this with actual payment information
+  //       address: addressId, // Assuming you have the address ID stored in state
+  //     };
+  //     console.log("Order Details:", orderDetails);
+
+  //     // Make API call to create order
+  //     const response = await fetch("http://localhost:8880/order/create", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(orderDetails),
+  //     });
+
+  //     const responseData = await response.json();
+
+  //     if (!response.ok) {
+  //       throw new Error(responseData.error || "Failed to create order");
+  //     }
+
+  //     // Redirect user or show success message
+  //     console.log("Order created successfully:", responseData.order);
+  //   } catch (error) {
+  //     console.error("Error creating order:", error.message);
+  //     // Handle error
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const calculateOrderSummaryFromDB = async () => {
     let subtotal = 0;
     let shipping = 30.0;
     let totalItems = 0;
-  
+    let cartId = null; // Added variable to store cart ID
+
     try {
       const userId = localStorage.getItem("userId");
       console.log("User ID:", userId);
@@ -190,28 +205,32 @@ const Checkout = () => {
       if (!response.ok) {
         throw new Error("Failed to fetch cart items");
       }
-  
+
       const cartItems = await response.json();
       console.log("Cart Items:", cartItems.data[0].items); // Log the cart items
-  
+
       if (!Array.isArray(cartItems.data[0].items)) {
         throw new Error("Cart items response is not an array");
       }
-  
+
+      // Return cart ID
+      cartId = cartItems.data[0]._id;
+      console.log("Cart ID:", cartId);
+
       cartItems.data[0].items.forEach((item) => {
         subtotal += item.itemPrice * item.quantity;
         totalItems += item.quantity;
       });
-      setCartData(cartItems.data);
-      console.log("Cart Data:", cartData);
-      return { totalItems, subtotal, shipping };
+
+      // Removed unnecessary console.log for cartData
+
+      return { totalItems, subtotal, shipping, cartId }; // Include cartId in the return
     } catch (error) {
       console.error("Error fetching order summary from database:", error);
       throw new Error("Failed to fetch order summary from database");
     }
   };
-  
-  
+
   const ShowCheckout = () => {
     let subtotal = 0;
     let shipping = 30.0;
@@ -504,6 +523,70 @@ const Checkout = () => {
     );
   };
   const SavedaddressLinees = () => {
+    const [selectedAddressId, setSelectedAddressId] = useState(null);
+
+    const handleSelectAddress = (addressId) => {
+      setSelectedAddressId(addressId);
+    };
+
+    const handlePlaceOrder = async () => {
+      if (!selectedAddressId) {
+        console.error("No address selected for order placement");
+        return;
+      }
+
+      try {
+        setLoading(true);
+
+        // Calculate order summary
+        const { subtotal, shipping, cartId } =
+          await calculateOrderSummaryFromDB();
+
+        // Prepare order details
+        const orderDetails = {
+          cart: cartId,
+          user: localStorage.getItem("userId"),
+          shippingPrice: shipping,
+          totalPrice: shipping + subtotal,
+          paymentInfo: {
+            status: "pending", // Example status
+            id: "payment_id_example", // Example payment ID
+          },
+          address: selectedAddressId, // Use the selected address ID
+        };
+
+        // Make API call to create order
+        const response = await fetch("http://localhost:8880/order/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderDetails),
+        });
+
+        const responseData = await response.json();
+
+        if (!response.ok) {
+          throw new Error(responseData.error || "Failed to create order");
+        }
+
+        // Redirect user or show success message
+        console.log("Order created successfully:", responseData.order);
+        // Redirect user to order details page
+        // Assuming the response data contains the ID of the newly created order
+        const orderId = responseData.order._id;
+        console.log("Order created successfully. Order ID:", orderId);
+
+        // Redirect user to order details page
+        navigate(`/order/${orderId}`);
+      } catch (error) {
+        console.error("Error creating order:", error.message);
+        // Handle error
+      } finally {
+        setLoading(false);
+      }
+    };
+
     return (
       <div className="card rounded-lg border-2 md:w-2/3 m-2">
         <div className="mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
@@ -532,14 +615,12 @@ const Checkout = () => {
                     </p>
                     <p>{address.country}</p>
                   </div>
-                  <div className=" my-2">
+                  <div className="my-2">
                     <button
-                      onClick={handlePayment}
-                      disabled={loading}
+                      onClick={() => handleSelectAddress(address._id)}
                       className="text-sm font-normal bg-gray-600 text-white p-2 rounded-l-xl hover:bg-black"
                     >
-                      {" "}
-                      {loading ? "Processing..." : "Proceed to Payment"}
+                      Select
                     </button>
                     <button
                       className="text-sm font-normal bg-gray-600 text-white p-2 rounded-r-xl hover:bg-black"
@@ -551,11 +632,25 @@ const Checkout = () => {
                 </div>
               ))
             )}
+            {selectedAddressId && (
+              <div className="text-center">
+                <button
+                  onClick={handlePlaceOrder}
+                  disabled={loading}
+                  className="text-sm font-normal bg-gray-600 text-white p-2 rounded-xl hover:bg-black"
+                >
+                  {loading
+                    ? "Processing..."
+                    : "Place Order with Selected Address"}
+                </button>
+              </div>
+            )}
           </div>
-        </div>{" "}
+        </div>
       </div>
     );
   };
+
   const EmptyCart = () => {
     return (
       <div className="text-center mt-24">

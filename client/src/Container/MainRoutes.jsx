@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import store from "../redux/store";
 import Navbar from "../Components/navbar";
 import { Login, Register } from "../Auth";
-import { Home, Product, AboutPage, ContactPage, Cart, Checkout } from "../Pages";
+import { Home, Product, AboutPage, ContactPage, Cart, Checkout,OrderDetails } from "../Pages";
 
 export default function MainRoutes() {
   // Assuming you have some authentication state
@@ -39,16 +39,11 @@ export default function MainRoutes() {
             element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />}
           />
           <Route exact path="/register" element={<Register />} />
-          
-          {/* Use Navigate to redirect unauthenticated users */}
-          <Route
-            path="/cart"
-            element={isLoggedIn ? <Cart /> : <Navigate to="/login" replace />}
-          />
-          <Route
-            path="/checkout"
-            element={isLoggedIn ? <Checkout /> : <Navigate to="/login" replace />}
-          />
+          <Route exact path="/cart" element={isLoggedIn ? <Cart /> : <Navigate to="/login" replace />} />
+          <Route exact path="/checkout" element={isLoggedIn ? <Checkout /> : <Navigate to="/login" replace />} />
+
+          {/* Route for order details */}
+          <Route path="/order/:orderId" element={<OrderDetails />} />
         </Routes>
       </>
     </Provider>
