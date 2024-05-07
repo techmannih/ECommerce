@@ -5,27 +5,58 @@ const OrderDetails = () => {
   const { orderId } = useParams();
   const [orderDetails, setOrderDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loading1, setLoading1] = useState(false);
+
+  const fetchOrderDetails = async (orderId) => {
+    try {
+      const response = await fetch(`http://localhost:8880/order/${orderId}`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Order details:", data.data);
+        setOrderDetails(data.data);
+        // return { totalItems: data.data.items.length, subtotal: data.data.totalPrice - data.data.shippingPrice, shipping: data.data.shippingPrice }
+      } else {
+        throw new Error("Failed to fetch order details");
+      }
+    } catch (error) {
+      console.error("Error fetching order details:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchOrderDetails = async () => {
-      try {
-        const response = await fetch(`http://localhost:8880/order/${orderId}`);
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Order details:", data.data);
-          setOrderDetails(data.data);
-        } else {
-          throw new Error("Failed to fetch order details");
-        }
-      } catch (error) {
-        console.error("Error fetching order details:", error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOrderDetails();
+    fetchOrderDetails(orderId);
   }, [orderId]);
+
+  const handlePayment = async () => {
+    try {
+      setLoading1(true);
+      const { items, totalPrice, shippingPrice } = orderDetails;
+      const totalItems = items.length;
+      const subtotal = totalPrice - shippingPrice;
+      const shipping = shippingPrice;
+     
+      const response = await fetch("http://localhost:8880/payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          totalItems,
+          subtotal,
+          shipping,
+        }),
+      });
+      const responseData = await response.json();
+      console.log("Payment response:", responseData);
+      window.location.href = responseData.url; // Redirect to Stripe Checkout
+    } catch (error) {
+      console.error("Error initiating payment:", error);
+    } finally {
+      setLoading1(false);
+    }
+};
 
   if (loading) {
     return <div>Loading order details...</div>;
@@ -64,6 +95,10 @@ const OrderDetails = () => {
         <p className="font-semibold">Shipping Price:</p>
         <p>${orderDetails.shippingPrice}</p>
       </div>
+      <button onClick={handlePayment} disabled={loading1} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+      {" "}
+                      {loading1 ? "Processing..." : "Proceed to Payment"}
+      </button>
     </div>
   );
 };
