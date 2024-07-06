@@ -9,11 +9,11 @@ const navigation = [
     href: "/",
     current: window.location.pathname === "/" ? true : false,
   },
-  {
-    name: "Products",
-    href: "/",
-    current: window.location.pathname === "/" ? true : false,
-  },
+  // {
+  //   name: "Products",
+  //   href: "/",
+  //   current: window.location.pathname === "/" ? true : false,
+  // },
   {
     name: "Contact Us",
     href: "/contact",
@@ -31,10 +31,13 @@ function classNames(...classes) {
 }
 
 export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
+  // Utility function to delete a cookie by name
+  const deleteCookie = (name) => {
+    document.cookie = `${name}=; Max-Age=0; path=/;`;
+  };
   const handleLogout = () => {
-    // Implement your logout logic here
-    // For simplicity, let's clear the token from local storage
-    localStorage.removeItem("userId");
+    // Clear the token from cookies
+    deleteCookie("jwt");
     setIsLoggedIn(false);
   };
   return (
@@ -142,7 +145,6 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
                               onClick={handleLogout}
-                              
                             >
                               Log out
                             </a>
@@ -155,7 +157,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                   // User is not logged in, show login and register buttons
                   <div className="flex space-x-4">
                     <Link
-                       to="/login"
+                      to="/login"
                       className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                     >
                       Login

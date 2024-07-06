@@ -1,11 +1,11 @@
 import React from "react";
 import Product from "../Components/product";
-export default function Home() {
+
+export default function Home({ isLoggedIn }) {
   return (
     <>
       <div className="">
-        {" "}
-        <Product />
+        <Product isLoggedIn={isLoggedIn} />
       </div>
     </>
   );

@@ -4,18 +4,22 @@ import { Provider } from "react-redux";
 import store from "../redux/store";
 import Navbar from "../Components/navbar";
 import { Login, Register } from "../Auth";
-import { Home, Product, AboutPage, ContactPage, Cart, Checkout,OrderDetails } from "../Pages";
+import { Home, AboutPage, ContactPage, Cart, Checkout, OrderDetails } from "../Pages";
+
+// Utility function to get the value of a cookie by name
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+};
 
 export default function MainRoutes() {
-  // Assuming you have some authentication state
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Function to simulate authentication (replace this with your actual authentication logic)
   useEffect(() => {
-    // Implement your authentication check here
-    // For simplicity, let's use a local storage variable as an example
-    const storedToken = localStorage.getItem("userId");
-    console.log("useridtoken", storedToken);
+    const storedToken = getCookie("jwt");
+    console.log("JWT Token from cookies:", storedToken);
     if (storedToken) {
       setIsLoggedIn(true);
     } else {
@@ -28,21 +32,25 @@ export default function MainRoutes() {
       <>
         <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
 
-        {/* Routes */}
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route exact path="/" element={<Home isLoggedIn={isLoggedIn} />} />
           <Route exact path="/contact" element={<ContactPage />} />
           <Route exact path="/about" element={<AboutPage />} />
-          <Route exact path="/" element={<Product />} />
           <Route
             path="/login"
             element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />}
           />
           <Route exact path="/register" element={<Register />} />
-          <Route exact path="/cart" element={isLoggedIn ? <Cart /> : <Navigate to="/login" replace />} />
-          <Route exact path="/checkout" element={isLoggedIn ? <Checkout /> : <Navigate to="/login" replace />} />
-
-          {/* Route for order details */}
+          <Route
+            exact
+            path="/cart"
+            element={isLoggedIn ? <Cart /> : <Navigate to="/login" replace />}
+          />
+          <Route
+            exact
+            path="/checkout"
+            element={isLoggedIn ? <Checkout /> : <Navigate to="/login" replace />}
+          />
           <Route path="/order/:orderId" element={<OrderDetails />} />
         </Routes>
       </>

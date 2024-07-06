@@ -54,9 +54,10 @@ module.exports.signup = async (req, res) => {
       // Create a new user
       const user = await User.create({ fullName, email, password });
 
-      // You may want to generate a JWT token and send it in the response for user authentication
+      // Generate a JWT token and send it in the response
+      const token = getToken(user._id);
       console.log("new user", user);
-      res.status(201).json({ success: "Signed up successfully" });
+      res.status(201).json({ success: "Signed up successfully", token });
     }
   } catch (err) {
     console.error("Error signing up", err);
@@ -78,8 +79,9 @@ module.exports.login = async (req, res) => {
       throw new Error("Invalid credentials");
     }
 
-    // Authentication successful
-    res.status(200).json({ success: user._id });
+    // Generate a JWT token and send it in the response
+    const token = getToken(user._id);
+    res.status(200).json({ success: user._id, token });
     console.log("Logged data", user);
   } catch (err) {
     console.error("Error logging in:", err.message);
