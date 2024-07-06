@@ -132,14 +132,14 @@ const LoginForm =({ isLoggedIn, setIsLoggedIn }) => {
         </div>
         <p className="text-red-500 m-2 p-2">{error}</p>
         <p className="text-red-500 m-2 p-2">{error1}</p>
-        <div className="flex justify-between items-center mb-4">
+        {/* <div className="flex justify-between items-center mb-4">
           <Link
             to="/"
             className="text-sm text-gray-600 hover:underline"
           >
             Forgot Password?
           </Link>
-        </div>
+        </div> */}
         <div className="">
           {" "}
           New User?

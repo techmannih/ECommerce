@@ -1,6 +1,7 @@
 import { Fragment, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Link } from "react-router-dom";
 
 const navigation = [
   {
@@ -153,12 +154,12 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                 ) : (
                   // User is not logged in, show login and register buttons
                   <div className="flex space-x-4">
-                    <a
-                      href="/login"
+                    <Link
+                       to="/login"
                       className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                     >
                       Login
-                    </a>
+                    </Link>
                     <a
                       href="/register"
                       className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
