@@ -33,7 +33,7 @@ export default function MainRoutes() {
           <Route exact path="/" element={<Home />} />
           <Route exact path="/contact" element={<ContactPage />} />
           <Route exact path="/about" element={<AboutPage />} />
-          <Route exact path="/products" element={<Product />} />
+          <Route exact path="/" element={<Product />} />
           <Route
             path="/login"
             element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />}

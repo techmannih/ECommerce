@@ -11,8 +11,8 @@ const navigation = [
   },
   {
     name: "Products",
-    href: "/products",
-    current: window.location.pathname === "/products" ? true : false,
+    href: "/",
+    current: window.location.pathname === "/" ? true : false,
   },
   {
     name: "Contact Us",
