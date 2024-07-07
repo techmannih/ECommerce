@@ -28,7 +28,9 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
         body: JSON.stringify(loginData),
       });
 
+      console.log(response);
       const responseBody = await response.json(); // Read response body only once
+      localStorage.setItem("userId", responseBody.success); // Use responseBody.success here
       console.log("datass", responseBody);
 
       if (response.ok) {
