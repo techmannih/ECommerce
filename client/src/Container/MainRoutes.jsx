@@ -13,6 +13,10 @@ const getCookie = (name) => {
   if (parts.length === 2) return parts.pop().split(';').shift();
   return null;
 };
+// i want to add userid on login in localStorage, give me code here 
+const UserId =localStorage.getItem('userId');
+console.log("User ID:", UserId);
+
 
 export default function MainRoutes() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
