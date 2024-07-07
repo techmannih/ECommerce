@@ -34,8 +34,9 @@ const Cart = () => {
   };
 
   const decreaseItem = (product) => {
+    const userId = localStorage.getItem("userId");
     console.log("Decreasing quantity for product:", product);
-    dispatch(decreaseItemInCart(product.userId, product.productId));
+    dispatch(decreaseItemInCart(userId, product.productId));
   };
 
   const deleteById = (product) => {

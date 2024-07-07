@@ -33,28 +33,33 @@ const cartReducer = (state = initialState, action) => {
       };
 
 
-    case DECREASE_ITEM_FROM_CART:
-      const existingDecreaseItem = state.cartItems.find(
-        (item) => item.productId === action.payload.productId
-      );
-      if (existingDecreaseItem.quantity > 1) {
+      case DECREASE_ITEM_FROM_CART:
+        const existingDecreaseItem = state.cartItems.find(
+          (item) => item.productId === action.payload.productId
+        );
+        if (existingDecreaseItem.quantity > 1) {
+          return {
+            ...state,
+            cartItems: state.cartItems.map((item) =>
+              item.productId === action.payload.productId
+                ? { ...item, quantity: item.quantity - 1 }
+                : item
+            ),
+          };
+        } else {
+          return {
+            ...state,
+            cartItems: state.cartItems.filter(
+              (item) => item.productId !== action.payload.productId
+            ),
+          };
+        }
+      case CLEAR_CART:
         return {
           ...state,
-          cartItems: state.cartItems.map((item) =>
-            item.productId === action.payload.productId
-              ? { ...item, quantity: item.quantity - 1 }
-              : item
-          ),
+          cartItems: [],
         };
-      } else {
-        return {
-          ...state,
-          cartItems: state.cartItems.filter(
-            (item) => item.productId !== action.payload.productId
-          ),
-        };
-      }
-
+  
     case ITEM_REMOVE_FROM_CART:
       return {
         ...state,
@@ -63,12 +68,7 @@ const cartReducer = (state = initialState, action) => {
         ),
       };
 
-    case CLEAR_CART:
-      return {
-        ...state,
-        cartItems: [],
-      };
-
+   
     case SET_CART_DATA:
       return {
         ...state,

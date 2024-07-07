@@ -5,12 +5,10 @@ import {
   SET_CART_DATA,
   FETCH_CART_FAILURE,
   DECREASE_ITEM_FROM_CART,
-  UPDATE_CART_ITEM
+  UPDATE_CART_ITEM,
 } from "../../constants/cartConstants";
 
 // Action creator function
-
-
 
 export const addToCart = (userId, product) => async (dispatch, getState) => {
   try {
@@ -80,54 +78,28 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
     console.error("Error adding/updating item in cart:", error.message);
   }
 };
-
-// export const increaseItemInCart = (userId, productId) => async (dispatch) => {
-//   try {
-//     const response = await fetch(
-//       `${import.meta.env.VITE_BACKEND_URL}/cart/increaseItem`,
-//       {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ userId, productId }),
-//       }
-//     );
-
-//     if (!response.ok) {
-//       throw new Error("Failed to increase item quantity in cart");
-//     }
-
-//     const data = await response.json();
-
-//     dispatch({
-//       type: ADD_TO_CART,
-//       payload: data.data.items.find((item) => item.productId === productId),
-//     });
-
-//     console.log("Item quantity increased in cart successfully:", data);
-//     return true;
-//   } catch (error) {
-//     console.error("Error increasing item quantity in cart:", error);
-//     return false;
-//   }
-// };
-
-export const decreaseItemInCart =
-  (userId, productId) => async (dispatch, getState) => {
+export const decreaseItemInCart = (userId, productId) => async (dispatch, getState) => {
     try {
       const { cartItems } = getState().cart;
-      const item = cartItems.find((item) => item.productId === productId);
-
+      const item = cartItems.find(
+        (item) => String(item.productId) === String(productId)
+      );
+      console.log(
+        "Decreasing item in cart:",
+        userId,
+        productId,
+        item,
+        item.quantity
+      );
       if (item.quantity > 1) {
         const response = await fetch(
           `${import.meta.env.VITE_BACKEND_URL}/cart/decreaseItem`,
           {
-            method: "POST",
+            method: "PUT",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ userId, productId }),
+            body: JSON.stringify({  productId }),
           }
         );
 
@@ -139,7 +111,7 @@ export const decreaseItemInCart =
 
         dispatch({
           type: DECREASE_ITEM_FROM_CART,
-          payload: data.data.items.find((item) => item.productId === productId),
+          payload: data.data,
         });
 
         console.log("Item quantity decreased in cart successfully:", data);
@@ -158,7 +130,7 @@ export const clearCart = (userId) => async (dispatch) => {
     const response = await fetch(
       `${import.meta.env.VITE_BACKEND_URL}/cart/clear`,
       {
-        method: "POST",
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
@@ -172,6 +144,7 @@ export const clearCart = (userId) => async (dispatch) => {
 
     dispatch({
       type: CLEAR_CART,
+      payload: [],  // Clear the cart	
     });
 
     console.log("Cart cleared successfully");
@@ -180,23 +153,22 @@ export const clearCart = (userId) => async (dispatch) => {
   }
 };
 
-
 export const removeItemFromCart = (userId, productId) => async (dispatch) => {
   try {
     console.log("Removing item from cart:", userId, productId);
     const response = await fetch(
       `${import.meta.env.VITE_BACKEND_URL}/cart/remove`,
       {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ userId, productId }),
       }
     );
 
     if (!response.ok) {
-      throw new Error('Failed to remove item from cart');
+      throw new Error("Failed to remove item from cart");
     }
 
     const data = await response.json();
@@ -206,9 +178,9 @@ export const removeItemFromCart = (userId, productId) => async (dispatch) => {
       payload: productId,
     });
 
-    console.log('Item removed from cart:', productId);
+    console.log("Item removed from cart:", productId);
   } catch (error) {
-    console.error('Error removing item from cart:', error);
+    console.error("Error removing item from cart:", error);
   }
 };
 
@@ -259,4 +231,3 @@ export const fetchCartData = () => async (dispatch) => {
     });
   }
 };
-
