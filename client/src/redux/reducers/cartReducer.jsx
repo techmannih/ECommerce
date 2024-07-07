@@ -5,7 +5,6 @@ import {
   SET_CART_DATA,
   FETCH_CART_FAILURE,
   DECREASE_ITEM_FROM_CART,
-  // INCREASE_ITEM_QUANTITY,
   UPDATE_CART_ITEM
 } from "../../constants/cartConstants";
 

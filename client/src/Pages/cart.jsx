@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  // addToCart,
-  // increaseItemInCart,
+  addToCart,
   decreaseItemInCart,
   removeItemFromCart,
   fetchCartData,
@@ -29,8 +28,9 @@ const Cart = () => {
   }, [dispatch]);
 
   const increaseItem = (product) => {
+    const userId = localStorage.getItem("userId");
     console.log("Increasing quantity for product:", product);
-    // dispatch(increaseItemInCart(product.userId, product.productId));
+    dispatch(addToCart(userId, product));
   };
 
   const decreaseItem = (product) => {
