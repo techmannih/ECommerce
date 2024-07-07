@@ -1,37 +1,90 @@
-const cart = [];
+import {
+  ADD_TO_CART,
+  ITEM_REMOVE_FROM_CART,
+  CLEAR_CART,
+  SET_CART_DATA,
+  FETCH_CART_FAILURE,
+  DECREASE_ITEM_FROM_CART,
+  // INCREASE_ITEM_QUANTITY,
+  UPDATE_CART_ITEM
+} from "../../constants/cartConstants";
 
-const handleCart = (state = cart, action) => {
-  const product = action.payload;
+const initialState = {
+  cartItems: [],
+  // cartId: null,
+  error: null,
+};
 
+const cartReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "ADDITEM":
-      // Check if product already in cart
-      const existingProduct = state.find((x) => x.id === product.id);
+    // Reducer snippet for handling ADD_TO_CART action
+    case ADD_TO_CART:
+      return {
+        ...state,
+        cartItems: [...state.cartItems, action.payload],
+      };
+    case UPDATE_CART_ITEM:
+      return {
+        ...state,
+        cartItems: state.cartItems.map((item) =>
+          item.productId === action.payload.productId
+            ? { ...item, quantity: item.quantity + action.payload.quantity, itemPrice: item.itemPrice + action.payload.itemPrice }
+            : item
+        ),
+      };
 
-      if (existingProduct) {
-        // Increase the quantity
-        return state.map((x) =>
-          x.id === product.id ? { ...x, quantity: x.quantity + 1 } : x
-        );
+
+    case DECREASE_ITEM_FROM_CART:
+      const existingDecreaseItem = state.cartItems.find(
+        (item) => item.productId === action.payload.productId
+      );
+      if (existingDecreaseItem.quantity > 1) {
+        return {
+          ...state,
+          cartItems: state.cartItems.map((item) =>
+            item.productId === action.payload.productId
+              ? { ...item, quantity: item.quantity - 1 }
+              : item
+          ),
+        };
       } else {
-        return state.concat({ ...product, quantity: 1 });
+        return {
+          ...state,
+          cartItems: state.cartItems.filter(
+            (item) => item.productId !== action.payload.productId
+          ),
+        };
       }
 
-    case "DELITEM":
-      const existingProduct2 = state.find((x) => x.id === product.id);
+    case ITEM_REMOVE_FROM_CART:
+      return {
+        ...state,
+        cartItems: state.cartItems.filter(
+          (item) => item.productId !== action.payload
+        ),
+      };
 
-      if (existingProduct2.quantity === 1) {
-        return state.filter((x) => x.id !== existingProduct2.id);
-      } else {
-        return state.map((x) =>
-          x.id === product.id ? { ...x, quantity: x.quantity - 1 } : x
-        );
-      }
-      case "DELITEMBYID":
-        return state.filter((x) => x.id !== product.id);
+    case CLEAR_CART:
+      return {
+        ...state,
+        cartItems: [],
+      };
+
+    case SET_CART_DATA:
+      return {
+        ...state,
+        cartItems: action.payload.cartItems,
+      };
+
+    case FETCH_CART_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+      };
+
     default:
       return state;
   }
 };
 
-export default handleCart;
+export default cartReducer;

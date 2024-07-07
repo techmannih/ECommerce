@@ -4,12 +4,14 @@ const { Cart } = require("../models/cartmodel");
 module.exports.createOrUpdateCart = async (req, res) => {
   try {
     const { userId, productId, quantity, itemPrice } = req.body;
+    console.log("Received userId:", req.body);
 
     if ( !productId || !quantity || !itemPrice) {
       return res.status(400).json({ success: false, error: "Missing required fields" });
     }
 
     let cart = await Cart.findOne({ user: userId });
+    console.log("cart", cart);
 
     if (!cart) {
       // Create a new cart if it doesn't exist
@@ -17,17 +19,22 @@ module.exports.createOrUpdateCart = async (req, res) => {
     }
 
     // Check if the product is already in the cart
-    const existingItem = cart.items.find(item => item.productId === productId);
+    const existingItem = cart.items.find(
+      (item) => String(item.productId) === String(productId)
+    );
+    console.log("existingItem", existingItem);
 
     if (existingItem) {
       // Increase the quantity of the product
       existingItem.quantity += quantity;
+      existingItem.itemPrice += itemPrice;
     } else {
       // Product not in the cart, add a new item
       cart.items.push({ productId, quantity, itemPrice });
     }
 
     const updatedCart = await cart.save();
+    console.log("updatedCart", updatedCart);
 
     res.status(200).json({
       success: true,
@@ -42,36 +49,36 @@ module.exports.createOrUpdateCart = async (req, res) => {
 
 
 
-module.exports.IncreaseItem = async (req, res) => {
-  try {
-    const { productId } = req.body;
+// module.exports.IncreaseItem = async (req, res) => {
+//   try {
+//     const { productId } = req.body;
 
-    // Find the cart containing the product
-    const cart = await Cart.findOne({ "items.productId": productId });
+//     // Find the cart containing the product
+//     const cart = await Cart.findOne({ "items.productId": productId });
 
-    if (cart) {
-      // Increase the quantity of the product
-      const item = cart.items.find(item => item.productId === productId);
-      item.quantity++;
+//     if (cart) {
+//       // Increase the quantity of the product
+//       const item = cart.items.find(item => item.productId === productId);
+//       item.quantity++;
 
-      const updatedCart = await cart.save();
+//       const updatedCart = await cart.save();
 
-      res.status(200).json({
-        success: true,
-        message: "Quantity updated in Cart successfully",
-        data: updatedCart,
-      });
-    } else {
-      res.status(404).json({
-        success: false,
-        error: "Item not found in the cart",
-      });
-    }
-  } catch (error) {
-    console.error("Error updating cart:", error);
-    res.status(500).json({ success: false, error: "Internal Server Error" });
-  }
-};
+//       res.status(200).json({
+//         success: true,
+//         message: "Quantity updated in Cart successfully",
+//         data: updatedCart,
+//       });
+//     } else {
+//       res.status(404).json({
+//         success: false,
+//         error: "Item not found in the cart",
+//       });
+//     }
+//   } catch (error) {
+//     console.error("Error updating cart:", error);
+//     res.status(500).json({ success: false, error: "Internal Server Error" });
+//   }
+// };
 
 module.exports.DecreaseItem = async (req, res) => {
   try {
@@ -109,20 +116,32 @@ module.exports.DecreaseItem = async (req, res) => {
   }
 };
 
+
+
 module.exports.getAllCart = async (req, res) => {
   try {
-    const { userId } = req.params; // Assuming user ID is passed in the URL parameters
-    
-    // Fetch all shopping carts for the given user ID from the database
-    const userCarts = await Cart.find({ user: userId });
-    
-    res.status(200).json({ success: true, data: userCarts });
+    const { userId } = req.params;
+
+    console.log("Received userId:", userId);
+
+    // Check if userId is provided and valid
+    if (!userId) {
+      return res.status(400).json({ success: false, error: 'User ID is required' });
+    }
+
+    // Fetch the cart for the given user ID from the database
+    const userCart = await Cart.findOne({ user: userId });
+
+    if (!userCart) {
+      return res.status(404).json({ success: false, error: 'No cart found for the user' });
+    }
+
+    console.log("userCart", userCart);
+
+    res.status(200).json({ success: true, data: userCart.items });
   } catch (error) {
-    console.error("Error getting all shopping carts:", error);
-    res.status(500).json({
-      success: false,
-      error: "Internal Server Error",
-    });
+    console.error('Error getting all shopping carts:', error);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 };
 

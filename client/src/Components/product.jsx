@@ -15,35 +15,17 @@ const Products = ({ isLoggedIn }) => {
   const dispatch = useDispatch();
   let componentMounted = true;
 
-  const addToCartHandler = async (product) => {
+  const addToCartHandler = (product) => {
     try {
       const cartItem = {
         productId: product.id,
         quantity: Number(product.qty) || 1,
         itemPrice: product.price,
       };
-
-      // Example API call to add item to cart (replace with your backend logic)
-      const response = await fetch("http://localhost:8880/cart/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(cartItem),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to add item to the cart");
-      }
+      const userId = localStorage.getItem("userId");
 
       // Dispatch addToCart action to update Redux state
-      dispatch(addToCart(product));
-
-      // Update local component state if needed
-      setCartData((prevState) => ({
-        ...prevState,
-        cartUpdated: true,
-      }));
+      dispatch(addToCart(userId,cartItem));
 
       console.log("Item added to the cart:", product);
     } catch (error) {
