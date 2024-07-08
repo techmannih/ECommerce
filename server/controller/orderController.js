@@ -58,7 +58,7 @@ module.exports.createOrder = async (req, res) => {
       items: orderItems,
       shippingPrice,
       totalPrice,
-      paymentInfo,
+      // paymentInfo,
     });
     console.log("Order:", order);
 
