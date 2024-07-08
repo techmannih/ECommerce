@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const {
     getAllAddress,
-    // getAddressById,
+    getAddressById,
     createAddress,
     deleteAddress,
     // updateAddress,
@@ -10,7 +10,7 @@ const {
 const router = Router();
 
 router.route("/address/:userId").get(getAllAddress);
-// router.route("/address/:id").get(getAddressById);
+router.route("/address/get/:id").get(getAddressById);
 router.route("/address/create").post(createAddress);
 router.route("/address/delete/:id").delete(deleteAddress); // Include ":id" as a parameter
 // router.route("/address/update").put(updateAddress);

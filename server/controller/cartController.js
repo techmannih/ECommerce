@@ -171,3 +171,26 @@ module.exports.clearAllCart = async (req, res) => {
     });
   }
 };
+
+module.exports.getCartById = async (req, res) => {
+  try {
+    const { cartId } = req.params;
+
+    // Fetch the cart for the given user ID from the database
+    const userCart = await Cart.findById(cartId);
+
+    if (!userCart) {
+      return res
+        .status(404)
+        .json({ success: false, error: "No cart found for the user" });
+    }
+
+    console.log("userCart", userCart);
+
+    res.status(200).json({ success: true, data: userCart.items });
+  } catch (error) {
+    console.error("Error getting all shopping carts:", error);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
+}
+
