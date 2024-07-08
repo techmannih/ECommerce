@@ -90,7 +90,28 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                 {isLoggedIn ? (
                   // User is logged in, show profile dropdown
                   <Menu as="div" className="relative ml-3">
-                    <div>
+                    <div className="flex items-center">
+                      <div class="m-2 text-white flex justify-center items-center">
+                        <a href="./cart">
+                          <div class="relative">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                              class="file:  m-1 h-8 w-8"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
+                              />
+                            </svg>
+                          </div>
+                        </a>
+                      </div>
+
                       <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm hover:outline-none hover:ring-2 hover:ring-white hover:ring-offset-2 hover:ring-offset-gray-800">
                         <span className="absolute -inset-1.5" />
                         <span className="sr-only">Open user menu</span>
@@ -126,13 +147,13 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                         <Menu.Item>
                           {({ active }) => (
                             <a
-                              href="#"
+                              href="/orders"
                               className={classNames(
                                 active ? "bg-gray-100" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
-                              Your Profile
+                              Your Orders
                             </a>
                           )}
                         </Menu.Item>
