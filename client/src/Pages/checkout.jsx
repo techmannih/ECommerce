@@ -5,11 +5,12 @@ import {
   saveAddress,
   deleteAddress,
 } from "../redux/actions/addressAction";
+import { createOrder } from "../redux/actions/orderAction";
 
 const Checkout = () => {
   const [error, setError] = useState(null);
   const { addresses = [], loading } = useSelector((state) => state.address);
-  console.log("adwwwwwwdresses", addresses);
+
   const dispatch = useDispatch();
 
   const cartItems = useSelector((state) => state.cart.cartItems);
@@ -25,6 +26,8 @@ const Checkout = () => {
     pincode: "",
     country: "",
   });
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
+
   const handleSaveBillingaddress = (e) => {
     e.preventDefault();
     if (
@@ -36,7 +39,7 @@ const Checkout = () => {
       setError("Invalid billing address. Please fill in all required fields.");
       return;
     }
-    const userId = localStorage.getItem("userId"); // Ensure userId is retrieved from localStorage or state
+    const userId = localStorage.getItem("userId");
     dispatch(saveAddress(billingaddress, userId));
     setBillingaddress({
       firstName: "",
@@ -50,33 +53,57 @@ const Checkout = () => {
       pincode: "",
       country: "",
     });
-    setError(null); // Clear error state after successful submission
+    setError(null);
   };
 
   const deleteAddressHandler = (addressId) => {
     dispatch(deleteAddress(addressId));
   };
 
+  const handleSelectAddress = (addressId) => {
+    setSelectedAddressId(addressId);
+  };
+
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     dispatch(fetchAddresses(userId));
   }, [dispatch]);
-  const subtotal = cartItems.reduce((acc, item) => acc + item.itemPrice, 0); // Calculate subtotal
-  const shipping = 10; // Replace with actual shipping cost
+
+  const subtotal = cartItems.reduce((acc, item) => acc + item.itemPrice, 0);
+  const shipping = 10;
+
+  const handlePlaceOrder = () => {
+    const user = localStorage.getItem("userId");
+    const cart = localStorage.getItem("cartId");
+    const shippingPrice = 10;
+    const orderData = {
+      user,
+      cart,
+      address: selectedAddressId,
+      shippingPrice,
+      Items: cartItems,
+      totalPrice: subtotal + shipping,
+    };
+    console.log("Order data:", orderData, user);
+    dispatch(createOrder(orderData));
+  };
+
   return (
-    <div>
+    <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       {error && <div className="text-red-500">{error}</div>}
+      {/* {orderError && <div className="text-red-500">{orderError}</div>} */}
       {loading ? (
         <p>Loading...</p>
       ) : (
         <div className="flex justify-between flex-col m-4 p-4">
           <div className="flex justify-between max-md:flex-col">
-            <form className="card rounded-lg border-2 md:w-2/3  m-2">
-              <div className=" mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold ">
-                {" "}
-                <p className="">Billing address</p>
+            <form
+              className="card rounded-lg border-2 md:w-2/3 m-2"
+              onSubmit={handleSaveBillingaddress}
+            >
+              <div className="mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
+                <p>Billing address</p>
               </div>
-
               <div className="grid grid-cols-2 gap-4 p-2 m-2">
                 <div className="mb-4">
                   <label
@@ -212,7 +239,7 @@ const Checkout = () => {
                       addressLine2: e.target.value,
                     })
                   }
-                  placeholder="Apartment, Suite, Unit, Building, Floor, etc."
+                  placeholder="Apt. / Suite / Other"
                   className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                 />
               </div>
@@ -260,7 +287,6 @@ const Checkout = () => {
                     }
                     placeholder="State"
                     className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-                    required
                   />
                 </div>
                 <div className="mb-4">
@@ -268,7 +294,7 @@ const Checkout = () => {
                     htmlFor="pincode"
                     className="block text-sm font-semibold text-gray-600"
                   >
-                    Pincode
+                    Zip / Postal code
                   </label>
                   <input
                     type="text"
@@ -281,7 +307,7 @@ const Checkout = () => {
                         pincode: e.target.value,
                       })
                     }
-                    placeholder="Pincode"
+                    placeholder="Zipcode"
                     className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                     required
                   />
@@ -310,78 +336,79 @@ const Checkout = () => {
                   required
                 />
               </div>
-              <p className="text-red-500 font-bold text-lg m-2 p-2">{error}</p>
-              <div className=" items-center m-2 p-2">
-                {" "}
+              <div className="flex justify-end mb-4 p-2 m-2">
                 <button
                   type="submit"
-                  onClick={handleSaveBillingaddress}
-                  className="mt-4 bg-black text-white p-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring focus:border-gray-300 "
+                  className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
                 >
-                  Save
+                  Save Address
                 </button>
               </div>
             </form>
-
-            <div className="card rounded-lg border-2 md:w-1/3 max-md:w-72  m-2">
-              <div className=" mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold ">
-                <h5 className="mb-0">Order Summary</h5>
+            <div className="md:w-1/3 m-2">
+              <div className="mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
+                <p>Saved addresses</p>
               </div>
-              <div className="card-body">
-                <ul className="p-2 py-4 text-xl">
-                  <li className=" flex justify-between items-center border-0 px-6 pb-2">
-                    Products<span>${Math.round(subtotal)}</span>
-                  </li>
-                  <li className=" flex justify-between items-center border-0 px-6 pb-2">
-                    Shipping
-                    <span>${shipping}</span>
-                  </li>
-                  <li className=" flex justify-between items-center border-0 px-6 pb-2 font-semibold">
+              <ul className="card rounded-lg border-2 divide-y divide-gray-200">
+                {addresses.map((address) => (
+                  <li
+                    key={address._id}
+                    className="p-4 flex justify-between items-center"
+                  >
                     <div>
-                      <strong>Total amount</strong>
-                    </div>
-                    <span>
-                      <strong>${Math.round(subtotal + shipping)}</strong>
-                    </span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div className="md:w-1/3 card rounded-lg border-2 m-2 max-md:mt-8">
-            <div className="mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
-              <p>Saved Addresses</p>
-            </div>
-            <ul className="divide-y divide-gray-200">
-              {addresses.length > 0 ? (
-                addresses.map((address) => (
-                  <li key={address._id} className="p-4 flex justify-between">
-                    <div>
-                      <p className="font-semibold">
-                        {address.firstName} {address.lastName}
-                      </p>
-                      <p>{address.addressLine1}</p>
-                      {address.addressLine2 && <p>{address.addressLine2}</p>}
+                      <p className="font-semibold">{address.addressLine1}</p>
                       <p>
-                        {address.city}, {address.state} - {address.pincode}
+                        {address.city}, {address.state}, {address.pincode}
                       </p>
                       <p>{address.country}</p>
-                      <p>Email: {address.email}</p>
-                      <p>Phone: {address.phoneNumber}</p>
                     </div>
-                    <button
-                      onClick={() => deleteAddressHandler(address._id)}
-                      className="text-red-500 font-semibold"
-                    >
-                      Delete
-                    </button>
+                    <div>
+                      <button
+                        onClick={() => handleSelectAddress(address._id)}
+                        className={`mr-2 py-2 px-4 rounded-md focus:outline-none ${
+                          selectedAddressId === address._id
+                            ? "bg-green-500 text-white"
+                            : "bg-blue-500 text-white hover:bg-blue-600"
+                        }`}
+                      >
+                        {selectedAddressId === address._id
+                          ? "Selected"
+                          : "Select"}
+                      </button>
+                      <button
+                        onClick={() => deleteAddressHandler(address._id)}
+                        className="py-2 px-4 rounded-md bg-red-500 text-white hover:bg-red-600 focus:outline-none"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </li>
-                ))
-              ) : (
-                <li className="p-4 text-center">No addresses saved yet</li>
-              )}
-            </ul>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="bg-white rounded-lg shadow-lg p-8 mt-8">
+            <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
+            <div className="flex justify-between mb-4">
+              <span className="text-gray-700">Subtotal</span>
+              <span className="text-gray-700">${subtotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between mb-4">
+              <span className="text-gray-700">Shipping</span>
+              <span className="text-gray-700">${shipping.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between mb-4">
+              <span className="text-gray-700">Total</span>
+              <span className="text-gray-700">
+                ${(subtotal + shipping).toFixed(2)}
+              </span>
+            </div>
+            <button
+              onClick={handlePlaceOrder}
+              className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 w-full"
+            >
+              Place Order
+            </button>
           </div>
         </div>
       )}

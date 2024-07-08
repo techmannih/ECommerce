@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import store from "../redux/store";
 import Navbar from "../Components/navbar";
 import { Login, Register } from "../Auth";
-import { Home, AboutPage, ContactPage, Cart, Checkout, OrderDetails } from "../Pages";
+import { Home, AboutPage, ContactPage, Cart, Checkout, OrderDetails,Order } from "../Pages";
 
 // Utility function to get the value of a cookie by name
 const getCookie = (name) => {
@@ -56,6 +56,8 @@ export default function MainRoutes() {
             element={isLoggedIn ? <Checkout /> : <Navigate to="/login" replace />}
           />
           <Route path="/order/:orderId" element={<OrderDetails />} />
+          <Route path="/orders" element={<Order />} />
+          
         </Routes>
       </>
     </Provider>

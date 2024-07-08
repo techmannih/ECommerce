@@ -9,7 +9,7 @@ module.exports.createOrder = async (req, res) => {
     const { cart, user, shippingPrice, totalPrice, paymentInfo, address } =
       req.body;
     // console.log("Request body:", req.body);
-
+    console.log("order body:", cart);
     // Find the cart by its ID
     const cartDetails = await Cart.findById(cart);
     // console.log("Cart details:", cartDetails);
@@ -98,8 +98,10 @@ module.exports.getOrderById = async (req, res) => {
 };
 
 module.exports.getOrderByUserId = async (req, res) => {
+  const userId = req.params.userId;
+  console.log("userid", userId);
   try {
-    const userId = req.params.userId;
+    console.log(userId);
     const orders = await Order.find({ user: userId });
     res.status(200).json({ success: true, data: orders });
   } catch (error) {
@@ -129,3 +131,4 @@ module.exports.cancelOrder = async (req, res) => {
     res.status(500).json({ success: false, error: "Internal server error" });
   }
 };
+module.exports.removeOrder = async (req, res) => {};

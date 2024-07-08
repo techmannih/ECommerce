@@ -1,21 +1,46 @@
-import React from "react";
+// components/OrdersPage.js
 
-export default function Order({ orderId, product, quantity, totalPrice }) {
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getOrders } from '../redux/actions/orderAction';
+
+const OrdersPage = () => {
+  const dispatch = useDispatch();
+
+  const { orders, loading, error } = useSelector((state) => state.order);
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    dispatch(getOrders(userId));
+  }, [dispatch]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <div>
-      <h1>Order Details</h1>
-      <p>Order ID: {orderId}</p>
-      <p>Product: {product}</p>
-      <p>Quantity: {quantity}</p>
-      <p>Total Price: ${totalPrice.toFixed(2)}</p>
-      {/* Add more details based on your order information */}
-      <button onClick={() => handleCancelOrder(orderId)}>Cancel Order</button>
+      <h1>All Orders</h1>
+      {orders && orders.length > 0 ? (
+        <ul>
+          {orders.map((order) => (
+            <li key={order._id}>
+              <p>Order ID: {order._id}</p>
+              <p>Total Price: {order.totalPrice}</p>
+              <p>Shipping Price: {order.shippingPrice}</p>
+              {/* Render other order details as needed */}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div>No orders found.</div>
+      )}
     </div>
   );
-}
-
-const handleCancelOrder = (orderId) => {
-  // Add logic to handle order cancellation
-  console.log(`Cancel Order with ID: ${orderId}`);
-  // You can make an API call to the server to cancel the order, update the UI, etc.
 };
+
+export default OrdersPage;
