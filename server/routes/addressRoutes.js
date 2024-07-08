@@ -9,7 +9,7 @@ const {
 
 const router = Router();
 
-router.route("/address").get(getAllAddress);
+router.route("/address/:userId").get(getAllAddress);
 // router.route("/address/:id").get(getAddressById);
 router.route("/address/create").post(createAddress);
 router.route("/address/delete/:id").delete(deleteAddress); // Include ":id" as a parameter
