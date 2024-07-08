@@ -339,7 +339,7 @@ const Checkout = () => {
               <div className="flex justify-end mb-4 p-2 m-2">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
+                  className="bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-400 focus:outline-none focus:ring "
                 >
                   Save Address
                 </button>
@@ -356,19 +356,26 @@ const Checkout = () => {
                     className="p-4 flex justify-between items-center"
                   >
                     <div>
+                      <div className="flex">
+                        <p className="font-semibold mr-1">
+                          {address.firstName}
+                        </p>{" "}
+                        <p className="font-semibold">{address.lastName}</p>
+                      </div>
+                      <p className="font-semibold">{address.phoneNumber}</p>
                       <p className="font-semibold">{address.addressLine1}</p>
                       <p>
                         {address.city}, {address.state}, {address.pincode}
                       </p>
                       <p>{address.country}</p>
                     </div>
-                    <div>
+                    <div className="flex flex-col">
                       <button
                         onClick={() => handleSelectAddress(address._id)}
-                        className={`mr-2 py-2 px-4 rounded-md focus:outline-none ${
+                        className={`mr-2 py-2 px-4 rounded-t-lg focus:outline-none font-semibold ${
                           selectedAddressId === address._id
                             ? "bg-green-500 text-white"
-                            : "bg-blue-500 text-white hover:bg-blue-600"
+                            : "bg-gray-600 text-white "
                         }`}
                       >
                         {selectedAddressId === address._id
@@ -377,7 +384,7 @@ const Checkout = () => {
                       </button>
                       <button
                         onClick={() => deleteAddressHandler(address._id)}
-                        className="py-2 px-4 rounded-md bg-red-500 text-white hover:bg-red-600 focus:outline-none"
+                        className="mr-2 py-2 px-4 rounded-b-lg font-semibold bg-white text-red-500 hover:bg-red-400 hover:text-white"
                       >
                         Delete
                       </button>
@@ -387,25 +394,29 @@ const Checkout = () => {
               </ul>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-lg p-8 mt-8">
-            <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
-            <div className="flex justify-between mb-4">
-              <span className="text-gray-700">Subtotal</span>
-              <span className="text-gray-700">${subtotal.toFixed(2)}</span>
+          <div className="p-2">
+            <div className="mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
+              <p>Order Summary</p>
             </div>
-            <div className="flex justify-between mb-4">
-              <span className="text-gray-700">Shipping</span>
-              <span className="text-gray-700">${shipping.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between mb-4">
-              <span className="text-gray-700">Total</span>
-              <span className="text-gray-700">
-                ${(subtotal + shipping).toFixed(2)}
-              </span>
+            <div className="card  border-2 divide-y divide-gray-200 p-4 flex flex-col justify-between ">
+              <div className="flex justify-between mb-4">
+                <span className="text-gray-700">Subtotal</span>
+                <span className="text-gray-700">${subtotal.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between mb-4">
+                <span className="text-gray-700">Shipping</span>
+                <span className="text-gray-700">${shipping.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between mb-4">
+                <span className="text-gray-700">Total</span>
+                <span className="text-gray-700">
+                  ${(subtotal + shipping).toFixed(2)}
+                </span>
+              </div>
             </div>
             <button
               onClick={handlePlaceOrder}
-              className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 w-full"
+              className="bg-gray-600 text-white py-2 px-4 rounded-b-lg hover:bg-gray-400 focus:outline-none focus:ring focus:border-blue-300 w-full"
             >
               Place Order
             </button>
