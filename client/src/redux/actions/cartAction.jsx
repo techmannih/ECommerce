@@ -63,6 +63,7 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
 
     const data = await response.json();
     console.log("Cart updated successfully:", data);
+    localStorage.setItem("cartId", data.data._id);
 
     dispatch({
       type: existingCartItem ? UPDATE_CART_ITEM : ADD_TO_CART,
@@ -78,7 +79,8 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
     console.error("Error adding/updating item in cart:", error.message);
   }
 };
-export const decreaseItemInCart = (userId, productId) => async (dispatch, getState) => {
+export const decreaseItemInCart =
+  (userId, productId) => async (dispatch, getState) => {
     try {
       const { cartItems } = getState().cart;
       const item = cartItems.find(
@@ -99,7 +101,7 @@ export const decreaseItemInCart = (userId, productId) => async (dispatch, getSta
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({  productId }),
+            body: JSON.stringify({ productId }),
           }
         );
 
@@ -144,7 +146,7 @@ export const clearCart = (userId) => async (dispatch) => {
 
     dispatch({
       type: CLEAR_CART,
-      payload: [],  // Clear the cart	
+      payload: [], // Clear the cart
     });
 
     console.log("Cart cleared successfully");
