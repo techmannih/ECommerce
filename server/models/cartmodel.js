@@ -16,6 +16,13 @@ const cartItemSchema = new mongoose.Schema({
     default: 0,
     required: true,
   },
+  // totalPrice = qunatity * itemPrice
+  totalItemPrice: {
+    type: Number,
+    default: 0,
+    required: true,
+  },
+ 
 });
 
 const cartSchema = new mongoose.Schema(
@@ -23,7 +30,7 @@ const cartSchema = new mongoose.Schema(
     // _id: mongoose.Schema.Types.ObjectId,  // Include _id here
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
     items: [cartItemSchema],

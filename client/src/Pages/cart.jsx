@@ -66,11 +66,11 @@ const Cart = () => {
     if (!cartItems || cartItems.length === 0) {
       return <EmptyCart />;
     }
-    // const totalItems = cartItems.reduce((acc, item) => acc + item.itemPrice, 0); // Calculate total items
-    const subtotal = cartItems.reduce((acc, item) => acc + item.itemPrice , 0); // Calculate subtotal
+
+    const subtotal = cartItems.reduce((acc, item) => acc + item.itemPrice * item.quantity, 0); // Calculate subtotal using totalItemPrice
     const shipping = 10; // Replace with actual shipping cost
 
-    console.log(subtotal,shipping)
+    console.log(subtotal, shipping);
     return (
       <section className="h-auto">
         <div className="py-5 flex justify-between my-4 max-md:flex-col max-md:items-center">
@@ -121,7 +121,7 @@ const Cart = () => {
                       </div>
                       <div className="m-1 p-1">
                         <p className="text-xl font-semibold">
-                          ${item.itemPrice}
+                          ${item.itemPrice * item.quantity}
                         </p>
                       </div>
                     </div>

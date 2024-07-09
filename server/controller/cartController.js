@@ -3,12 +3,14 @@ const { Cart } = require("../models/cartmodel");
 module.exports.createOrUpdateCart = async (req, res) => {
   try {
     const { userId, productId, quantity, itemPrice } = req.body;
+
     console.log("Received userId:", req.body);
 
     if (!productId || !quantity || !itemPrice) {
-      return res
-        .status(400)
-        .json({ success: false, error: "Missing required fields" });
+      return res.status(400).json({
+        success: false,
+        error: "Missing required fields",
+      });
     }
 
     let cart = await Cart.findOne({ user: userId });
@@ -26,12 +28,13 @@ module.exports.createOrUpdateCart = async (req, res) => {
     console.log("existingItem", existingItem);
 
     if (existingItem) {
-      // Increase the quantity of the product
+      // Increase the quantity of the product and update total item price
       existingItem.quantity += quantity;
-      existingItem.itemPrice += itemPrice;
+      existingItem.totalItemPrice += quantity * itemPrice;
     } else {
-      // Product not in the cart, add a new item
-      cart.items.push({ productId, quantity, itemPrice });
+      // Product not in the cart, add a new item with initial total item price
+      const totalItemPrice = quantity * itemPrice;
+      cart.items.push({ productId, quantity, itemPrice, totalItemPrice });
     }
 
     const updatedCart = await cart.save();
@@ -46,9 +49,14 @@ module.exports.createOrUpdateCart = async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating or updating cart:", error);
-    res.status(500).json({ success: false, error: "Internal Server Error" });
+    res.status(500).json({
+      success: false,
+      error: "Internal Server Error",
+    });
   }
 };
+
+
 
 module.exports.DecreaseItem = async (req, res) => {
   try {
@@ -192,5 +200,4 @@ module.exports.getCartById = async (req, res) => {
     console.error("Error getting all shopping carts:", error);
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
-}
-
+};

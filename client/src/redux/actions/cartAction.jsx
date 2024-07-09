@@ -9,7 +9,6 @@ import {
 } from "../../constants/cartConstants";
 
 // Action creator function
-
 export const addToCart = (userId, product) => async (dispatch, getState) => {
   try {
     console.log("UserID and Product:", userId, product.productId);
@@ -71,6 +70,7 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
         productId: product.productId,
         quantity: 1,
         itemPrice: product.itemPrice,
+        totalItemPrice: product.itemPrice * (existingCartItem ? existingCartItem.quantity + 1 : 1), // Calculate totalItemPrice
       },
     });
 
@@ -79,53 +79,47 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
     console.error("Error adding/updating item in cart:", error.message);
   }
 };
-export const decreaseItemInCart =
-  (userId, productId) => async (dispatch, getState) => {
-    try {
-      const { cartItems } = getState().cart;
-      const item = cartItems.find(
-        (item) => String(item.productId) === String(productId)
-      );
-      console.log(
-        "Decreasing item in cart:",
-        userId,
-        productId,
-        item,
-        item.quantity
-      );
-      if (item.quantity > 1) {
-        const response = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/cart/decreaseItem`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ productId }),
-          }
-        );
 
-        if (!response.ok) {
-          throw new Error("Failed to decrease item quantity in cart");
+export const decreaseItemInCart = (userId, productId) => async (dispatch, getState) => {
+  try {
+    const { cartItems } = getState().cart;
+    const item = cartItems.find(
+      (item) => String(item.productId) === String(productId)
+    );
+    console.log("Decreasing item in cart:", userId, productId, item, item.quantity);
+    if (item.quantity > 1) {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/cart/decreaseItem`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ productId }),
         }
+      );
 
-        const data = await response.json();
-
-        dispatch({
-          type: DECREASE_ITEM_FROM_CART,
-          payload: data.data,
-        });
-
-        console.log("Item quantity decreased in cart successfully:", data);
-        return true;
-      } else {
-        dispatch(removeItemFromCart(userId, productId));
+      if (!response.ok) {
+        throw new Error("Failed to decrease item quantity in cart");
       }
-    } catch (error) {
-      console.error("Error decreasing item quantity in cart:", error);
-      return false;
+
+      const data = await response.json();
+
+      dispatch({
+        type: DECREASE_ITEM_FROM_CART,
+        payload: { userId, productId }
+      });
+
+      console.log("Item quantity decreased in cart successfully:", data);
+      return true;
+    } else {
+      dispatch(removeItemFromCart(userId, productId));
     }
-  };
+  } catch (error) {
+    console.error("Error decreasing item quantity in cart:", error);
+    return false;
+  }
+};
 
 export const clearCart = (userId) => async (dispatch) => {
   try {

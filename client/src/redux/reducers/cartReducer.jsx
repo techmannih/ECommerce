@@ -5,7 +5,7 @@ import {
   SET_CART_DATA,
   FETCH_CART_FAILURE,
   DECREASE_ITEM_FROM_CART,
-  UPDATE_CART_ITEM
+  UPDATE_CART_ITEM,
 } from "../../constants/cartConstants";
 
 const initialState = {
@@ -16,33 +16,45 @@ const initialState = {
 
 const cartReducer = (state = initialState, action) => {
   switch (action.type) {
-    // Reducer snippet for handling ADD_TO_CART action
     case ADD_TO_CART:
       return {
         ...state,
         cartItems: [...state.cartItems, action.payload],
       };
+
     case UPDATE_CART_ITEM:
       return {
         ...state,
         cartItems: state.cartItems.map((item) =>
           item.productId === action.payload.productId
-            ? { ...item, quantity: item.quantity + action.payload.quantity, itemPrice: item.itemPrice + action.payload.itemPrice }
+            ? {
+                ...item,
+                quantity: item.quantity + action.payload.quantity,
+                totalItemPrice:
+                  item.totalItemPrice + action.payload.totalItemPrice,
+              }
             : item
         ),
       };
 
-
       case DECREASE_ITEM_FROM_CART:
+        console.log("Action Payload:", action.payload);
+        console.log("Current Cart Items:", state.cartItems);
         const existingDecreaseItem = state.cartItems.find(
-          (item) => item.productId === action.payload.productId
+          (item) => String(item.productId) === String(action.payload.productId)
         );
-        if (existingDecreaseItem.quantity > 1) {
+        console.log("Existing Decrease Item in reducer:", existingDecreaseItem);
+  
+        if (existingDecreaseItem && existingDecreaseItem.quantity > 1) {
           return {
             ...state,
             cartItems: state.cartItems.map((item) =>
-              item.productId === action.payload.productId
-                ? { ...item, quantity: item.quantity - 1 }
+              String(item.productId) === String(action.payload.productId)
+                ? {
+                    ...item,
+                    quantity: item.quantity - 1,
+                    totalItemPrice: item.totalItemPrice - item.itemPrice,
+                  }
                 : item
             ),
           };
@@ -50,16 +62,17 @@ const cartReducer = (state = initialState, action) => {
           return {
             ...state,
             cartItems: state.cartItems.filter(
-              (item) => item.productId !== action.payload.productId
+              (item) => String(item.productId) !== String(action.payload.productId)
             ),
           };
         }
-      case CLEAR_CART:
-        return {
-          ...state,
-          cartItems: [],
-        };
   
+    case CLEAR_CART:
+      return {
+        ...state,
+        cartItems: [],
+      };
+
     case ITEM_REMOVE_FROM_CART:
       return {
         ...state,
@@ -68,7 +81,6 @@ const cartReducer = (state = initialState, action) => {
         ),
       };
 
-   
     case SET_CART_DATA:
       return {
         ...state,
