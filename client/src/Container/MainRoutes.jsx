@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import store from "../redux/store";
 import Navbar from "../Components/navbar";
 import { Login, Register } from "../Auth";
+import Footer from "../Components/footer";
 import {
   Home,
   AboutPage,
@@ -42,7 +43,6 @@ export default function MainRoutes() {
     <Provider store={store}>
       <>
         <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-
         <Routes>
           <Route exact path="/" element={<Home isLoggedIn={isLoggedIn} />} />
           <Route exact path="/contact" element={<ContactPage />} />
@@ -69,6 +69,7 @@ export default function MainRoutes() {
           <Route path="/order/:id" element={<OrderDetails />} />
           <Route path="/orders" element={<Order />} />
         </Routes>
+        <Footer />
       </>
     </Provider>
   );

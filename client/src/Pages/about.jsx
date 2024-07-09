@@ -9,14 +9,14 @@ const AboutPage = () => {
       <hr className="m-6" />
 
       <p className="text-lg leading-relaxed">
-        Welcome to [Your E-commerce Store Name], your one-stop destination for
-        quality products and exceptional service. We are committed to providing
-        our customers with the best shopping experience, from browsing our
-        extensive product range to enjoying fast and reliable delivery. At [Your
-        E-commerce Store Name], we believe in the power of choice. That's why we
-        offer a diverse selection of products to cater to every taste and need.
-        Our team works tirelessly to curate the latest trends and timeless
-        classics, ensuring there's something for everyone.
+        Welcome to Ecommerce, your one-stop destination for quality products and
+        exceptional service. We are committed to providing our customers with
+        the best shopping experience, from browsing our extensive product range
+        to enjoying fast and reliable delivery. At Ecommerce, we believe in the
+        power of choice. That's why we offer a diverse selection of products to
+        cater to every taste and need. Our team works tirelessly to curate the
+        latest trends and timeless classics, ensuring there's something for
+        everyone.
       </p>
       <h2 className="text-2xl font-bold py-4">Our Mission</h2>
       <p>
@@ -61,43 +61,95 @@ const AboutPage = () => {
         of:
       </p>
       <ul className="list-disc list-inside ml-6">
-        <li>T-Shirts & Polos: Comfortable and stylish options perfect for everyday wear.</li>
-        <li>Shirts: From classic to trendy, find the perfect shirt for any occasion.</li>
-        <li>Jeans & Trousers: Durable and fashionable, our bottoms are made for every lifestyle.</li>
-        <li>Jackets & Coats: Stay warm and stylish with our range of outerwear.</li>
+        <li>
+          T-Shirts & Polos: Comfortable and stylish options perfect for everyday
+          wear.
+        </li>
+        <li>
+          Shirts: From classic to trendy, find the perfect shirt for any
+          occasion.
+        </li>
+        <li>
+          Jeans & Trousers: Durable and fashionable, our bottoms are made for
+          every lifestyle.
+        </li>
+        <li>
+          Jackets & Coats: Stay warm and stylish with our range of outerwear.
+        </li>
       </ul>
 
       <h3 className="text-xl font-semibold py-2">Women's Clothing</h3>
       <p>
-        Our women's clothing collection combines elegance, comfort, and trendiness. Whether you're dressing up for a special occasion or keeping it casual, we have the perfect outfit for you. Shop our variety of:
+        Our women's clothing collection combines elegance, comfort, and
+        trendiness. Whether you're dressing up for a special occasion or keeping
+        it casual, we have the perfect outfit for you. Shop our variety of:
       </p>
       <ul className="list-disc list-inside ml-6">
-        <li>Dresses: From casual sundresses to elegant evening gowns, find the perfect dress for any event.</li>
-        <li>Tops & Blouses: Stylish and versatile, our tops are designed to complement any wardrobe.</li>
-        <li>Skirts & Pants: Discover a range of bottoms that offer both style and comfort.</li>
-        <li>Outerwear: Stay chic and warm with our selection of coats and jackets.</li>
+        <li>
+          Dresses: From casual sundresses to elegant evening gowns, find the
+          perfect dress for any event.
+        </li>
+        <li>
+          Tops & Blouses: Stylish and versatile, our tops are designed to
+          complement any wardrobe.
+        </li>
+        <li>
+          Skirts & Pants: Discover a range of bottoms that offer both style and
+          comfort.
+        </li>
+        <li>
+          Outerwear: Stay chic and warm with our selection of coats and jackets.
+        </li>
       </ul>
 
       <h3 className="text-xl font-semibold py-2">Jewelry</h3>
       <p>
-        Add a touch of elegance and sparkle to your look with our exquisite jewelry collection. Our pieces are designed to enhance your style and make a statement. Explore our range of:
+        Add a touch of elegance and sparkle to your look with our exquisite
+        jewelry collection. Our pieces are designed to enhance your style and
+        make a statement. Explore our range of:
       </p>
       <ul className="list-disc list-inside ml-6">
-        <li>Necklaces: Delicate pendants to bold statement pieces, perfect for every neckline.</li>
-        <li>Earrings: From studs to chandeliers, find the perfect pair to complement your outfit.</li>
-        <li>Bracelets & Bangles: Elegant designs that add a touch of sophistication to any look.</li>
-        <li>Rings: Beautiful rings for every occasion, including engagement and wedding bands.</li>
+        <li>
+          Necklaces: Delicate pendants to bold statement pieces, perfect for
+          every neckline.
+        </li>
+        <li>
+          Earrings: From studs to chandeliers, find the perfect pair to
+          complement your outfit.
+        </li>
+        <li>
+          Bracelets & Bangles: Elegant designs that add a touch of
+          sophistication to any look.
+        </li>
+        <li>
+          Rings: Beautiful rings for every occasion, including engagement and
+          wedding bands.
+        </li>
       </ul>
 
       <h3 className="text-xl font-semibold py-2">Electronics</h3>
       <p>
-        Stay ahead of the curve with our latest electronics. From cutting-edge gadgets to essential devices, we offer a variety of products to meet your tech needs. Browse our selection of:
+        Stay ahead of the curve with our latest electronics. From cutting-edge
+        gadgets to essential devices, we offer a variety of products to meet
+        your tech needs. Browse our selection of:
       </p>
       <ul className="list-disc list-inside ml-6">
-        <li>Smartphones: The latest models with innovative features and sleek designs.</li>
-        <li>Laptops & Tablets: High-performance devices for work, play, and everything in between.</li>
-        <li>Home Appliances: Upgrade your home with our range of efficient and modern appliances.</li>
-        <li>Accessories: Enhance your devices with our selection of chargers, cases, and more.</li>
+        <li>
+          Smartphones: The latest models with innovative features and sleek
+          designs.
+        </li>
+        <li>
+          Laptops & Tablets: High-performance devices for work, play, and
+          everything in between.
+        </li>
+        <li>
+          Home Appliances: Upgrade your home with our range of efficient and
+          modern appliances.
+        </li>
+        <li>
+          Accessories: Enhance your devices with our selection of chargers,
+          cases, and more.
+        </li>
       </ul>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
