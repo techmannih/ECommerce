@@ -47,7 +47,7 @@ const OrdersPage = () => {
                 {orders.map((order) => (
                   <li
                     key={order._id}
-                    className="bg-white shadow-lg rounded-lg p-4 mb-4 flex justify-between items-center"
+                    className="bg-white shadow-lg rounded-lg p-4 mb-4 flex justify-between items-center max-md:flex-col"
                   >
                     <div className="m-3">
                       <p className="text-xl font-semibold">
