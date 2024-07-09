@@ -81,7 +81,7 @@ module.exports.getOrderById = async (req, res) => {
     const orderId = req.params.id; // Retrieve orderId from request parameters
     console.log("Order ID:", orderId);
 
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId).populate("address");
 
     if (!order) {
       console.log("Order not found");

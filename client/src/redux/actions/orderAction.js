@@ -5,6 +5,9 @@ import {
   GET_ORDERS_REQUEST,
   GET_ORDERS_SUCCESS,
   GET_ORDERS_FAIL,
+  GET_ORDER_DETAILS_REQUEST,
+  GET_ORDER_DETAILS_SUCCESS,
+  GET_ORDER_DETAILS_FAIL,
 } from "../../constants/orderConstants";
 
 export const createOrder = (orderData) => async (dispatch) => {
@@ -71,6 +74,39 @@ export const getOrders = (userId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GET_ORDERS_FAIL,
+      payload: error.message,
+    });
+  }
+};
+
+export const getOrderDetails = (orderId) => async (dispatch) => {
+  console.log("orderId in order details", orderId);
+  try {
+    dispatch({ type: GET_ORDER_DETAILS_REQUEST });
+
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/order/${orderId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const data = await response.json();
+    console.log("order details data", data);
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to fetch order details");
+    }
+
+    dispatch({
+      type: GET_ORDER_DETAILS_SUCCESS,
+      payload: data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_ORDER_DETAILS_FAIL,
       payload: error.message,
     });
   }

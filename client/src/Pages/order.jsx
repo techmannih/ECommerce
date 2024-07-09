@@ -1,11 +1,11 @@
-// components/OrdersPage.js
-
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { getOrders } from "../redux/actions/orderAction";
 
 const OrdersPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { orders, loading, error } = useSelector((state) => state.order);
 
   useEffect(() => {
@@ -28,6 +28,11 @@ const OrdersPage = () => {
       </div>
     );
   }
+
+  const handlePaymentClick = (orderId) => {
+    console.log("order id", orderId);
+    navigate(`/order/${orderId}`);
+  };
 
   return (
     <section className="h-auto p-5">
@@ -57,7 +62,16 @@ const OrdersPage = () => {
                       {/* Render other order details as needed */}
                     </div>
                     <div className="">
-                      <button className="bg-green-500 text-white font-semibold m-2 p-2 rounded-lg">{order.paymentInfo}</button>
+                      <button
+                        className={`text-white font-semibold m-2 p-2 rounded-lg ${
+                          order.paymentInfo === "paid"
+                            ? "bg-green-500"
+                            : "bg-red-500"
+                        }`}
+                        onClick={() => handlePaymentClick(order._id)}
+                      >
+                        Payment {order.paymentInfo}
+                      </button>
                     </div>
                   </li>
                 ))}
