@@ -52,7 +52,7 @@ const Cart = () => {
     <div className="py-5 text-center">
       <h4 className="p-3 text-2xl">Your Cart is Empty</h4>
       <Link
-        to="/products"
+        to="/"
         className="underline underline-offset-8 hover:text-blue-400 my-3"
       >
         Continue Shopping

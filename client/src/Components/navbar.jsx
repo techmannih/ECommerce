@@ -37,6 +37,9 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   };
   const handleLogout = () => {
     // Clear the token from cookies
+    // remove localStorage.setItem("userId");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("cartId");
     deleteCookie("jwt");
     setIsLoggedIn(false);
   };
