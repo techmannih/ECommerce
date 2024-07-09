@@ -123,7 +123,7 @@ const Products = ({ isLoggedIn }) => {
             </button>
           </div>
         </div>
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap justify-center items-center">
           {filter.map((product) => (
             <div key={product.id} className="flex justify-center">
               <div className="mb-4 flex-col border-gray-300 rounded-xl border-2 p-4 h-auto w-72 m-6 max-sm:m-2">
@@ -181,7 +181,7 @@ const Products = ({ isLoggedIn }) => {
           <hr className="my-9" />
         </div>
       </div>
-      <div className="flex flex-wrap">
+      <div className="flex flex-col">
         {loading ? <Loading /> : <ShowProducts />}
       </div>
     </div>
