@@ -69,8 +69,8 @@ const Checkout = () => {
     dispatch(fetchAddresses(userId));
   }, [dispatch]);
 
-  const subtotal = cartItems.reduce((acc, item) => acc + item.itemPrice * item.quantity, 0); // Calculate subtotal using totalItemPrice
-    const shipping = 10; 
+  const subtotal = cartItems.reduce((acc, item) => acc + item.itemPrice, 0);
+  const shipping = 10;
 
   const handlePlaceOrder = () => {
     const user = localStorage.getItem("userId");
@@ -416,7 +416,7 @@ const Checkout = () => {
             </div>
             <button
               onClick={handlePlaceOrder}
-              className="bg-gray-600 text-white py-2 px-4 rounded-b-lg hover:bg-gray-400 focus:outline-none focus:ring focus:border-blue-300 w-full"
+              className="bg-gray-600 text-white py-2 px-4 rounded-b-lg font-semibold hover:bg-green-400 focus:outline-none focus:ring focus:border-blue-300 w-full"
             >
               Place Order
             </button>
