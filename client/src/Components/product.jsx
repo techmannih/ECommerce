@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { addToCart } from "../redux/actions/cartAction";
-import Cart from "../Pages/cart";
 
 const Products = ({ isLoggedIn }) => {
   const [data, setData] = useState([]);
@@ -25,7 +24,7 @@ const Products = ({ isLoggedIn }) => {
       const userId = localStorage.getItem("userId");
 
       // Dispatch addToCart action to update Redux state
-      dispatch(addToCart(userId,cartItem));
+      dispatch(addToCart(userId, cartItem));
 
       console.log("Item added to the cart:", product);
     } catch (error) {
@@ -185,7 +184,6 @@ const Products = ({ isLoggedIn }) => {
       <div className="flex flex-wrap">
         {loading ? <Loading /> : <ShowProducts />}
       </div>
-      <Cart />
     </div>
   );
 };
