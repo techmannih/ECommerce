@@ -42,6 +42,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
     localStorage.removeItem("cartId");
     deleteCookie("jwt");
     setIsLoggedIn(false);
+    window.location.href = "/";
   };
   return (
     <Disclosure as="nav" className="bg-gray-800">

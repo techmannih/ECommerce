@@ -132,3 +132,42 @@ module.exports.cancelOrder = async (req, res) => {
   }
 };
 module.exports.removeOrder = async (req, res) => {};
+
+module.exports.updatePaymentStatus = async (req, res) => {
+  const { id, status } = req.body;
+
+  if (!id || !status) {
+    return res.status(400).json({
+      status: "error",
+      message: "Invalid request: Order ID and status are required",
+    });
+  }
+
+  try {
+    const updatedOrder = await Order.findByIdAndUpdate(
+      id,
+      { paymentInfo: status },
+      { new: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({
+        status: "error",
+        message: "Order not found",
+      });
+    }
+
+    res.json({
+      status: "success",
+      message: "Payment status updated successfully",
+      order: updatedOrder,
+    });
+  } catch (error) {
+    console.error("Error updating payment status:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
+    });
+  }
+};
+

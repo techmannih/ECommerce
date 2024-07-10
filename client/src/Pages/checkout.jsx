@@ -86,6 +86,7 @@ const Checkout = () => {
     };
     console.log("Order data:", orderData, user);
     dispatch(createOrder(orderData));
+    window.location.href = "/orders";
   };
 
   return (
@@ -416,6 +417,7 @@ const Checkout = () => {
             </div>
             <button
               onClick={handlePlaceOrder}
+
               className="bg-gray-600 text-white py-2 px-4 rounded-b-lg font-semibold hover:bg-green-400 focus:outline-none focus:ring focus:border-blue-300 w-full"
             >
               Place Order

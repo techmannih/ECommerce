@@ -13,6 +13,7 @@ import {
   Checkout,
   OrderDetails,
   Order,
+  UpdatePaymentStatus,
 } from "../Pages";
 
 // Utility function to get the value of a cookie by name
@@ -68,6 +69,10 @@ export default function MainRoutes() {
           />
           <Route path="/order/:id" element={<OrderDetails />} />
           <Route path="/orders" element={<Order />} />
+          <Route
+            path="/updatePaymentStatus"
+            element={<UpdatePaymentStatus />}
+          />
         </Routes>
         <Footer />
       </>

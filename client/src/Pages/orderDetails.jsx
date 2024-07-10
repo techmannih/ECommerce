@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrderDetails } from "../redux/actions/orderAction";
 import { useParams } from "react-router-dom";
@@ -6,7 +6,8 @@ import { useParams } from "react-router-dom";
 const OrderDetails = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-
+  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [paymentError, setPaymentError] = useState(null);
   const orderDetails = useSelector((state) => state.order);
   const { loading, error, order } = orderDetails;
 
@@ -21,7 +22,42 @@ const OrderDetails = () => {
       </div>
     );
   }
-
+  const handlePayment = async () => {
+    try {
+      setPaymentLoading(true);
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/payment`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            totalItems: order.items.length, // Example: Sending the total items count
+            subtotal: order.totalPrice - order.shippingPrice, // Example: Calculating subtotal
+            shipping: order.shippingPrice, // Example: Shipping cost
+          }),
+        }
+      );
+      const data = await response.json();
+      console.log("Payment data:", data);
+      if (response.ok) {
+        window.location.href = data.url; // Redirect to Stripe checkout
+        // add here code for render to updatePaymentStatus after success
+        window.location.href = data.url; // Redirect to Stripe checkout
+        localStorage.setItem("orderId", id);
+        console.log("Payment initiated successfully");
+        console.log("Order ID: after payment", id);
+      } else {
+        setPaymentError("Failed to initiate payment. Please try again later.");
+      }
+    } catch (error) {
+      setPaymentError("Failed to initiate payment. Please try again later.");
+      console.error("Payment error:", error);
+    } finally {
+      setPaymentLoading(false);
+    }
+  };
   if (error) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -51,6 +87,7 @@ const OrderDetails = () => {
                     </p>
                     <p className="text-xl">
                       <strong>Payment Status:</strong> {order.paymentInfo}
+                      <p className="text-red-500">{paymentError}</p>
                     </p>
                   </div>
                   <div className="">
@@ -60,8 +97,14 @@ const OrderDetails = () => {
                           ? "bg-green-500"
                           : "bg-red-500"
                       }`}
+                      onClick={handlePayment}
+                      disabled={order.paymentInfo === "paid" || paymentLoading}
                     >
-                      Payment {order.paymentInfo}
+                      {order.paymentInfo === "paid"
+                        ? "Paid"
+                        : paymentLoading
+                        ? "Processing..."
+                        : "Pay Now"}
                     </button>
                   </div>
                 </div>
