@@ -67,7 +67,10 @@ const Cart = () => {
       return <EmptyCart />;
     }
 
-    const subtotal = cartItems.reduce((acc, item) => acc + item.itemPrice * item.quantity, 0); // Calculate subtotal using totalItemPrice
+    const subtotal = cartItems.reduce(
+      (acc, item) => acc + item.itemPrice * item.quantity,
+      0
+    ); // Calculate subtotal using totalItemPrice
     const shipping = 10; // Replace with actual shipping cost
 
     console.log(subtotal, shipping);
@@ -84,6 +87,9 @@ const Cart = () => {
                   key={item.productId}
                   className="bg-white shadow-lg rounded-lg p-4 mb-4"
                 >
+                  <div className="m-1 p-1">
+                    <p className="text-sm font-semibold">{item.title}</p>
+                  </div>
                   <div className="flex justify-between items-center m-3 px-4 max-md:flex-col">
                     <div className="rounded-xl m-1 p-1">
                       <img
@@ -92,10 +98,6 @@ const Cart = () => {
                         width={100}
                         height={75}
                       />
-                    </div>
-
-                    <div className="m-1 p-1">
-                      <p className="text-xl font-semibold">{item.title}</p>
                     </div>
 
                     <div className="flex flex-col">

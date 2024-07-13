@@ -36,6 +36,7 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
             quantity: 1,
             itemPrice: product.itemPrice,
             image: product.image,
+            title: product.title,	// Add title to the cart item
           }),
         }
       );
@@ -55,6 +56,7 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
             quantity: 1,
             itemPrice: product.itemPrice,
             image: product.image,
+            title: product.title,	// Add title to the cart item
           }),
         }
       );
@@ -77,6 +79,7 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
         itemPrice: product.itemPrice,
         totalItemPrice: product.itemPrice * (existingCartItem ? existingCartItem.quantity + 1 : 1),
         image: product.image,
+        title: product.title,
       },
     });
 

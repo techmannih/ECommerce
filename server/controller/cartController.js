@@ -2,11 +2,11 @@ const { Cart } = require("../models/cartmodel");
 
 module.exports.createOrUpdateCart = async (req, res) => {
   try {
-    const { userId, productId, quantity, itemPrice, image } = req.body;
+    const { userId, productId, quantity, itemPrice, image, title } = req.body;
 
     console.log("Received userId:", req.body);
 
-    if (!productId || !quantity || !itemPrice || !image) {
+    if (!productId || !quantity || !itemPrice || !image || !title) {
       
       console.log("Missing required fields");
       return res.status(400).json({
@@ -37,7 +37,7 @@ module.exports.createOrUpdateCart = async (req, res) => {
     } else {
       // Product not in the cart, add a new item with initial total item price
       const totalItemPrice = quantity * itemPrice;
-      cart.items.push({ productId, quantity, itemPrice, totalItemPrice, image });
+      cart.items.push({ productId, quantity, itemPrice, totalItemPrice, image, title});
     }
 
     const updatedCart = await cart.save();
