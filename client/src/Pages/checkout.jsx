@@ -15,6 +15,7 @@ const Checkout = () => {
   const dispatch = useDispatch();
 
   const cartItems = useSelector((state) => state.cart.cartItems);
+  console.log("Cart items:11", cartItems);
   const [billingaddress, setBillingaddress] = useState({
     firstName: "",
     lastName: "",

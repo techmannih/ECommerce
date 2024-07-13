@@ -116,10 +116,25 @@ const OrderDetails = () => {
                   <ul>
                     {order.items &&
                       order.items.map((item, index) => (
-                        <li key={index} className="text-xl">
-                          <strong>Quantity:</strong> {item.quantity},{" "}
-                          <strong>Price:</strong> ${item.itemPrice}
-                        </li>
+                        <div key={index} className="text-xl flex text-black">
+                          <div className="rounded-xl m-1 p-1 flex flex-col">
+                            <p className="text-sm font-semibold">
+                              {item.title}
+                            </p>
+                            <img
+                              src={item.image}
+                              alt={item.title}
+                              width={100}
+                              height={75}
+                            />
+                            <p>
+                              <strong>Quantity: </strong> {item.quantity}
+                            </p>
+                            <p>
+                              <strong>Item Price: </strong> ${item.itemPrice}
+                            </p>
+                          </div>
+                        </div>
                       ))}
                   </ul>
                 </div>

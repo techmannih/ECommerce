@@ -6,7 +6,7 @@ const { Address } = require("../models/addressmodel");
 module.exports.createOrder = async (req, res) => {
   try {
     // Extract necessary information from the request body
-    const { cart, user, shippingPrice, totalPrice, paymentInfo, address } =
+    const { cart, user, shippingPrice, totalPrice, address,title, image } =
       req.body;
     // console.log("Request body:", req.body);
     console.log("order body:", cart);
@@ -47,6 +47,8 @@ module.exports.createOrder = async (req, res) => {
       // productName: item.productName,
       quantity: item.quantity,
       itemPrice: item.itemPrice,
+      title: item.title,
+      image: item.image,
     }));
     // console.log("Order items:", orderItems);
 
@@ -58,7 +60,9 @@ module.exports.createOrder = async (req, res) => {
       items: orderItems,
       shippingPrice,
       totalPrice,
-      // paymentInfo,
+      title,
+      image,
+    
     });
     console.log("Order:", order);
 
