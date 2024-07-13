@@ -6,6 +6,7 @@ import {
   deleteAddress,
 } from "../redux/actions/addressAction";
 import { createOrder } from "../redux/actions/orderAction";
+import toast from "react-hot-toast";
 
 const Checkout = () => {
   const [error, setError] = useState(null);
@@ -84,9 +85,14 @@ const Checkout = () => {
       Items: cartItems,
       totalPrice: subtotal + shipping,
     };
+    if(!selectedAddressId){
+      toast.error("Please select an address to place the order");
+      return;
+    }
+    
     console.log("Order data:", orderData, user);
     dispatch(createOrder(orderData));
-    window.location.href = "/orders";
+    
   };
 
   return (

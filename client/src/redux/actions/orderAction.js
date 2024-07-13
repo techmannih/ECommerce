@@ -9,6 +9,7 @@ import {
   GET_ORDER_DETAILS_SUCCESS,
   GET_ORDER_DETAILS_FAIL,
 } from "../../constants/orderConstants";
+import toast from 'react-hot-toast';
 
 export const createOrder = (orderData) => async (dispatch) => {
   try {
@@ -37,11 +38,15 @@ export const createOrder = (orderData) => async (dispatch) => {
       type: CREATE_ORDER_SUCCESS,
       payload: data,
     });
+
+    toast.success("Order created successfully!");
+    window.location.href = "/orders";
   } catch (error) {
     dispatch({
       type: CREATE_ORDER_FAIL,
       payload: error.message,
     });
+    toast.error(`Error: ${error.message}`);
   }
 };
 
@@ -58,7 +63,7 @@ export const getOrders = (userId) => async (dispatch) => {
         },
       }
     );
-    console.log("fet orders response", response);
+    console.log("fetch orders response", response);
 
     const data = await response.json();
     console.log("get order data", data);
@@ -71,11 +76,14 @@ export const getOrders = (userId) => async (dispatch) => {
       type: GET_ORDERS_SUCCESS,
       payload: data.data,
     });
+
+    toast.success("Orders fetched successfully!");
   } catch (error) {
     dispatch({
       type: GET_ORDERS_FAIL,
       payload: error.message,
     });
+    toast.error(`Error: ${error.message}`);
   }
 };
 
@@ -104,10 +112,13 @@ export const getOrderDetails = (orderId) => async (dispatch) => {
       type: GET_ORDER_DETAILS_SUCCESS,
       payload: data.data,
     });
+
+    toast.success("Order details fetched successfully!");
   } catch (error) {
     dispatch({
       type: GET_ORDER_DETAILS_FAIL,
       payload: error.message,
     });
+    toast.error(`Error: ${error.message}`);
   }
 };

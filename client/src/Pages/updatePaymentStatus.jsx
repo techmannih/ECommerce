@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrderDetails } from "../redux/actions/orderAction";
+import toast from "react-hot-toast";
 // import OrdersPage from "./order";
 
 const UpdateStatus = () => {
@@ -11,6 +12,7 @@ const UpdateStatus = () => {
     console.log("Order ID in update status:", orderId);
     if (orderId) {
       dispatch(getOrderDetails(orderId));
+      toast.success("Now Update Payment Status!");
     } else {
       console.error("Order ID is undefined");
     }
@@ -37,6 +39,7 @@ const UpdateStatus = () => {
       });
       if (response.ok) {
         console.log("Payment status updated successfully");
+        toast.success("Payment status updated successfully");
         dispatch(getOrderDetails(orderId)); // Refresh order details after update
         // want to back to Orders Page after update 
         window.location.href = "/orders";

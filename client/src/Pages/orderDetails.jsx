@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrderDetails } from "../redux/actions/orderAction";
 import { useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const OrderDetails = () => {
   const dispatch = useDispatch();
@@ -47,6 +48,7 @@ const OrderDetails = () => {
         window.location.href = data.url; // Redirect to Stripe checkout
         localStorage.setItem("orderId", id);
         console.log("Payment initiated successfully");
+        toast.success("Payment initiated successfully");
         console.log("Order ID: after payment", id);
       } else {
         setPaymentError("Failed to initiate payment. Please try again later.");

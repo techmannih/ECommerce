@@ -1,3 +1,5 @@
+import toast from 'react-hot-toast';
+
 export const FETCH_ADDRESSES_REQUEST = "FETCH_ADDRESSES_REQUEST";
 export const FETCH_ADDRESSES_SUCCESS = "FETCH_ADDRESSES_SUCCESS";
 export const FETCH_ADDRESSES_FAILURE = "FETCH_ADDRESSES_FAILURE";
@@ -25,14 +27,17 @@ export const fetchAddresses = (userId) => {
         type: FETCH_ADDRESSES_SUCCESS,
         payload: data.data, // Assuming the response structure has a 'data' field containing addresses
       });
+      toast.success("Addresses fetched successfully!");
     } catch (error) {
       dispatch({
         type: FETCH_ADDRESSES_FAILURE,
         error: error.message || "Failed to fetch addresses",
       });
+      toast.error(`Error: ${error.message || "Failed to fetch addresses"}`);
     }
   };
 };
+
 export const saveAddress = (address, userId) => {
   return async (dispatch) => {
     dispatch({ type: SAVE_ADDRESS_REQUEST });
@@ -54,11 +59,13 @@ export const saveAddress = (address, userId) => {
         type: SAVE_ADDRESS_SUCCESS,
         payload: data.data,
       });
+      toast.success("Address saved successfully!");
     } catch (error) {
       dispatch({
         type: SAVE_ADDRESS_FAILURE,
         error: error.message,
       });
+      toast.error(`Error: ${error.message || "Failed to save address"}`);
     }
   };
 };
@@ -80,11 +87,13 @@ export const deleteAddress = (addressId) => {
         type: DELETE_ADDRESS_SUCCESS,
         payload: addressId,
       });
+      toast.success("Address deleted successfully!");
     } catch (error) {
       dispatch({
         type: DELETE_ADDRESS_FAILURE,
         error: error.message,
       });
+      toast.error(`Error: ${error.message || "Failed to delete address"}`);
     }
   };
 };

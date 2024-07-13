@@ -7,6 +7,7 @@ import {
   DECREASE_ITEM_FROM_CART,
   UPDATE_CART_ITEM,
 } from "../../constants/cartConstants";
+import toast from 'react-hot-toast';
 
 // Action creator function
 export const addToCart = (userId, product) => async (dispatch, getState) => {
@@ -23,7 +24,7 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
     if (existingCartItem) {
       console.log("Existing Cart Item Found:", existingCartItem);
       response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/cart/create`, // Ensure the endpoint is correct
+        `${import.meta.env.VITE_BACKEND_URL}/cart/create`,
         {
           method: "POST",
           headers: {
@@ -32,11 +33,12 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
           body: JSON.stringify({
             userId,
             productId: product.productId,
-            quantity: 1, // Increase by 1
-            itemPrice: product.itemPrice, // Adjust as needed
+            quantity: 1,
+            itemPrice: product.itemPrice,
           }),
         }
       );
+      toast.success("Item updated in the cart");
     } else {
       console.log("Adding new item to cart.");
       response = await fetch(
@@ -49,11 +51,12 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
           body: JSON.stringify({
             userId,
             productId: product.productId,
-            quantity: 1, // Initial quantity
-            itemPrice: product.itemPrice, // Initial price
+            quantity: 1,
+            itemPrice: product.itemPrice,
           }),
         }
       );
+      toast.success("Item added to the cart");
     }
 
     if (!response.ok) {
@@ -70,12 +73,13 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
         productId: product.productId,
         quantity: 1,
         itemPrice: product.itemPrice,
-        totalItemPrice: product.itemPrice * (existingCartItem ? existingCartItem.quantity + 1 : 1), // Calculate totalItemPrice
+        totalItemPrice: product.itemPrice * (existingCartItem ? existingCartItem.quantity + 1 : 1),
       },
     });
 
     return true;
   } catch (error) {
+    toast.error("Error adding/updating item in cart");
     console.error("Error adding/updating item in cart:", error.message);
   }
 };
@@ -110,12 +114,14 @@ export const decreaseItemInCart = (userId, productId) => async (dispatch, getSta
         payload: { userId, productId }
       });
 
+      toast.success("Item quantity decreased in cart");
       console.log("Item quantity decreased in cart successfully:", data);
       return true;
     } else {
       dispatch(removeItemFromCart(userId, productId));
     }
   } catch (error) {
+    toast.error("Error decreasing item quantity in cart");
     console.error("Error decreasing item quantity in cart:", error);
     return false;
   }
@@ -143,8 +149,10 @@ export const clearCart = (userId) => async (dispatch) => {
       payload: [], // Clear the cart
     });
 
+    toast.success("Cart cleared successfully");
     console.log("Cart cleared successfully");
   } catch (error) {
+    toast.error("Error clearing cart");
     console.error("Error clearing cart:", error);
   }
 };
@@ -174,8 +182,10 @@ export const removeItemFromCart = (userId, productId) => async (dispatch) => {
       payload: productId,
     });
 
+    toast.success("Item removed from cart");
     console.log("Item removed from cart:", productId);
   } catch (error) {
+    toast.error("Error removing item from cart");
     console.error("Error removing item from cart:", error);
   }
 };
@@ -201,7 +211,6 @@ export const fetchCartData = () => async (dispatch) => {
       throw new Error(`API error! Message: ${data.message}`);
     }
 
-    // Assuming data.data is an array of cart objects and we want the items of the first cart
     const cart = data.data.length > 0 ? data.data : null;
     console.log("Cart data:", cart);
     const cartItems = cart ? cart : [];
@@ -217,9 +226,10 @@ export const fetchCartData = () => async (dispatch) => {
       },
     });
 
-    console.log("Cart data in cart fetched successfully:", cartItems);
+    toast.success("Cart data fetched successfully");
     return cartItems; // Return cartItems to handle in component
   } catch (error) {
+    toast.error("Error fetching cart data");
     console.error("Error fetching cart data:", error.message);
     dispatch({
       type: FETCH_CART_FAILURE,
