@@ -2,11 +2,13 @@ const { Cart } = require("../models/cartmodel");
 
 module.exports.createOrUpdateCart = async (req, res) => {
   try {
-    const { userId, productId, quantity, itemPrice } = req.body;
+    const { userId, productId, quantity, itemPrice, image } = req.body;
 
     console.log("Received userId:", req.body);
 
-    if (!productId || !quantity || !itemPrice) {
+    if (!productId || !quantity || !itemPrice || !image) {
+      
+      console.log("Missing required fields");
       return res.status(400).json({
         success: false,
         error: "Missing required fields",
@@ -19,6 +21,7 @@ module.exports.createOrUpdateCart = async (req, res) => {
     if (!cart) {
       // Create a new cart if it doesn't exist
       cart = new Cart({ user: userId, items: [] });
+      console.log("new cart", cart);
     }
 
     // Check if the product is already in the cart
@@ -34,7 +37,7 @@ module.exports.createOrUpdateCart = async (req, res) => {
     } else {
       // Product not in the cart, add a new item with initial total item price
       const totalItemPrice = quantity * itemPrice;
-      cart.items.push({ productId, quantity, itemPrice, totalItemPrice });
+      cart.items.push({ productId, quantity, itemPrice, totalItemPrice, image });
     }
 
     const updatedCart = await cart.save();
@@ -55,6 +58,7 @@ module.exports.createOrUpdateCart = async (req, res) => {
     });
   }
 };
+
 
 
 

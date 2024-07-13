@@ -12,7 +12,7 @@ import toast from 'react-hot-toast';
 // Action creator function
 export const addToCart = (userId, product) => async (dispatch, getState) => {
   try {
-    console.log("UserID and Product:", userId, product.productId);
+    console.log("UserID and Product:", userId, product);
 
     const existingCartItem = getState().cart.cartItems.find(
       (item) => String(item.productId) === String(product.productId)
@@ -35,6 +35,7 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
             productId: product.productId,
             quantity: 1,
             itemPrice: product.itemPrice,
+            image: product.image,
           }),
         }
       );
@@ -53,6 +54,7 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
             productId: product.productId,
             quantity: 1,
             itemPrice: product.itemPrice,
+            image: product.image,
           }),
         }
       );
@@ -74,6 +76,7 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
         quantity: 1,
         itemPrice: product.itemPrice,
         totalItemPrice: product.itemPrice * (existingCartItem ? existingCartItem.quantity + 1 : 1),
+        image: product.image,
       },
     });
 

@@ -22,6 +22,10 @@ const cartItemSchema = new mongoose.Schema({
     default: 0,
     required: true,
   },
+  image: {
+    type: String,
+    required: true,
+  },
  
 });
 

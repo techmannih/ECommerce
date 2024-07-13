@@ -20,6 +20,7 @@ const Products = ({ isLoggedIn }) => {
         productId: product.id,
         quantity: Number(product.qty) || 1,
         itemPrice: product.price,
+        image: product.image,
       };
       const userId = localStorage.getItem("userId");
 
