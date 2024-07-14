@@ -16,7 +16,7 @@ export const fetchAddresses = (userId) => {
   return async (dispatch) => {
     dispatch({ type: FETCH_ADDRESSES_REQUEST });
     try {
-      const response = await fetch(`http://localhost:8880/address/${userId}`);
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/address/${userId}`);
       if (!response.ok) {
         throw new Error("Failed to fetch addresses");
       }
@@ -42,7 +42,8 @@ export const saveAddress = (address, userId) => {
   return async (dispatch) => {
     dispatch({ type: SAVE_ADDRESS_REQUEST });
     try {
-      const response = await fetch("http://localhost:8880/address/create", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/address/create`
+      , {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +76,7 @@ export const deleteAddress = (addressId) => {
     dispatch({ type: DELETE_ADDRESS_REQUEST });
     try {
       const response = await fetch(
-        `http://localhost:8880/address/delete/${addressId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/address/delete/${addressId}`,
         {
           method: "DELETE",
         }

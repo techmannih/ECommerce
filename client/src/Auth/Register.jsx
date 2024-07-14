@@ -24,7 +24,7 @@ const SignupForm = () => {
       console.log("Form data submitted:", formData);
 
       // Make an API call to your server to handle user registration
-      const response = await fetch("http://localhost:8880/signup", {
+      const response = await fetch( `${import.meta.env.VITE_BACKEND_URL}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
