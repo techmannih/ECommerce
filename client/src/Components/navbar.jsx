@@ -6,25 +6,21 @@ import { Link } from "react-router-dom";
 const navigation = [
   {
     name: "Home",
-    href: "/",
+    to: "/",
     current: window.location.pathname === "/" ? true : false,
   },
-  // {
-  //   name: "Products",
-  //   href: "/",
-  //   current: window.location.pathname === "/" ? true : false,
-  // },
   {
     name: "Contact Us",
-    href: "/contact",
+    to: "/contact",
     current: window.location.pathname === "/contact" ? true : false,
   },
   {
     name: "About Us",
-    href: "/about",
+    to: "/about",
     current: window.location.pathname === "/about" ? true : false,
   },
 ];
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -73,9 +69,9 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
-                        href={item.href}
+                        to={item.to}
                         className={classNames(
                           item.current
                             ? "bg-gray-900 text-white"
@@ -85,7 +81,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                         aria-current={item.current ? "page" : undefined}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -163,8 +159,8 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                         </Menu.Item>
                         <Menu.Item>
                           {({ active }) => (
-                            <a
-                              href="#"
+                            <Link
+                              to="/"
                               className={classNames(
                                 active ? "bg-gray-100" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
@@ -172,7 +168,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                               onClick={handleLogout}
                             >
                               Log out
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                       </Menu.Items>
@@ -187,12 +183,12 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                     >
                       Login
                     </Link>
-                    <a
+                    <Link
                       href="/register"
                       className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                     >
                       Register
-                    </a>
+                    </Link>
                   </div>
                 )}
               </div>
