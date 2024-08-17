@@ -51,7 +51,7 @@ jobs:
           --image ${{ secrets.DOCKER_USERNAME }}/ecommerce:v1 \
           --cpu 1 \
           --memory 1 \
-          --registry-login-server ${{ secrets.DOCKER_USERNAME }}/ecommerce \
+          --registry-login-server index.docker.io \
           --registry-username ${{ secrets.DOCKER_USERNAME }} \
           --registry-password ${{ secrets.DOCKER_PASSWORD }} \
           --ports 80 \
