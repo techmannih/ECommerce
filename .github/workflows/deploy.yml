@@ -16,7 +16,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: '16' # Use the Node.js version your project requires
+        node-version: '20'
 
     - name: Install dependencies
       working-directory: client
@@ -35,17 +35,23 @@ jobs:
     - name: Build and Push Docker Image
       run: |
         cd client
-        docker build -t techmannih/ecommerce:v1 .
-        docker push techmannih/ecommerce:v1
+        docker build -t ${{ secrets.DOCKER_REGISTRY }}/ecommerce:v1 .
+        docker push ${{ secrets.DOCKER_REGISTRY }}/ecommerce:v1
+
+    - name: Log in to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Deploy to Azure Container Instances
       run: |
         az container create \
           --resource-group frontend \
           --name myecommerce \
-          --image techmannih/ecommerce:v1 \
-          --cpu 1 --memory 1 \
-          --registry-login-server index.docker.io \
+          --image ${{ secrets.DOCKER_REGISTRY }}/ecommerce:v1 \
+          --cpu 1 \
+          --memory 1 \
+          --registry-login-server ${{ secrets.DOCKER_REGISTRY }} \
           --registry-username ${{ secrets.DOCKER_USERNAME }} \
           --registry-password ${{ secrets.DOCKER_PASSWORD }} \
           --ports 80 \
