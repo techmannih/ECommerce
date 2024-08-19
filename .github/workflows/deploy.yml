@@ -1,12 +1,12 @@
-name: Build and Deploy to Azure Container Instances
+name: Build and Deploy Backend to Azure App Service
 
 on:
   push:
     branches:
-      - main
+      - main  # Replace with your default branch
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,14 +16,14 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20'
+        node-version: '20'  # Replace with your Node.js version
 
     - name: Install dependencies
-      working-directory: client
+      working-directory: server
       run: npm install
 
-    - name: Build the frontend
-      working-directory: client
+    - name: Build the backend
+      working-directory: server
       run: npm run build
 
     - name: Log in to Docker Hub
@@ -34,27 +34,30 @@ jobs:
 
     - name: Build and Push Docker Image
       run: |
-        cd client
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/ecommerce:v1 .
-        docker push ${{ secrets.DOCKER_USERNAME }}/ecommerce:v1
+        cd server
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/ecommerce-server:v1 .
+        docker push ${{ secrets.DOCKER_USERNAME }}/ecommerce-server:v1
 
     - name: Log in to Azure
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Deploy to Azure Container Instances
+    - name: Set Environment Variables in Azure App Service
       run: |
-        az container create \
-          --resource-group frontend \
-          --name myecommerce \
-          --image ${{ secrets.DOCKER_USERNAME }}/ecommerce:v1 \
-          --cpu 1 \
-          --memory 1 \
-          --registry-login-server index.docker.io \
-          --registry-username ${{ secrets.DOCKER_USERNAME }} \
-          --registry-password ${{ secrets.DOCKER_PASSWORD }} \
-          --ports 80 \
-          --ip-address public
+        az webapp config appsettings set \
+          --name ecommerce-server \
+          --resource-group ecommerce-s \
+          --settings PORT=${{ secrets.PORT }} \
+                      dbURL=${{ secrets.DB_URL }} \
+                      SECRET_KEY=${{ secrets.SECRET_KEY }} \
+                      STRIPE_PRIVATE_KEY=${{ secrets.STRIPE_PRIVATE_KEY }}
+
+    - name: Deploy Docker Image to Azure App Service
+      run: |
+        az webapp config container set \
+          --name ecommerce-server \
+          --resource-group ecommerce-s \
+          --docker-custom-image-name ${{ secrets.DOCKER_USERNAME }}/ecommerce-server:v1
       env:
         AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
