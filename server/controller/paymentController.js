@@ -27,8 +27,8 @@ module.exports.makePayment = async (req, res) => {
           quantity: 1, // Quantity is set to 1 for the total amount
         },
       ],
-      success_url: "http://localhost:5173/updatePaymentStatus",
-      cancel_url: "http://localhost:5173/orders",
+      success_url: `${process.env.CLIENT_URL}/updatePaymentStatus`,
+      cancel_url: `${process.env.CLIENT_URL}/orders`,
     });
 
     res.json({
