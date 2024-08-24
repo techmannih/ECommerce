@@ -35,7 +35,7 @@ jobs:
         docker push ${{ secrets.DOCKER_USERNAME }}/ecommerce-server:latest
 
     - name: Log in to Azure
-      uses: azure/login@latest
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
