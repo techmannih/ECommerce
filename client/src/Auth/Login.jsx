@@ -63,14 +63,11 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
   };
 
   return (
-    <div className="flex items-center justify-center py-12 bg-gray-100">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
-        {successMessage && (
-          <div className="text-green-500 text-center mb-4">{successMessage}</div>
-        )}
-        <h2 className="text-3xl font-semibold mb-6 text-center">Login</h2>
-        <form onSubmit={handleLogin}>
-          <div className="mb-4">
+    <div className="max-sm:mx-6 mt-24">
+      {successMessage && <div className="text-green-500 text-center p-2">{successMessage}</div>}
+      <h2 className="text-4xl font-semibold mb-4 text-center">Login</h2>
+      <form onSubmit={handleLogin} className="max-w-md mx-auto">
+        <div className="mb-4">
           <label htmlFor="email" className="block text-sm font-medium text-gray-600">Email</label>
           <input
             type="email"
@@ -96,25 +93,19 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
             required
           />
         </div>
-        <p className="text-red-500 mb-2">{error}</p>
-        <p className="text-red-500 mb-2">{error1}</p>
-        <div className="mb-4">
-          New User?{' '}
-          <Link to="/register" className="text-sm text-blue-500 hover:underline">
-            Create an Account
-          </Link>
+        <p className="text-red-500 m-2 p-2">{error}</p>
+        <p className="text-red-500 m-2 p-2">{error1}</p>
+        <div className="">
+          New User?
+          <Link to="/register" className="text-sm text-blue-500 hover:underline">Create an Account</Link>
         </div>
         <div className="text-center">
-          <button
-            type="submit"
-            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none w-full"
-          >
+          <button type="submit" className="bg-black text-white m-7 px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:shadow-outline-blue active:bg-gray-800">
             Login
           </button>
         </div>
-        </form>
-      </div>
-      </div>
+      </form>
+    </div>
   );
 };
 
