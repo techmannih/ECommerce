@@ -1,8 +1,9 @@
 import React from "react";
+import Container from "../Components/Container";
 
 const AboutPage = () => {
   return (
-    <div className="my-3 py-3 mx-auto max-w-7xl px-8  lg:px-12">
+    <Container className="my-3 py-3 px-8 lg:px-12">
       <h1 className="text-center text-6xl max-md:text-3xl max-lg:text-5xl">
         About Us
       </h1>
@@ -197,7 +198,7 @@ const AboutPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 
