@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Container from "../Components/Container";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchAddresses,
@@ -97,7 +98,7 @@ const Checkout = () => {
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+    <Container>
       {error && <div className="text-red-500">{error}</div>}
       {/* {orderError && <div className="text-red-500">{orderError}</div>} */}
       {loading ? (
@@ -432,7 +433,7 @@ const Checkout = () => {
           </div>
         </div>
       )}
-    </div>
+    </Container>
   );
 };
 

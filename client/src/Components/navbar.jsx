@@ -2,6 +2,7 @@ import { Fragment, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import Container from "./Container";
 
 const navigation = [
   {
@@ -44,7 +45,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
         <>
-          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+          <Container>
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
@@ -193,7 +194,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                 )}
               </div>
             </div>
-          </div>
+          </Container>
           {/* navigation items */}
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
