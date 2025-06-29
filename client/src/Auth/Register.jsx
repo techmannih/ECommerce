@@ -66,7 +66,7 @@ const SignupForm = () => {
   };
 
   return (
-    <div className="flex items-center justify-center py-12 min-h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+    <div className="flex items-center justify-center py-12 bg-gray-100">
          <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
          {errorExist && (
               <div className="text-red-500 text-center mb-4">{errorExist}</div>

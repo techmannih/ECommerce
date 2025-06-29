@@ -5,7 +5,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-800 text-white pt-6 mt-3 max-md:text-sm">
+    <footer className="bg-gray-800 text-white pt-6 max-md:text-sm">
       <div className="container mx-auto text-center py-6">
         <p className="text-lg max-md:text-sm">
           Ecommerce &copy; {currentYear} All rights reserved.
