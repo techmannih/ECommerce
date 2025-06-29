@@ -42,8 +42,9 @@ export default function MainRoutes() {
 
   return (
     <Provider store={store}>
-      <>
+      <div className="flex flex-col min-h-screen">
         <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        <main className="flex-grow">
         <Routes>
           <Route exact path="/" element={<Home isLoggedIn={isLoggedIn} />} />
           <Route exact path="/contact" element={<ContactPage />} />
@@ -74,8 +75,9 @@ export default function MainRoutes() {
             element={<UpdatePaymentStatus />}
           />
         </Routes>
+        </main>
         <Footer />
-      </>
+      </div>
     </Provider>
   );
 }
