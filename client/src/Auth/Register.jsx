@@ -66,16 +66,17 @@ const SignupForm = () => {
   };
 
   return (
-    <div className="max-sm:mx-6 m-24 ">
+    <div className="flex items-center justify-center py-12 min-h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+         <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
          {errorExist && (
-              <div className="text-red-500 text-center">{errorExist}</div>
+              <div className="text-red-500 text-center mb-4">{errorExist}</div>
             )}
-            
+
         {successMessage && (
-              <div className="text-green-500 text-center">{successMessage}</div>
+              <div className="text-green-500 text-center mb-4">{successMessage}</div>
             )}
-      <h2 className="text-4xl font-semibold mb-4 text-center">Sign Up</h2>
-      <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+      <h2 className="text-3xl font-semibold mb-6 text-center">Sign Up</h2>
+      <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label
             htmlFor="fullName"
@@ -141,7 +142,7 @@ const SignupForm = () => {
         <div className="text-center">
           <button
             type="submit"
-            className="bg-black text-white m-7 px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:shadow-outline-blue active:bg-gray-800"
+            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none w-full"
           >
             Register
           </button>
@@ -149,6 +150,7 @@ const SignupForm = () => {
         </div>
       </form>
     </div>
+  </div>
   );
 };
 
