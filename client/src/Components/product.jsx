@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { addToCart } from "../redux/actions/cartAction";
+import ProductCard from "./ProductCard";
+import Container from "./Container";
 
 const Products = ({ isLoggedIn }) => {
   const [data, setData] = useState([]);
@@ -92,7 +93,7 @@ const Products = ({ isLoggedIn }) => {
     return (
       <>
         <div className="flex justify-center items-center">
-          <div className="buttons py-5 text-lg">
+          <div className="flex flex-wrap gap-2 py-5 text-lg">
             <button
               className="btn btn-outline-dark px-3 py-2 hover:border-2 hover:border-gray-400"
               onClick={() => setFilter(data)}
@@ -125,48 +126,14 @@ const Products = ({ isLoggedIn }) => {
             </button>
           </div>
         </div>
-        <div className="flex flex-wrap justify-center items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filter.map((product) => (
-            <div key={product.id} className="flex justify-center">
-              <div className="mb-4 flex-col border-gray-300 rounded-xl border-2 p-4 h-auto w-72 m-6 max-sm:m-2">
-                <div className="card text-center">
-                  <img
-                    className="card-img-top p-2 h-72 w-64"
-                    src={product.image}
-                    alt="Product"
-                    height={300}
-                    width={300}
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title font-semibold">
-                      {product.title.substring(0, 12)}...
-                    </h5>
-                    <p className="card-text">
-                      {product.description.substring(0, 90)}...
-                    </p>
-                  </div>
-                  <ul className="font-semibold">
-                    <hr className="m-2" />
-                    <li>$ {product.price}</li>
-                    <hr className="m-2" />
-                  </ul>
-                  <div className="card-body flex-col">
-                    {isLoggedIn ? (
-                      <button
-                        onClick={() => addToCartHandler(product)}
-                        className="m-1 p-3 bg-black text-white rounded-xl hover:bg-gray-700"
-                      >
-                        Buy Now
-                      </button>
-                    ) : (
-                      <Link to="/login" className="text-red-500 underline">
-                        Log in to buy
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ProductCard
+              key={product.id}
+              product={product}
+              isLoggedIn={isLoggedIn}
+              onAddToCart={addToCartHandler}
+            />
           ))}
         </div>
       </>
@@ -174,7 +141,7 @@ const Products = ({ isLoggedIn }) => {
   };
 
   return (
-    <div className="my-3 py-3 mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+    <Container className="my-3 py-3">
       <div className="">
         <div className="font-light">
           <p className="text-center text-6xl max-md:text-3xl max-lg:text-5xl">
@@ -186,7 +153,7 @@ const Products = ({ isLoggedIn }) => {
       <div className="flex flex-col">
         {loading ? <Loading /> : <ShowProducts />}
       </div>
-    </div>
+    </Container>
   );
 };
 

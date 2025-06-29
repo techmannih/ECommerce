@@ -8,6 +8,7 @@ import {
   clearCart,
 } from "../redux/actions/cartAction";
 import { Link } from "react-router-dom";
+import Container from "../Components/Container";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -180,7 +181,7 @@ const Cart = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
       <div className="py-12">
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <Container>
           <div className="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div className="p-6 sm:px-20 bg-white border-b border-gray-200">
               <div className="text-2xl">Cart</div>
@@ -193,7 +194,7 @@ const Cart = () => {
               </button>
             </div>
           </div>
-        </div>
+        </Container>
       </div>
     </div>
   );
