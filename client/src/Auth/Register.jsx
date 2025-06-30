@@ -7,6 +7,7 @@ const SignupForm = () => {
     fullName: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
   const [successMessage, setSuccessMessage] = useState(null);
 
@@ -19,12 +20,14 @@ const SignupForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      // Add logic to send the form data to your backend for user registration
-      console.log("Form data submitted:", formData);
+    if (formData.password !== formData.confirmPassword) {
+      setErrorExist("Passwords do not match.");
+      setTimeout(() => setErrorExist(null), 1000);
+      return;
+    }
 
-      // Make an API call to your server to handle user registration
-      const response = await fetch( `${import.meta.env.VITE_BACKEND_URL}/signup`, {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,23 +40,19 @@ const SignupForm = () => {
         fullName: "",
         email: "",
         password: "",
+        confirmPassword: "",
       });
       if (response.ok) {
-        // Registration successful, you can redirect or perform other actions
-
-        setSuccessMessage("User registered successfully!"); // Registration successful, display success message
+        setSuccessMessage("User registered successfully!");
         // Clear success message and navigate after 2 seconds
         setTimeout(() => {
           setSuccessMessage(null);
           navigate("/login");
         }, 1000);
-        console.log("User registered successfully!");
-        console.log(formData);
       } else {
-        // Registration failed, handle errors
-        console.error("Registration failed:", response.statusText);
+        const errorBody = await response.json();
         setErrorExist(
-          "Email is already in use. Please choose a different email."
+          errorBody.errors?.email || "Registration failed. Please try again."
         );
         setTimeout(() => {
           setErrorExist(null);
@@ -61,7 +60,8 @@ const SignupForm = () => {
         }, 1000);
       }
     } catch (error) {
-      console.error("Error during registration:", error.message);
+      setErrorExist("Something went wrong. Please try again.");
+      setTimeout(() => setErrorExist(null), 1000);
     }
   };
 
@@ -81,7 +81,7 @@ const SignupForm = () => {
             htmlFor="fullName"
             className="block text-sm font-medium text-gray-600"
           >
-            fullName
+            FullName
           </label>
           <input
             type="text"
@@ -127,6 +127,21 @@ const SignupForm = () => {
             onChange={handleChange}
             className="mt-1 p-2 w-full border rounded-md"
             placeholder="Your Password"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-600">
+            Confirm Password
+          </label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            className="mt-1 p-2 w-full border rounded-md"
+            placeholder="Confirm Password"
             required
           />
         </div>

@@ -5,7 +5,6 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
-  const [error1, setError1] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
   useEffect(() => {
@@ -28,14 +27,12 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
         body: JSON.stringify(loginData),
       });
 
-      console.log(response);
       const responseBody = await response.json(); // Read response body only once
-      localStorage.setItem("userId", responseBody.success); // Use responseBody.success here
-      console.log("datass", responseBody);
+
 
       if (response.ok) {
+        localStorage.setItem("userId", responseBody.success);
         document.cookie = `jwt=${responseBody.token}; path=/`; // Set the JWT token in cookies
-        console.log("Token set in cookie:", document.cookie);
 
         setLoginData({ email: "", password: "" });
         setSuccessMessage("User Logged In successfully!");
@@ -44,21 +41,22 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
           setSuccessMessage(null);
           navigate("/");
         }, 1000);
-        console.log("User authenticated successfully!");
       } else {
         setIsLoggedIn(false);
-        if (responseBody.errors && (responseBody.errors.email || responseBody.errors.password === "Invalid credentials")) {
+        if (
+          responseBody.errors &&
+          (responseBody.errors.email || responseBody.errors.password === "Invalid credentials")
+        ) {
           setError("Invalid email or password. Please try again.");
-          setTimeout(() => setError(null), 1000);
         } else {
-          console.error("Authentication failed:", response.statusText);
-          setError1("Invalid email or password. Please try again.");
-          setTimeout(() => setError1(null), 1000);
+          setError("Invalid email or password. Please try again.");
         }
+        setTimeout(() => setError(null), 1000);
       }
     } catch (error) {
       setIsLoggedIn(false);
-      console.error("Error during authentication:", error.message);
+      setError("Something went wrong. Please try again.");
+      setTimeout(() => setError(null), 1000);
     }
   };
 
@@ -94,7 +92,6 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
           />
         </div>
         <p className="text-red-500 m-2 p-2">{error}</p>
-        <p className="text-red-500 m-2 p-2">{error1}</p>
         <div className="">
           New User?
           <Link to="/register" className="text-sm text-blue-500 hover:underline">Create an Account</Link>
