@@ -201,6 +201,10 @@ export const fetchCartData = () => async (dispatch) => {
     const userId = localStorage.getItem("userId");
     console.log("User ID:", userId);
 
+    if (!userId) {
+      throw new Error("User ID not found. Please log in to view your cart.");
+    }
+
     const response = await fetch(
       `${import.meta.env.VITE_BACKEND_URL}/cart/${userId}`
     );
@@ -235,11 +239,12 @@ export const fetchCartData = () => async (dispatch) => {
     toast.success("Cart data fetched successfully");
     return cartItems; // Return cartItems to handle in component
   } catch (error) {
-    toast.error("Unable to fetch cart data.");
-    console.error("Error fetching cart data:", error.message);
+    const errorMessage = error.message || "Unable to fetch cart data.";
+    toast.error(errorMessage);
+    console.error("Error fetching cart data:", errorMessage);
     dispatch({
       type: FETCH_CART_FAILURE,
-      payload: error.message,
+      payload: errorMessage,
     });
   }
 };

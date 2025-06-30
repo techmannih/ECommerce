@@ -13,7 +13,7 @@ import Container from "../Components/Container";
 const Cart = () => {
   const dispatch = useDispatch();
 
-  const cartItems = useSelector((state) => state.cart.cartItems);
+  const { cartItems, error } = useSelector((state) => state.cart);
 
   useEffect(() => {
     console.log("Fetching cart data...");
@@ -185,7 +185,14 @@ const Cart = () => {
           <div className="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div className="p-6 sm:px-20 bg-white border-b border-gray-200">
               <div className="text-2xl">Cart</div>
-              {cartItems ? <ShowCart /> : <p>Loading cart...</p>}
+              {error && (
+                <p className="text-red-600 my-4">{error}</p>
+              )}
+              {cartItems ? (
+                <ShowCart />
+              ) : (
+                !error && <p>Loading cart...</p>
+              )}
               <button
                 onClick={() => clearCartHandler(localStorage.getItem("userId"))}
                 className="bg-gray-500 text-white px-4 py-2 mt-4 rounded hover:bg-gray-600"
