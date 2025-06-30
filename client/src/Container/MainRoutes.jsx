@@ -23,8 +23,8 @@ const getCookie = (name) => {
   if (parts.length === 2) return parts.pop().split(";").shift();
   return null;
 };
-// i want to add userid on login in localStorage, give me code here
-const UserId = localStorage.getItem("userId");
+// Keep user id only for the lifetime of the tab
+const UserId = sessionStorage.getItem("userId");
 console.log("User ID:", UserId);
 
 export default function MainRoutes() {
@@ -32,8 +32,9 @@ export default function MainRoutes() {
 
   useEffect(() => {
     const storedToken = getCookie("jwt");
+    const storedUserId = sessionStorage.getItem("userId");
     console.log("JWT Token from cookies:", storedToken);
-    if (storedToken) {
+    if (storedToken && storedUserId) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);

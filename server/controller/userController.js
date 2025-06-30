@@ -64,11 +64,12 @@ module.exports.signup = async (req, res) => {
       const user = await User.create({ fullName, email, password });
 
       const token = getToken(user._id);
+      // Create a session cookie so the user remains logged in on reload
+      // but is logged out once the browser/tab is closed
       res.cookie("jwt", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        maxAge: maxAge * 1000,
       });
       console.log("new user", user);
       res.status(201).json({ success: "Signed up successfully" });
@@ -102,11 +103,12 @@ module.exports.login = async (req, res) => {
     }
 
     const token = getToken(user._id);
+    // Issue a session cookie instead of a persistent one so the
+    // authentication is cleared once the browser session ends
     res.cookie("jwt", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: maxAge * 1000,
     });
     res.status(200).json({ success: user._id });
     console.log("Logged data", user);

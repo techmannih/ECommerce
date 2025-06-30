@@ -42,7 +42,7 @@ const Checkout = () => {
       setError("Invalid billing address. Please fill in all required fields.");
       return;
     }
-    const userId = localStorage.getItem("userId");
+    const userId = sessionStorage.getItem("userId");
     dispatch(saveAddress(billingaddress, userId));
     setBillingaddress({
       firstName: "",
@@ -68,7 +68,7 @@ const Checkout = () => {
   };
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
+    const userId = sessionStorage.getItem("userId");
     dispatch(fetchAddresses(userId));
   }, [dispatch]);
 
@@ -76,8 +76,8 @@ const Checkout = () => {
   const shipping = 10;
 
   const handlePlaceOrder = () => {
-    const user = localStorage.getItem("userId");
-    const cart = localStorage.getItem("cartId");
+    const user = sessionStorage.getItem("userId");
+    const cart = sessionStorage.getItem("cartId");
     const shippingPrice = 10;
     const orderData = {
       user,

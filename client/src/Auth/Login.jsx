@@ -42,7 +42,9 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
       const { ok, body } = await post('/login', loginData);
 
       if (ok) {
-        localStorage.setItem("userId", body.success);
+        // Persist the user only for this tab so reloading keeps the
+        // session but closing the tab logs the user out
+        sessionStorage.setItem("userId", body.success);
         resetForm();
         toast.success("Logged in successfully!");
         setIsLoggedIn(true);

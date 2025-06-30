@@ -32,9 +32,9 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   };
   const handleLogout = () => {
     // Clear the token from cookies
-    // remove localStorage.setItem("userId");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("cartId");
+    // Remove session based values
+    sessionStorage.removeItem("userId");
+    sessionStorage.removeItem("cartId");
     deleteCookie("jwt");
     setIsLoggedIn(false);
     window.location.href = "/";

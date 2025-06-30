@@ -46,7 +46,7 @@ const OrderDetails = () => {
         window.location.href = data.url; // Redirect to Stripe checkout
         // add here code for render to updatePaymentStatus after success
         window.location.href = data.url; // Redirect to Stripe checkout
-        localStorage.setItem("orderId", id);
+        sessionStorage.setItem("orderId", id);
         console.log("Payment initiated successfully");
         toast.success("Payment initiated successfully");
         console.log("Order ID: after payment", id);
