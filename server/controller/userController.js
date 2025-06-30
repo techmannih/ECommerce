@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const maxAge = 2 * 24 * 60 * 60;
 const mySecretKey = process.env.SECRET_KEY;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function getToken(userID) {
   return jwt.sign({ userID }, mySecretKey, {
@@ -40,6 +41,14 @@ module.exports.signup = async (req, res) => {
   console.log("Signing up");
 
   try {
+    if (!emailRegex.test(email) || !password || password.length < 6) {
+      return res.status(400).json({
+        errors: {
+          email: !emailRegex.test(email) ? "Invalid email" : undefined,
+          password: !password || password.length < 6 ? "Password must be at least 6 characters" : undefined,
+        },
+      });
+    }
     // Check if user with the same email already exists
     const existingUser = await User.findOne({ email });
     console.log("existing user", existingUser);
@@ -54,10 +63,15 @@ module.exports.signup = async (req, res) => {
       // Create a new user
       const user = await User.create({ fullName, email, password });
 
-      // Generate a JWT token and send it in the response
       const token = getToken(user._id);
+      res.cookie("jwt", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: maxAge * 1000,
+      });
       console.log("new user", user);
-      res.status(201).json({ success: "Signed up successfully", token });
+      res.status(201).json({ success: "Signed up successfully" });
     }
   } catch (err) {
     console.error("Error signing up", err);
@@ -72,6 +86,14 @@ module.exports.login = async (req, res) => {
   const { email, password } = req.body;
   console.log("Logging in");
   try {
+    if (!emailRegex.test(email) || !password) {
+      return res.status(400).json({
+        errors: {
+          email: !emailRegex.test(email) ? "Invalid email" : undefined,
+          password: !password ? "Password is required" : undefined,
+        },
+      });
+    }
     const user = await User.login(email, password);
 
     if (!user) {
@@ -79,9 +101,14 @@ module.exports.login = async (req, res) => {
       throw new Error("Invalid credentials");
     }
 
-    // Generate a JWT token and send it in the response
     const token = getToken(user._id);
-    res.status(200).json({ success: user._id, token });
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: maxAge * 1000,
+    });
+    res.status(200).json({ success: user._id });
     console.log("Logged data", user);
   } catch (err) {
     console.error("Error logging in:", err.message);
