@@ -22,7 +22,7 @@ const ProductCard = ({ product, isLoggedIn, onAddToCart }) => {
           onClick={() => onAddToCart(product)}
           className="mt-3 bg-black text-white rounded-md py-2 hover:bg-gray-700"
         >
-          Buy Now
+          Add to Cart
         </button>
       ) : (
         <Link to="/login" className="mt-3 text-blue-500 underline">
