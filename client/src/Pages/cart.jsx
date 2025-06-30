@@ -27,19 +27,19 @@ const Cart = () => {
   }, [dispatch]);
 
   const increaseItem = (product) => {
-    const userId = localStorage.getItem("userId");
+    const userId = sessionStorage.getItem("userId");
     console.log("Increasing quantity for product:", product);
     dispatch(addToCart(userId, product));
   };
 
   const decreaseItem = (product) => {
-    const userId = localStorage.getItem("userId");
+    const userId = sessionStorage.getItem("userId");
     console.log("Decreasing quantity for product:", product);
     dispatch(decreaseItemInCart(userId, product.productId));
   };
 
   const deleteById = (product) => {
-    const userId = localStorage.getItem("userId");
+    const userId = sessionStorage.getItem("userId");
     console.log("Deleting product from cart:", product);
     dispatch(removeItemFromCart(userId, product.productId));
   };
@@ -194,7 +194,7 @@ const Cart = () => {
                 !error && <p>Loading cart...</p>
               )}
               <button
-                onClick={() => clearCartHandler(localStorage.getItem("userId"))}
+                onClick={() => clearCartHandler(sessionStorage.getItem("userId"))}
                 className="bg-gray-500 text-white px-4 py-2 mt-4 rounded hover:bg-gray-600"
               >
                 Clear Cart

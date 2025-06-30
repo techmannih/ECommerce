@@ -24,7 +24,7 @@ const Products = ({ isLoggedIn }) => {
         image: product.image,
         title: product.title,
       };
-      const userId = localStorage.getItem("userId");
+      const userId = sessionStorage.getItem("userId");
 
       // Dispatch addToCart action to update Redux state
       dispatch(addToCart(userId, cartItem));

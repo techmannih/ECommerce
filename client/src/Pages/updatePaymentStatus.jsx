@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 
 const UpdateStatus = () => {
   const dispatch = useDispatch();
-  const orderId = localStorage.getItem("orderId");
+  const orderId = sessionStorage.getItem("orderId");
   useEffect(() => {
     
     console.log("Order ID in update status:", orderId);
@@ -43,7 +43,7 @@ const UpdateStatus = () => {
         dispatch(getOrderDetails(orderId)); // Refresh order details after update
         // want to back to Orders Page after update 
         window.location.href = "/orders";
-        localStorage.removeItem("orderId");
+        sessionStorage.removeItem("orderId");
       } else {
         console.error("Error updating payment status:", response.statusText);
       }

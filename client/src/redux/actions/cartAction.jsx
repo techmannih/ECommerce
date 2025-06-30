@@ -69,7 +69,7 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
 
     const data = await response.json();
     console.log("Cart updated successfully:", data);
-    localStorage.setItem("cartId", data.data._id);
+    sessionStorage.setItem("cartId", data.data._id);
 
     dispatch({
       type: existingCartItem ? UPDATE_CART_ITEM : ADD_TO_CART,
@@ -198,7 +198,7 @@ export const removeItemFromCart = (userId, productId) => async (dispatch) => {
 
 export const fetchCartData = () => async (dispatch) => {
   try {
-    const userId = localStorage.getItem("userId");
+    const userId = sessionStorage.getItem("userId");
     console.log("User ID:", userId);
 
     if (!userId) {

@@ -9,7 +9,7 @@ const OrdersPage = () => {
   const { orders, loading, error } = useSelector((state) => state.order);
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
+    const userId = sessionStorage.getItem("userId");
     dispatch(getOrders(userId));
   }, [dispatch]);
 
