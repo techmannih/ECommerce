@@ -5,7 +5,8 @@ const InputField = ({ label, name, type = 'text', value, onChange, placeholder =
   const isPassword = type === 'password';
   const fieldType = isPassword && show ? 'text' : type;
   return (
-    <div className={`mb-4 ${isPassword ? 'relative' : ''}`}>\n      <label htmlFor={name} className="block text-sm font-medium text-gray-600">
+    <div className={`mb-4 ${isPassword ? 'relative' : ''}`}>
+      <label htmlFor={name} className="block text-sm font-medium text-gray-600">
         {label}
       </label>
       <input
