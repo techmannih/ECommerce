@@ -4,6 +4,7 @@ import { InputField, FormError, SubmitButton } from "../Components";
 import useForm from "../hooks/useForm";
 import { validateEmail } from "../utils/validation";
 import { post } from "../utils/api";
+import toast from "react-hot-toast";
 
 const SignupForm = () => {
   const navigate = useNavigate();
@@ -13,7 +14,6 @@ const SignupForm = () => {
     password: "",
     confirmPassword: "",
   });
-  const [successMessage, setSuccessMessage] = useState(null);
   const [errorExist, setErrorExist] = useState(null);
   const [emailError, setEmailError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -28,6 +28,11 @@ const SignupForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!formData.fullName || !formData.email || !formData.password || !formData.confirmPassword) {
+      toast.error("Please fill out all required fields.");
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setErrorExist("Passwords do not match.");
       setTimeout(() => setErrorExist(null), 1000);
@@ -40,20 +45,22 @@ const SignupForm = () => {
 
       resetForm();
       if (ok) {
-        setSuccessMessage("User registered successfully!");
+        toast.success("Registration successful! Please log in.");
         setTimeout(() => {
-          setSuccessMessage(null);
           navigate("/login");
         }, 1000);
       } else {
-        setErrorExist(body.errors?.email || "Registration failed. Please try again.");
+        const message = body.errors?.email || "Registration failed. Please try again.";
+        setErrorExist(message);
+        toast.error(message);
         setTimeout(() => {
           setErrorExist(null);
           navigate("/register");
         }, 1000);
       }
     } catch (error) {
-      setErrorExist("Something went wrong. Please try again.");
+      setErrorExist("Oops! Something went wrong. Please try again later.");
+      toast.error("Oops! Something went wrong. Please try again later.");
       setTimeout(() => setErrorExist(null), 1000);
     } finally {
       setLoading(false);
@@ -63,7 +70,6 @@ const SignupForm = () => {
   return (
     <div className="max-sm:mx-6 m-24">
       {errorExist && <div className="text-red-500 text-center">{errorExist}</div>}
-      {successMessage && <div className="text-green-500 text-center">{successMessage}</div>}
       <h2 className="text-4xl font-semibold mb-4 text-center">Sign Up</h2>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
         <InputField

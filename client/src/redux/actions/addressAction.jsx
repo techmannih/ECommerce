@@ -33,7 +33,7 @@ export const fetchAddresses = (userId) => {
         type: FETCH_ADDRESSES_FAILURE,
         error: error.message || "Failed to fetch addresses",
       });
-      toast.error(`Error: ${error.message || "Failed to fetch addresses"}`);
+      toast.error(`Unable to fetch addresses: ${error.message || "Failed to fetch addresses"}`);
     }
   };
 };
@@ -66,7 +66,7 @@ export const saveAddress = (address, userId) => {
         type: SAVE_ADDRESS_FAILURE,
         error: error.message,
       });
-      toast.error(`Error: ${error.message || "Failed to save address"}`);
+      toast.error(`Unable to save address: ${error.message || "Failed to save address"}`);
     }
   };
 };
@@ -94,7 +94,7 @@ export const deleteAddress = (addressId) => {
         type: DELETE_ADDRESS_FAILURE,
         error: error.message,
       });
-      toast.error(`Error: ${error.message || "Failed to delete address"}`);
+      toast.error(`Unable to delete address: ${error.message || "Failed to delete address"}`);
     }
   };
 };
