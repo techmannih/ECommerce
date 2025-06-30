@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const SignupForm = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -10,11 +12,17 @@ const SignupForm = () => {
     confirmPassword: "",
   });
   const [successMessage, setSuccessMessage] = useState(null);
-
   const [errorExist, setErrorExist] = useState(null);
+  const [emailError, setEmailError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    if (name === "email") {
+      setEmailError(emailRegex.test(value) || value === "" ? null : "Invalid email");
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -35,7 +43,6 @@ const SignupForm = () => {
         body: JSON.stringify(formData),
       });
 
-      // Clear the form fields
       setFormData({
         fullName: "",
         email: "",
@@ -44,16 +51,13 @@ const SignupForm = () => {
       });
       if (response.ok) {
         setSuccessMessage("User registered successfully!");
-        // Clear success message and navigate after 2 seconds
         setTimeout(() => {
           setSuccessMessage(null);
           navigate("/login");
         }, 1000);
       } else {
         const errorBody = await response.json();
-        setErrorExist(
-          errorBody.errors?.email || "Registration failed. Please try again."
-        );
+        setErrorExist(errorBody.errors?.email || "Registration failed. Please try again.");
         setTimeout(() => {
           setErrorExist(null);
           navigate("/register");
@@ -65,23 +69,18 @@ const SignupForm = () => {
     }
   };
 
+  const buttonClass =
+    "bg-black text-white m-7 px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:shadow-outline-blue active:bg-gray-800";
+
   return (
-    <div className="max-sm:mx-6 m-24 ">
-         {errorExist && (
-              <div className="text-red-500 text-center">{errorExist}</div>
-            )}
-            
-        {successMessage && (
-              <div className="text-green-500 text-center">{successMessage}</div>
-            )}
+    <div className="max-sm:mx-6 m-24">
+      {errorExist && <div className="text-red-500 text-center">{errorExist}</div>}
+      {successMessage && <div className="text-green-500 text-center">{successMessage}</div>}
       <h2 className="text-4xl font-semibold mb-4 text-center">Sign Up</h2>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
         <div className="mb-4">
-          <label
-            htmlFor="fullName"
-            className="block text-sm font-medium text-gray-600"
-          >
-            FullName
+          <label htmlFor="fullName" className="block text-sm font-medium text-gray-600">
+            Full Name
           </label>
           <input
             type="text"
@@ -91,14 +90,13 @@ const SignupForm = () => {
             onChange={handleChange}
             className="mt-1 p-2 w-full border rounded-md"
             placeholder="Your Name"
+            autoComplete="name"
+            autoFocus
             required
           />
         </div>
         <div className="mb-4">
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-600"
-          >
+          <label htmlFor="email" className="block text-sm font-medium text-gray-600">
             Email
           </label>
           <input
@@ -108,59 +106,68 @@ const SignupForm = () => {
             value={formData.email}
             onChange={handleChange}
             className="mt-1 p-2 w-full border rounded-md"
-            placeholder="Your Email"
+            placeholder="you@example.com"
+            autoComplete="email"
             required
           />
+          {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
         </div>
-        <div className="mb-4">
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-600"
-          >
+        <div className="mb-4 relative">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-600">
             Password
           </label>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             id="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
             className="mt-1 p-2 w-full border rounded-md"
             placeholder="Your Password"
+            autoComplete="new-password"
             required
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-2 top-9 text-xs text-gray-600"
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
         </div>
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-600">
             Confirm Password
           </label>
           <input
-            type="password"
+            type={showConfirm ? "text" : "password"}
             id="confirmPassword"
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
             className="mt-1 p-2 w-full border rounded-md"
             placeholder="Confirm Password"
+            autoComplete="new-password"
             required
           />
+          <button
+            type="button"
+            onClick={() => setShowConfirm(!showConfirm)}
+            className="absolute right-2 top-9 text-xs text-gray-600"
+          >
+            {showConfirm ? "Hide" : "Show"}
+          </button>
         </div>
-
-        <div className=" items-center mb-4">
-          {" "}
-          Already have an account?
+        <div className="items-center mb-4">
+          Already have an account?{' '}
           <Link to="/login" className="text-sm text-blue-500 hover:underline">
             Login
           </Link>
         </div>
         <div className="text-center">
-          <button
-            type="submit"
-            className="bg-black text-white m-7 px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:shadow-outline-blue active:bg-gray-800"
-          >
+          <button type="submit" className={buttonClass}>
             Register
           </button>
-
         </div>
       </form>
     </div>
