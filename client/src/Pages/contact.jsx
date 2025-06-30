@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Container from "../Components/Container";
+import toast from "react-hot-toast";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -18,7 +19,12 @@ const ContactForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Add your form submission logic here
+    if (!formData.name || !formData.email || !formData.message) {
+      toast.error("Please fill out all fields before submitting.");
+      return;
+    }
     console.log("Form submitted:", formData);
+    toast.success("Thank you! Your message has been sent.");
   };
 
   return (

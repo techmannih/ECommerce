@@ -4,6 +4,7 @@ import { InputField, FormError, SubmitButton } from "../Components";
 import useForm from "../hooks/useForm";
 import { validateEmail } from "../utils/validation";
 import { post } from "../utils/api";
+import toast from "react-hot-toast";
 
 const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate();
@@ -14,7 +15,6 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
   const [error, setError] = useState(null);
   const [emailError, setEmailError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState(null);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -32,6 +32,11 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    if (!loginData.email || !loginData.password) {
+      toast.error("Please enter both email and password.");
+      return;
+    }
+
     try {
       setLoading(true);
       const { ok, body } = await post('/login', loginData);
@@ -39,20 +44,22 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
       if (ok) {
         localStorage.setItem("userId", body.success);
         resetForm();
-        setSuccessMessage("User Logged In successfully!");
+        toast.success("Logged in successfully!");
         setIsLoggedIn(true);
         setTimeout(() => {
-          setSuccessMessage(null);
           navigate("/");
         }, 1000);
       } else {
         setIsLoggedIn(false);
-        setError(body.errors?.email || body.errors?.password || "Invalid email or password. Please try again.");
+        const message = body.errors?.email || body.errors?.password || "Invalid email or password. Please try again.";
+        setError(message);
+        toast.error(message);
         setTimeout(() => setError(null), 1000);
       }
     } catch (error) {
       setIsLoggedIn(false);
-      setError("Something went wrong. Please try again.");
+      setError("Oops! Something went wrong. Please try again later.");
+      toast.error("Oops! Something went wrong. Please try again later.");
       setTimeout(() => setError(null), 1000);
     } finally {
       setLoading(false);
@@ -61,7 +68,6 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
 
   return (
     <div className="max-sm:mx-6 mt-24">
-      {successMessage && <div className="text-green-500 text-center p-2">{successMessage}</div>}
       <h2 className="text-4xl font-semibold mb-4 text-center">Login</h2>
       <form onSubmit={handleLogin} className="max-w-md mx-auto">
         <InputField
