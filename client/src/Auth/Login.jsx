@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { InputField, FormError, SubmitButton } from "../Components";
+import useForm from "../hooks/useForm";
+import { validateEmail } from "../utils/validation";
+import { post } from "../utils/api";
 
 const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate();
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const { values: loginData, handleChange, resetForm } = useForm({
+    email: "",
+    password: "",
+  });
   const [error, setError] = useState(null);
   const [emailError, setEmailError] = useState(null);
-  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState(null);
 
   useEffect(() => {
@@ -17,11 +22,10 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
     }
   }, [isLoggedIn]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setLoginData({ ...loginData, [name]: value });
-    if (name === "email") {
-      setEmailError(emailRegex.test(value) || value === "" ? null : "Invalid email");
+  const handleInputChange = (e) => {
+    handleChange(e);
+    if (e.target.name === "email") {
+      setEmailError(validateEmail(e.target.value) ? null : "Invalid email");
     }
   };
 
@@ -29,19 +33,12 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(loginData),
-      });
+      setLoading(true);
+      const { ok, body } = await post('/login', loginData);
 
-      const responseBody = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem("userId", responseBody.success);
-        document.cookie = `jwt=${responseBody.token}; path=/`;
-
-        setLoginData({ email: "", password: "" });
+      if (ok) {
+        localStorage.setItem("userId", body.success);
+        resetForm();
         setSuccessMessage("User Logged In successfully!");
         setIsLoggedIn(true);
         setTimeout(() => {
@@ -50,66 +47,44 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
         }, 1000);
       } else {
         setIsLoggedIn(false);
-        setError("Invalid email or password. Please try again.");
+        setError(body.errors?.email || body.errors?.password || "Invalid email or password. Please try again.");
         setTimeout(() => setError(null), 1000);
       }
     } catch (error) {
       setIsLoggedIn(false);
       setError("Something went wrong. Please try again.");
       setTimeout(() => setError(null), 1000);
+    } finally {
+      setLoading(false);
     }
   };
-
-  const buttonClass =
-    "bg-black text-white m-7 px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:shadow-outline-blue active:bg-gray-800";
 
   return (
     <div className="max-sm:mx-6 mt-24">
       {successMessage && <div className="text-green-500 text-center p-2">{successMessage}</div>}
       <h2 className="text-4xl font-semibold mb-4 text-center">Login</h2>
       <form onSubmit={handleLogin} className="max-w-md mx-auto">
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-600">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={loginData.email}
-            onChange={handleChange}
-            className="mt-1 p-2 w-full border rounded-md"
-            placeholder="you@example.com"
-            autoComplete="email"
-            autoFocus
-            required
-          />
-          {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
-        </div>
-        <div className="mb-4 relative">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-600">
-            Password
-          </label>
-          <input
-            type={showPassword ? "text" : "password"}
-            id="password"
-            name="password"
-            value={loginData.password}
-            onChange={handleChange}
-            className="mt-1 p-2 w-full border rounded-md"
-            placeholder="Your Password"
-            autoComplete="current-password"
-            required
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-2 top-9 text-xs text-gray-600"
-          >
-            {showPassword ? "Hide" : "Show"}
-          </button>
-        </div>
-        {error && <p className="text-red-500 m-2 p-2">{error}</p>}
+        <InputField
+          label="Email"
+          name="email"
+          type="email"
+          value={loginData.email}
+          onChange={handleInputChange}
+          placeholder="you@example.com"
+          autoComplete="email"
+          autoFocus
+        />
+        <FormError message={emailError} />
+        <InputField
+          label="Password"
+          name="password"
+          type="password"
+          value={loginData.password}
+          onChange={handleInputChange}
+          placeholder="Your Password"
+          autoComplete="current-password"
+        />
+        <FormError message={error} />
         <div>
           New User?{' '}
           <Link to="/register" className="text-sm text-blue-500 hover:underline">
@@ -117,9 +92,7 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
           </Link>
         </div>
         <div className="text-center">
-          <button type="submit" className={buttonClass}>
-            Login
-          </button>
+          <SubmitButton loading={loading}>Login</SubmitButton>
         </div>
       </form>
     </div>
