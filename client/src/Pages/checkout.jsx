@@ -16,7 +16,6 @@ const Checkout = () => {
   const dispatch = useDispatch();
 
   const cartItems = useSelector((state) => state.cart.cartItems);
-  console.log("Cart items:11", cartItems);
   const [billingaddress, setBillingaddress] = useState({
     firstName: "",
     lastName: "",
@@ -111,7 +110,6 @@ const Checkout = () => {
       return;
     }
     
-    console.log("Order data:", orderData, user);
     dispatch(createOrder(orderData));
     
   };

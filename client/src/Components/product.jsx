@@ -29,9 +29,8 @@ const Products = ({ isLoggedIn }) => {
       // Dispatch addToCart action to update Redux state
       dispatch(addToCart(userId, cartItem));
 
-      console.log("Item added to the cart:", product);
     } catch (error) {
-      console.error("Error adding item to the cart:", error.message);
+      // Error handling can be improved with user notifications
     }
   };
 
@@ -47,7 +46,6 @@ const Products = ({ isLoggedIn }) => {
           setLoading(false);
         }
       } catch (error) {
-        console.error("Error fetching products:", error);
         setLoading(false);
       }
     };

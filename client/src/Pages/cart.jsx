@@ -16,36 +16,28 @@ const Cart = () => {
   const { cartItems, error } = useSelector((state) => state.cart);
 
   useEffect(() => {
-    console.log("Fetching cart data...");
     dispatch(fetchCartData())
-      .then((data) => {
-        console.log("Cart data fetched successfully", data);
-      })
-      .catch((error) => {
-        console.error("Error fetching cart data:", error);
+      .catch(() => {
+        // handled in action
       });
   }, [dispatch]);
 
   const increaseItem = (product) => {
     const userId = sessionStorage.getItem("userId");
-    console.log("Increasing quantity for product:", product);
     dispatch(addToCart(userId, product));
   };
 
   const decreaseItem = (product) => {
     const userId = sessionStorage.getItem("userId");
-    console.log("Decreasing quantity for product:", product);
     dispatch(decreaseItemInCart(userId, product.productId));
   };
 
   const deleteById = (product) => {
     const userId = sessionStorage.getItem("userId");
-    console.log("Deleting product from cart:", product);
     dispatch(removeItemFromCart(userId, product.productId));
   };
 
   const clearCartHandler = (userId) => {
-    console.log("Clearing cart for user:", userId);
     dispatch(clearCart(userId));
   };
 
@@ -62,7 +54,6 @@ const Cart = () => {
   );
 
   const ShowCart = () => {
-    console.log("Rendering cart with data:", cartItems);
 
     if (!cartItems || cartItems.length === 0) {
       return <EmptyCart />;
@@ -73,8 +64,6 @@ const Cart = () => {
       0
     ); // Calculate subtotal using totalItemPrice
     const shipping = 10; // Replace with actual shipping cost
-
-    console.log(subtotal, shipping);
     return (
       <section className="h-auto">
         <div className="py-5 flex justify-between my-4 max-md:flex-col max-md:items-center">

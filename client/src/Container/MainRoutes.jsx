@@ -16,7 +16,6 @@ import {
 
 // Keep user id only for the lifetime of the tab
 const UserId = sessionStorage.getItem("userId");
-console.log("User ID:", UserId);
 
 export default function MainRoutes() {
   // Determine initial login state from sessionStorage so the user
