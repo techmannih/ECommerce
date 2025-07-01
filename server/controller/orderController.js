@@ -6,8 +6,16 @@ const { Address } = require("../models/addressmodel");
 module.exports.createOrder = async (req, res) => {
   try {
     // Extract necessary information from the request body
-    const { cart, user, shippingPrice, totalPrice, address,title, image } =
+    const { cart, user, shippingPrice, totalPrice, address, title, image } =
       req.body;
+
+    // Basic validation for required fields
+    if (!cart || !user || !address) {
+      return res.status(400).json({
+        success: false,
+        message: "Cart ID, user ID and address are required to create an order",
+      });
+    }
     // console.log("Request body:", req.body);
     console.log("order body:", cart);
     // Find the cart by its ID
@@ -17,7 +25,7 @@ module.exports.createOrder = async (req, res) => {
     // Check if cart exists
     if (!cartDetails) {
       console.log("Cart not found");
-      return res.status(404).json({ success: false, error: "Cart not found" });
+      return res.status(404).json({ success: false, message: "Cart not found" });
     }
 
     // Retrieve user details
@@ -27,7 +35,7 @@ module.exports.createOrder = async (req, res) => {
     // Check if user exists
     if (!userDetails) {
       console.log("User not found");
-      return res.status(404).json({ success: false, error: "User not found" });
+      return res.status(404).json({ success: false, message: "User not found" });
     }
 
     // Retrieve address details
@@ -37,9 +45,7 @@ module.exports.createOrder = async (req, res) => {
     // Check if address exists
     if (!addressDetails) {
       console.log("Address not found");
-      return res
-        .status(404)
-        .json({ success: false, error: "Address not found" });
+      return res.status(404).json({ success: false, message: "Address not found" });
     }
 
     // Map cart items to order items
@@ -76,7 +82,7 @@ module.exports.createOrder = async (req, res) => {
   } catch (error) {
     // Handle any errors that occur during order creation
     console.error("Error creating order:", error);
-    res.status(500).json({ success: false, error: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -89,7 +95,7 @@ module.exports.getOrderById = async (req, res) => {
 
     if (!order) {
       console.log("Order not found");
-      return res.status(404).json({ success: false, error: "Order not found" });
+      return res.status(404).json({ success: false, message: "Order not found" });
     }
 
     console.log("Order:", order); // Log the order details
@@ -97,7 +103,7 @@ module.exports.getOrderById = async (req, res) => {
     res.status(200).json({ success: true, data: order });
   } catch (error) {
     console.error("Error getting order by ID:", error);
-    res.status(500).json({ success: false, error: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -110,7 +116,7 @@ module.exports.getOrderByUserId = async (req, res) => {
     res.status(200).json({ success: true, data: orders });
   } catch (error) {
     console.error("Error getting orders by user ID:", error);
-    res.status(500).json({ success: false, error: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -123,7 +129,7 @@ module.exports.cancelOrder = async (req, res) => {
       { new: true }
     );
     if (!updatedOrder) {
-      return res.status(404).json({ success: false, error: "Order not found" });
+      return res.status(404).json({ success: false, message: "Order not found" });
     }
     res.status(200).json({
       success: true,
@@ -132,7 +138,7 @@ module.exports.cancelOrder = async (req, res) => {
     });
   } catch (error) {
     console.error("Error cancelling order:", error);
-    res.status(500).json({ success: false, error: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 module.exports.removeOrder = async (req, res) => {};
