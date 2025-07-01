@@ -9,14 +9,6 @@ const navigation = [
     name: "Home",
     to: "/",
   },
-  {
-    name: "Contact Us",
-    to: "/contact",
-  },
-  {
-    name: "About Us",
-    to: "/about",
-  },
 ];
 
 

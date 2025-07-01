@@ -7,8 +7,6 @@ import { Login, Register } from "../Auth";
 import Footer from "../Components/footer";
 import {
   Home,
-  AboutPage,
-  ContactPage,
   Cart,
   Checkout,
   OrderDetails,
@@ -43,8 +41,6 @@ export default function MainRoutes() {
         <main className="flex-grow">
         <Routes>
           <Route exact path="/" element={<Home isLoggedIn={isLoggedIn} />} />
-          <Route exact path="/contact" element={<ContactPage />} />
-          <Route exact path="/about" element={<AboutPage />} />
           <Route
             path="/login"
             element={
