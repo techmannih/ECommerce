@@ -5,6 +5,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { addToCart } from "../redux/actions/cartAction";
 import ProductCard from "./ProductCard";
 import Container from "./Container";
+import toast from "react-hot-toast";
 
 const Products = ({ isLoggedIn }) => {
   const [data, setData] = useState([]);
@@ -28,10 +29,8 @@ const Products = ({ isLoggedIn }) => {
 
       // Dispatch addToCart action to update Redux state
       dispatch(addToCart(userId, cartItem));
-
-      console.log("Item added to the cart:", product);
     } catch (error) {
-      console.error("Error adding item to the cart:", error.message);
+      toast.error("Failed to add item to cart");
     }
   };
 
@@ -47,7 +46,7 @@ const Products = ({ isLoggedIn }) => {
           setLoading(false);
         }
       } catch (error) {
-        console.error("Error fetching products:", error);
+        toast.error("Failed to fetch products");
         setLoading(false);
       }
     };

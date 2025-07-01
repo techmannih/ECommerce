@@ -45,7 +45,6 @@ module.exports.createAddress = async (req, res) => {
       data: savedAddress,
     });
   } catch (error) {
-    console.error("Error creating address:", error);
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 };
@@ -57,7 +56,6 @@ module.exports.getAllAddress = async (req, res) => {
 
     res.status(200).json({ success: true, data: allAddresses });
   } catch (error) {
-    console.error("Error getting all addresses:", error);
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 };
@@ -83,7 +81,6 @@ module.exports.deleteAddress = async (req, res) => {
       data: existingAddress,
     });
   } catch (error) {
-    console.error("Error deleting address by ID:", error);
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 };
@@ -109,7 +106,6 @@ module.exports.getAddressById = async (req, res) => {
       data: address,
     });
   } catch (error) {
-    console.error("Error getting address by ID:", error);
     res.status(500).json({
       success: false,
       error: "Internal Server Error",
@@ -138,7 +134,6 @@ module.exports.getAddressById = async (req, res) => {
 //       data: updatedAddress,
 //     });
 //   } catch (error) {
-//     console.error("Error updating address by ID:", error);
 //     res.status(500).json({ success: false, error: "Internal Server Error" });
 //   }
 // };

@@ -23,7 +23,6 @@ const ContactForm = () => {
       toast.error("Please fill out all fields before submitting.");
       return;
     }
-    console.log("Form submitted:", formData);
     toast.success("Thank you! Your message has been sent.");
   };
 

@@ -25,7 +25,6 @@ const getCookie = (name) => {
 };
 // Keep user id only for the lifetime of the tab
 const UserId = sessionStorage.getItem("userId");
-console.log("User ID:", UserId);
 
 export default function MainRoutes() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -33,7 +32,6 @@ export default function MainRoutes() {
   useEffect(() => {
     const storedToken = getCookie("jwt");
     const storedUserId = sessionStorage.getItem("userId");
-    console.log("JWT Token from cookies:", storedToken);
     if (storedToken && storedUserId) {
       setIsLoggedIn(true);
     } else {

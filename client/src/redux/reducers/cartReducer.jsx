@@ -38,12 +38,9 @@ const cartReducer = (state = initialState, action) => {
       };
 
       case DECREASE_ITEM_FROM_CART:
-        console.log("Action Payload:", action.payload);
-        console.log("Current Cart Items:", state.cartItems);
         const existingDecreaseItem = state.cartItems.find(
           (item) => String(item.productId) === String(action.payload.productId)
         );
-        console.log("Existing Decrease Item in reducer:", existingDecreaseItem);
   
         if (existingDecreaseItem && existingDecreaseItem.quantity > 1) {
           return {

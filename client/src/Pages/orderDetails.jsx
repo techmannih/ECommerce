@@ -16,6 +16,24 @@ const OrderDetails = () => {
     dispatch(getOrderDetails(id));
   }, [dispatch, id]);
 
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (paymentError) {
+      toast.error(paymentError);
+    }
+  }, [paymentError]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -41,32 +59,21 @@ const OrderDetails = () => {
         }
       );
       const data = await response.json();
-      console.log("Payment data:", data);
       if (response.ok) {
         window.location.href = data.url; // Redirect to Stripe checkout
         // add here code for render to updatePaymentStatus after success
         window.location.href = data.url; // Redirect to Stripe checkout
         sessionStorage.setItem("orderId", id);
-        console.log("Payment initiated successfully");
         toast.success("Payment initiated successfully");
-        console.log("Order ID: after payment", id);
       } else {
         setPaymentError("Failed to initiate payment. Please try again later.");
       }
     } catch (error) {
       setPaymentError("Failed to initiate payment. Please try again later.");
-      console.error("Payment error:", error);
     } finally {
       setPaymentLoading(false);
     }
   };
-  if (error) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        Error: {error}
-      </div>
-    );
-  }
 
   return (
     <section className="h-auto p-5">
@@ -89,7 +96,6 @@ const OrderDetails = () => {
                     </p>
                     <p className="text-xl">
                       <strong>Payment Status:</strong> {order.paymentInfo}
-                      <p className="text-red-500">{paymentError}</p>
                     </p>
                   </div>
                   <div className="">

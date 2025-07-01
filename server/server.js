@@ -39,5 +39,4 @@ app.use(orderRoutes);
 app.use(paymentRoutes);
 
 app.listen(port, function () {
-  console.log(`Listening on port ${port}`);
 });

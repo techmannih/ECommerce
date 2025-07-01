@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { InputField, FormError, SubmitButton } from "../Components";
+import { InputField, SubmitButton } from "../Components";
 import useForm from "../hooks/useForm";
 import { validateEmail } from "../utils/validation";
 import { post } from "../utils/api";
@@ -12,8 +12,6 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
     email: "",
     password: "",
   });
-  const [error, setError] = useState(null);
-  const [emailError, setEmailError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -24,9 +22,6 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
 
   const handleInputChange = (e) => {
     handleChange(e);
-    if (e.target.name === "email") {
-      setEmailError(validateEmail(e.target.value) ? null : "Invalid email");
-    }
   };
 
   const handleLogin = async (e) => {
@@ -34,6 +29,10 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
 
     if (!loginData.email || !loginData.password) {
       toast.error("Please enter both email and password.");
+      return;
+    }
+    if (!validateEmail(loginData.email)) {
+      toast.error("Invalid email");
       return;
     }
 
@@ -54,15 +53,11 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
       } else {
         setIsLoggedIn(false);
         const message = body.errors?.email || body.errors?.password || "Invalid email or password. Please try again.";
-        setError(message);
         toast.error(message);
-        setTimeout(() => setError(null), 1000);
       }
     } catch (error) {
       setIsLoggedIn(false);
-      setError("Oops! Something went wrong. Please try again later.");
       toast.error("Oops! Something went wrong. Please try again later.");
-      setTimeout(() => setError(null), 1000);
     } finally {
       setLoading(false);
     }
@@ -82,7 +77,6 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
           autoComplete="email"
           autoFocus
         />
-        <FormError message={emailError} />
         <InputField
           label="Password"
           name="password"
@@ -92,7 +86,6 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
           placeholder="Your Password"
           autoComplete="current-password"
         />
-        <FormError message={error} />
         <div>
           New User?{' '}
           <Link to="/register" className="text-sm text-blue-500 hover:underline">

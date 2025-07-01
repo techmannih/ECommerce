@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getOrders } from "../redux/actions/orderAction";
+import toast from "react-hot-toast";
 
 const OrdersPage = () => {
   const dispatch = useDispatch();
@@ -13,6 +14,12 @@ const OrdersPage = () => {
     dispatch(getOrders(userId));
   }, [dispatch]);
 
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -21,16 +28,8 @@ const OrdersPage = () => {
     );
   }
 
-  if (error) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        Error: {error}
-      </div>
-    );
-  }
 
   const handlePaymentClick = (orderId) => {
-    console.log("order id", orderId);
     navigate(`/order/${orderId}`);
   };
 

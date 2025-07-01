@@ -37,7 +37,6 @@ module.exports.makePayment = async (req, res) => {
       url: session.url,
     });
   } catch (error) {
-    console.error("Error making payment:", error);
 
     if (error.type === "StripeCardError") {
       return res.status(400).json({

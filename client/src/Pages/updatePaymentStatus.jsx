@@ -8,22 +8,20 @@ const UpdateStatus = () => {
   const dispatch = useDispatch();
   const orderId = sessionStorage.getItem("orderId");
   useEffect(() => {
-    
-    console.log("Order ID in update status:", orderId);
     if (orderId) {
       dispatch(getOrderDetails(orderId));
       toast.success("Now Update Payment Status!");
     } else {
-      console.error("Order ID is undefined");
+      toast.error("Order ID is undefined");
     }
-  }, [dispatch,orderId ]);
+  }, [dispatch, orderId]);
 
   const orderDetails = useSelector((state) => state.order);
   const { loading, error, order } = orderDetails;
 
   const handlePaymentStatusUpdate = async () => {
     if (!orderId) {
-      console.error("Cannot update payment status: Order ID is undefined");
+      toast.error("Cannot update payment status: Order ID is undefined");
       return;
     }
     try {
@@ -38,17 +36,16 @@ const UpdateStatus = () => {
         }),
       });
       if (response.ok) {
-        console.log("Payment status updated successfully");
         toast.success("Payment status updated successfully");
         dispatch(getOrderDetails(orderId)); // Refresh order details after update
-        // want to back to Orders Page after update 
+        // want to back to Orders Page after update
         window.location.href = "/orders";
         sessionStorage.removeItem("orderId");
       } else {
-        console.error("Error updating payment status:", response.statusText);
+        toast.error("Error updating payment status");
       }
     } catch (error) {
-      console.error("Error updating payment status:", error);
+      toast.error("Error updating payment status");
     }
   };
 
@@ -57,7 +54,7 @@ const UpdateStatus = () => {
   }
 
   if (error) {
-    return <p>Error: {error}</p>;
+    toast.error(error);
   }
 
   return (

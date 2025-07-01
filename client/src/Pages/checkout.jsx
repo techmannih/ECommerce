@@ -10,13 +10,11 @@ import { createOrder } from "../redux/actions/orderAction";
 import toast from "react-hot-toast";
 
 const Checkout = () => {
-  const [error, setError] = useState(null);
   const { addresses = [], loading } = useSelector((state) => state.address);
 
   const dispatch = useDispatch();
 
   const cartItems = useSelector((state) => state.cart.cartItems);
-  console.log("Cart items:11", cartItems);
   const [billingaddress, setBillingaddress] = useState({
     firstName: "",
     lastName: "",
@@ -39,7 +37,7 @@ const Checkout = () => {
       !billingaddress.pincode ||
       !billingaddress.country
     ) {
-      setError("Invalid billing address. Please fill in all required fields.");
+      toast.error("Invalid billing address. Please fill in all required fields.");
       return;
     }
     const userId = sessionStorage.getItem("userId");
@@ -56,7 +54,6 @@ const Checkout = () => {
       pincode: "",
       country: "",
     });
-    setError(null);
   };
 
   const deleteAddressHandler = (addressId) => {
@@ -92,14 +89,12 @@ const Checkout = () => {
       return;
     }
     
-    console.log("Order data:", orderData, user);
     dispatch(createOrder(orderData));
     
   };
 
   return (
     <Container>
-      {error && <div className="text-red-500">{error}</div>}
       {/* {orderError && <div className="text-red-500">{orderError}</div>} */}
       {loading ? (
         <p>Loading...</p>
