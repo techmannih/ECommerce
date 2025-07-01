@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOrderDetails } from "../redux/actions/orderAction";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import Container from "../Components/Container";
 
 const OrderDetails = () => {
   const dispatch = useDispatch();
@@ -67,13 +68,12 @@ const OrderDetails = () => {
   }
 
   return (
-    <section className="h-auto p-5">
-      <div className="flex flex-col items-center my-4">
-        <div className="card rounded-lg border-2 w-full max-w-4xl m-2">
-          <div className="card-title text-2xl py-5 px-9 bg-gray-100 rounded-t-lg border-b-2 font-semibold">
-            <h2 className="text-3xl font-semibold mb-6">Order Details</h2>
-          </div>
-          <div className="card-body bg-white shadow-lg rounded-lg p-4">
+    <Container className="my-8">
+      <div className="card rounded-lg border-2 w-full max-w-4xl m-auto">
+        <div className="card-title text-2xl py-5 px-9 bg-gray-100 rounded-t-lg border-b-2 font-semibold">
+          <h2 className="text-3xl font-semibold mb-6">Order Details</h2>
+        </div>
+        <div className="card-body bg-white shadow-lg rounded-lg p-6">
             {order && (
               <div>
                 <div className="mb-6 flex max-md:flex-col justify-between">
@@ -111,28 +111,25 @@ const OrderDetails = () => {
 
                 <div className="mb-6">
                   <h3 className="text-2xl font-semibold mb-2">Items Ordered</h3>
-                  <ul>
+                  <ul className="divide-y divide-gray-200">
                     {order.items &&
                       order.items.map((item, index) => (
-                        <div key={index} className="text-xl flex text-black">
-                          <div className="rounded-xl m-1 p-1 flex flex-col">
-                            <p className="text-sm font-semibold">
-                              {item.title}
-                            </p>
-                            <img
-                              src={item.image}
-                              alt={item.title}
-                              width={100}
-                              height={75}
-                            />
+                        <li key={index} className="flex py-4 space-x-4">
+                          <img
+                            className="w-20 h-20 object-contain rounded"
+                            src={item.image}
+                            alt={item.title}
+                          />
+                          <div className="text-sm">
+                            <p className="font-semibold">{item.title}</p>
                             <p>
-                              <strong>Quantity: </strong> {item.quantity}
+                              <strong>Quantity:</strong> {item.quantity}
                             </p>
                             <p>
-                              <strong>Item Price: </strong> ${item.itemPrice}
+                              <strong>Item Price:</strong> ${item.itemPrice}
                             </p>
                           </div>
-                        </div>
+                        </li>
                       ))}
                   </ul>
                 </div>
@@ -182,7 +179,7 @@ const OrderDetails = () => {
           </div>
         </div>
       </div>
-    </section>
+    </Container>
   );
 };
 
