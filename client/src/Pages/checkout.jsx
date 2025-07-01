@@ -31,15 +31,31 @@ const Checkout = () => {
   });
   const [selectedAddressId, setSelectedAddressId] = useState(null);
 
+  const validateBillingAddress = () => {
+    const emailRegex = /^\S+@\S+\.\S+$/;
+    const phoneRegex = /^\d{10}$/;
+
+    if (
+      !billingaddress.firstName.trim() ||
+      !billingaddress.lastName.trim() ||
+      !emailRegex.test(billingaddress.email) ||
+      !phoneRegex.test(billingaddress.phoneNumber) ||
+      !billingaddress.addressLine1.trim() ||
+      !billingaddress.city.trim() ||
+      !billingaddress.pincode.trim() ||
+      !billingaddress.country.trim()
+    ) {
+      return false;
+    }
+    return true;
+  };
+
   const handleSaveBillingaddress = (e) => {
     e.preventDefault();
-    if (
-      !billingaddress.addressLine1 ||
-      !billingaddress.city ||
-      !billingaddress.pincode ||
-      !billingaddress.country
-    ) {
-      setError("Invalid billing address. Please fill in all required fields.");
+    if (!validateBillingAddress()) {
+      setError(
+        "Invalid billing address. Please ensure all fields are filled correctly."
+      );
       return;
     }
     const userId = sessionStorage.getItem("userId");
@@ -72,13 +88,16 @@ const Checkout = () => {
     dispatch(fetchAddresses(userId));
   }, [dispatch]);
 
-  const subtotal = cartItems.reduce((acc, item) => acc + item.itemPrice, 0);
-  const shipping = 10;
+  const subtotal = cartItems.reduce(
+    (acc, item) => acc + item.itemPrice * (item.quantity || 1),
+    0
+  );
+  const shipping = cartItems.length > 0 ? 10 : 0;
 
   const handlePlaceOrder = () => {
     const user = sessionStorage.getItem("userId");
     const cart = sessionStorage.getItem("cartId");
-    const shippingPrice = 10;
+    const shippingPrice = shipping;
     const orderData = {
       user,
       cart,
@@ -169,7 +188,7 @@ const Checkout = () => {
                   Email
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   id="email"
                   name="email"
                   value={billingaddress.email}
@@ -192,7 +211,8 @@ const Checkout = () => {
                   Phone
                 </label>
                 <input
-                  type="text"
+                  type="tel"
+                  pattern="\d{10}"
                   id="phoneNumber"
                   name="phoneNumber"
                   value={billingaddress.phoneNumber}
@@ -307,6 +327,7 @@ const Checkout = () => {
                   </label>
                   <input
                     type="text"
+                    pattern="\d{5,6}"
                     id="pincode"
                     name="pincode"
                     value={billingaddress.pincode}
@@ -359,47 +380,51 @@ const Checkout = () => {
                 <p>Saved addresses</p>
               </div>
               <ul className="card rounded-lg border-2 divide-y divide-gray-200">
-                {addresses.map((address) => (
-                  <li
-                    key={address._id}
-                    className="p-4 flex justify-between items-center"
-                  >
-                    <div>
-                      <div className="flex">
-                        <p className="font-semibold mr-1">
-                          {address.firstName}
-                        </p>{" "}
-                        <p className="font-semibold">{address.lastName}</p>
+                {addresses.length === 0 ? (
+                  <li className="p-4">No saved addresses.</li>
+                ) : (
+                  addresses.map((address) => (
+                    <li
+                      key={address._id}
+                      className="p-4 flex justify-between items-center"
+                    >
+                      <div>
+                        <div className="flex">
+                          <p className="font-semibold mr-1">
+                            {address.firstName}
+                          </p>{" "}
+                          <p className="font-semibold">{address.lastName}</p>
+                        </div>
+                        <p className="font-semibold">{address.phoneNumber}</p>
+                        <p className="font-semibold">{address.addressLine1}</p>
+                        <p>
+                          {address.city}, {address.state}, {address.pincode}
+                        </p>
+                        <p>{address.country}</p>
                       </div>
-                      <p className="font-semibold">{address.phoneNumber}</p>
-                      <p className="font-semibold">{address.addressLine1}</p>
-                      <p>
-                        {address.city}, {address.state}, {address.pincode}
-                      </p>
-                      <p>{address.country}</p>
-                    </div>
-                    <div className="flex flex-col">
-                      <button
-                        onClick={() => handleSelectAddress(address._id)}
-                        className={`mr-2 py-2 px-4 rounded-t-lg focus:outline-none font-semibold ${
-                          selectedAddressId === address._id
-                            ? "bg-green-500 text-white"
-                            : "bg-gray-600 text-white "
-                        }`}
-                      >
-                        {selectedAddressId === address._id
-                          ? "Selected"
-                          : "Select"}
-                      </button>
-                      <button
-                        onClick={() => deleteAddressHandler(address._id)}
-                        className="mr-2 py-2 px-4 rounded-b-lg font-semibold bg-white text-red-500 hover:bg-red-400 hover:text-white"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </li>
-                ))}
+                      <div className="flex flex-col">
+                        <button
+                          onClick={() => handleSelectAddress(address._id)}
+                          className={`mr-2 py-2 px-4 rounded-t-lg focus:outline-none font-semibold ${
+                            selectedAddressId === address._id
+                              ? "bg-green-500 text-white"
+                              : "bg-gray-600 text-white "
+                          }`}
+                        >
+                          {selectedAddressId === address._id
+                            ? "Selected"
+                            : "Select"}
+                        </button>
+                        <button
+                          onClick={() => deleteAddressHandler(address._id)}
+                          className="mr-2 py-2 px-4 rounded-b-lg font-semibold bg-white text-red-500 hover:bg-red-400 hover:text-white"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </li>
+                  ))
+                )}
               </ul>
             </div>
           </div>
