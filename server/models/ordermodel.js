@@ -22,11 +22,6 @@ const orderItemSchema = new mongoose.Schema({
 
 const orderSchema = new mongoose.Schema(
   {
-    orderNumber: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     cart: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Cart",
