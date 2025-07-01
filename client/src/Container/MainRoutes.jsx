@@ -16,25 +16,20 @@ import {
   UpdatePaymentStatus,
 } from "../Pages";
 
-// Utility function to get the value of a cookie by name
-const getCookie = (name) => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(";").shift();
-  return null;
-};
 // Keep user id only for the lifetime of the tab
 const UserId = sessionStorage.getItem("userId");
 console.log("User ID:", UserId);
 
 export default function MainRoutes() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Determine initial login state from sessionStorage so the user
+  // remains logged in when the page reloads within the same tab
+  const [isLoggedIn, setIsLoggedIn] = useState(() =>
+    Boolean(sessionStorage.getItem("userId"))
+  );
 
   useEffect(() => {
-    const storedToken = getCookie("jwt");
     const storedUserId = sessionStorage.getItem("userId");
-    console.log("JWT Token from cookies:", storedToken);
-    if (storedToken && storedUserId) {
+    if (storedUserId) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
