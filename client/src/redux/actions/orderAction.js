@@ -25,10 +25,7 @@ export const createOrder = (orderData) => async (dispatch) => {
         body: JSON.stringify(orderData),
       }
     );
-    console.log("Order data:", orderData);
-    console.log("Order response:", response);
     const data = await response.json();
-    console.log("Order data data:", data);
 
     if (!response.ok) {
       throw new Error(data.message || data.error || "Failed to create order");
@@ -54,7 +51,6 @@ export const createOrder = (orderData) => async (dispatch) => {
 export const getOrders = (userId) => async (dispatch) => {
   try {
     dispatch({ type: GET_ORDERS_REQUEST });
-    console.log(userId);
     const response = await fetch(
       `${import.meta.env.VITE_BACKEND_URL}/order/all/${userId}`,
       {
@@ -64,10 +60,7 @@ export const getOrders = (userId) => async (dispatch) => {
         },
       }
     );
-    console.log("fetch orders response", response);
-
     const data = await response.json();
-    console.log("get order data", data);
 
     if (!response.ok) {
       throw new Error(data.message || data.error || "Failed to fetch orders");
@@ -90,7 +83,6 @@ export const getOrders = (userId) => async (dispatch) => {
 };
 
 export const getOrderDetails = (orderId) => async (dispatch) => {
-  console.log("orderId in order details", orderId);
   try {
     dispatch({ type: GET_ORDER_DETAILS_REQUEST });
 
@@ -105,7 +97,6 @@ export const getOrderDetails = (orderId) => async (dispatch) => {
     );
 
     const data = await response.json();
-    console.log("order details data", data);
     if (!response.ok) {
       throw new Error(data.message || data.error || "Failed to fetch order details");
     }

@@ -30,7 +30,6 @@ const OrdersPage = () => {
   }
 
   const handlePaymentClick = (orderId) => {
-    console.log("order id", orderId);
     navigate(`/order/${orderId}`);
   };
 

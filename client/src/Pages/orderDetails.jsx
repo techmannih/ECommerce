@@ -41,21 +41,19 @@ const OrderDetails = () => {
         }
       );
       const data = await response.json();
-      console.log("Payment data:", data);
       if (response.ok) {
         window.location.href = data.url; // Redirect to Stripe checkout
         // add here code for render to updatePaymentStatus after success
         window.location.href = data.url; // Redirect to Stripe checkout
         sessionStorage.setItem("orderId", id);
-        console.log("Payment initiated successfully");
         toast.success("Payment initiated successfully");
-        console.log("Order ID: after payment", id);
       } else {
         setPaymentError("Failed to initiate payment. Please try again later.");
+        toast.error("Failed to initiate payment. Please try again later.");
       }
     } catch (error) {
       setPaymentError("Failed to initiate payment. Please try again later.");
-      console.error("Payment error:", error);
+      toast.error("Failed to initiate payment. Please try again later.");
     } finally {
       setPaymentLoading(false);
     }

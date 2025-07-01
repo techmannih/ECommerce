@@ -20,9 +20,7 @@ export const fetchAddresses = (userId) => {
       if (!response.ok) {
         throw new Error("Failed to fetch addresses");
       }
-      console.log("responsefetch", response);
       const data = await response.json();
-      console.log("datafetch", data);
       dispatch({
         type: FETCH_ADDRESSES_SUCCESS,
         payload: data.data, // Assuming the response structure has a 'data' field containing addresses
@@ -53,9 +51,7 @@ export const saveAddress = (address, userId) => {
       if (!response.ok) {
         throw new Error("Failed to save address");
       }
-      console.log("responsesave", response);
       const data = await response.json();
-      console.log("datasave", data);
       dispatch({
         type: SAVE_ADDRESS_SUCCESS,
         payload: data.data,
