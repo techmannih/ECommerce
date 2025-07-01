@@ -31,15 +31,31 @@ const Checkout = () => {
   });
   const [selectedAddressId, setSelectedAddressId] = useState(null);
 
+  const validateBillingAddress = () => {
+    const emailRegex = /^\S+@\S+\.\S+$/;
+    const phoneRegex = /^\d{10}$/;
+
+    if (
+      !billingaddress.firstName.trim() ||
+      !billingaddress.lastName.trim() ||
+      !emailRegex.test(billingaddress.email) ||
+      !phoneRegex.test(billingaddress.phoneNumber) ||
+      !billingaddress.addressLine1.trim() ||
+      !billingaddress.city.trim() ||
+      !billingaddress.pincode.trim() ||
+      !billingaddress.country.trim()
+    ) {
+      return false;
+    }
+    return true;
+  };
+
   const handleSaveBillingaddress = (e) => {
     e.preventDefault();
-    if (
-      !billingaddress.addressLine1 ||
-      !billingaddress.city ||
-      !billingaddress.pincode ||
-      !billingaddress.country
-    ) {
-      setError("Invalid billing address. Please fill in all required fields.");
+    if (!validateBillingAddress()) {
+      setError(
+        "Invalid billing address. Please ensure all fields are filled correctly."
+      );
       return;
     }
     const userId = sessionStorage.getItem("userId");
@@ -76,12 +92,12 @@ const Checkout = () => {
     (acc, item) => acc + item.itemPrice * (item.quantity || 1),
     0
   );
-  const shipping = 10;
+  const shipping = cartItems.length > 0 ? 10 : 0;
 
   const handlePlaceOrder = () => {
     const user = sessionStorage.getItem("userId");
     const cart = sessionStorage.getItem("cartId");
-    const shippingPrice = 10;
+    const shippingPrice = shipping;
     const orderData = {
       user,
       cart,
@@ -172,7 +188,7 @@ const Checkout = () => {
                   Email
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   id="email"
                   name="email"
                   value={billingaddress.email}
@@ -195,7 +211,8 @@ const Checkout = () => {
                   Phone
                 </label>
                 <input
-                  type="text"
+                  type="tel"
+                  pattern="\d{10}"
                   id="phoneNumber"
                   name="phoneNumber"
                   value={billingaddress.phoneNumber}
@@ -310,6 +327,7 @@ const Checkout = () => {
                   </label>
                   <input
                     type="text"
+                    pattern="\d{5,6}"
                     id="pincode"
                     name="pincode"
                     value={billingaddress.pincode}
