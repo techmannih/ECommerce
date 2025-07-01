@@ -46,7 +46,8 @@ export const createOrder = (orderData) => async (dispatch) => {
       type: CREATE_ORDER_FAIL,
       payload: error.message,
     });
-    toast.error(`Unable to create order: ${error.message}`);
+    const msg = error.message || "Failed to place order. Please try again.";
+    toast.error(`Unable to place order: ${msg}`);
   }
 };
 
@@ -83,7 +84,8 @@ export const getOrders = (userId) => async (dispatch) => {
       type: GET_ORDERS_FAIL,
       payload: error.message,
     });
-    toast.error(`Unable to fetch orders: ${error.message}`);
+    const msg = error.message || "Failed to fetch orders.";
+    toast.error(`Unable to fetch orders: ${msg}`);
   }
 };
 
@@ -119,6 +121,7 @@ export const getOrderDetails = (orderId) => async (dispatch) => {
       type: GET_ORDER_DETAILS_FAIL,
       payload: error.message,
     });
-    toast.error(`Unable to fetch order details: ${error.message}`);
+    const msg = error.message || "Failed to fetch order details.";
+    toast.error(`Unable to fetch order details: ${msg}`);
   }
 };

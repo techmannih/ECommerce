@@ -13,7 +13,8 @@ module.exports.createOrder = async (req, res) => {
     if (!cart || !user || !address) {
       return res.status(400).json({
         success: false,
-        message: "Cart ID, user ID and address are required to create an order",
+        message:
+          "Cart, user and address information are required to place an order.",
       });
     }
     // console.log("Request body:", req.body);
@@ -25,7 +26,17 @@ module.exports.createOrder = async (req, res) => {
     // Check if cart exists
     if (!cartDetails) {
       console.log("Cart not found");
-      return res.status(404).json({ success: false, message: "Cart not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Unable to place order because the cart was not found.",
+      });
+    }
+
+    if (cartDetails.items.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Your cart is empty. Please add items before ordering.",
+      });
     }
 
     // Retrieve user details
@@ -35,7 +46,10 @@ module.exports.createOrder = async (req, res) => {
     // Check if user exists
     if (!userDetails) {
       console.log("User not found");
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res.status(404).json({
+        success: false,
+        message: "User account not found. Please log in again.",
+      });
     }
 
     // Retrieve address details
@@ -45,7 +59,10 @@ module.exports.createOrder = async (req, res) => {
     // Check if address exists
     if (!addressDetails) {
       console.log("Address not found");
-      return res.status(404).json({ success: false, message: "Address not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Shipping address not found. Please add a valid address.",
+      });
     }
 
     // Map cart items to order items
@@ -82,7 +99,10 @@ module.exports.createOrder = async (req, res) => {
   } catch (error) {
     // Handle any errors that occur during order creation
     console.error("Error creating order:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong while placing your order. Please try again later.",
+    });
   }
 };
 
