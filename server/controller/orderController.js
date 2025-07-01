@@ -67,8 +67,11 @@ module.exports.createOrder = async (req, res) => {
       image: item.image,
     }));
 
+    const orderNumber = `ORD-${Date.now()}`;
+
     // Create a new order document using the Order model
     const order = new Order({
+      orderNumber,
       cart: cartDetails,
       user: userDetails,
       address: addressDetails,
