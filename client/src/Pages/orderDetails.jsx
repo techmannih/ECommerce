@@ -74,97 +74,104 @@ const OrderDetails = () => {
           <div className="px-6 py-4 border-b">
             <h2 className="text-2xl font-semibold">Order Details</h2>
           </div>
-          <div className="p-6">
-              {order && (
-              <div>
-                <div className="mb-6 flex flex-wrap justify-between">
-                  <div>
-                    <h3 className="text-2xl font-semibold mb-2">Order Information</h3>
-                    <p>
-                      <strong>Order ID:</strong> {order._id}
-                    </p>
-                    <p>
-                      <strong>Payment Status:</strong> {order.paymentInfo}
-                      <p className="text-red-500">{paymentError}</p>
-                    </p>
-                  </div>
-                  <div>
-                    <button
-                      className={`text-white font-semibold px-4 py-2 rounded-lg ${
+          {order && (
+            <div className="p-6 space-y-8">
+              <div className="flex flex-wrap justify-between items-start">
+                <div className="space-y-2">
+                  <h3 className="text-xl font-semibold">Order Information</h3>
+                  <p>
+                    <strong>Order ID:</strong> {order._id}
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <strong>Payment Status:</strong>
+                    <span
+                      className={`text-white text-sm px-2 py-1 rounded ${
                         order.paymentInfo === "paid" ? "bg-green-500" : "bg-red-500"
                       }`}
-                      onClick={handlePayment}
-                      disabled={order.paymentInfo === "paid" || paymentLoading}
                     >
-                      {order.paymentInfo === "paid" ? "Paid" : paymentLoading ? "Processing..." : "Pay Now"}
-                    </button>
+                      {order.paymentInfo}
+                    </span>
+                  </p>
+                  {paymentError && <p className="text-red-500">{paymentError}</p>}
+                </div>
+                <button
+                  className={`mt-4 sm:mt-0 px-4 py-2 rounded-lg text-white font-semibold ${
+                    order.paymentInfo === "paid" ? "bg-green-500" : "bg-black hover:bg-gray-800"
+                  }`}
+                  onClick={handlePayment}
+                  disabled={order.paymentInfo === "paid" || paymentLoading}
+                >
+                  {order.paymentInfo === "paid" ? "Paid" : paymentLoading ? "Processing..." : "Pay Now"}
+                </button>
+              </div>
+
+              <div className="grid gap-8 lg:grid-cols-3">
+                <div className="lg:col-span-2 space-y-4">
+                  <h3 className="text-xl font-semibold">Items Ordered</h3>
+                  {order.items &&
+                    order.items.map((item, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-4 bg-gray-50 p-3 rounded"
+                      >
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="w-24 h-24 object-contain"
+                        />
+                        <div className="space-y-1">
+                          <p className="font-semibold">{item.title}</p>
+                          <p>
+                            <strong>Quantity:</strong> {item.quantity}
+                          </p>
+                          <p>
+                            <strong>Item Price:</strong> ${item.itemPrice}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">Shipping Information</h3>
+                    {order.address ? (
+                      <div className="text-sm space-y-1">
+                        <p>
+                          <strong>Address ID:</strong> {order.address._id}
+                        </p>
+                        <p>
+                          <strong>Street:</strong> {order.address.addressLine1}
+                        </p>
+                        <p>
+                          <strong>Near:</strong> {order.address.addressLine2}
+                        </p>
+                        <p>
+                          <strong>City:</strong> {order.address.city}
+                        </p>
+                        <p>
+                          <strong>State:</strong> {order.address.state}
+                        </p>
+                        <p>
+                          <strong>Postal Code:</strong> {order.address.pincode}
+                        </p>
+                      </div>
+                    ) : (
+                      <p>No address available</p>
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">Order Summary</h3>
+                    <p>
+                      <strong>Shipping Price:</strong> ${order.shippingPrice}
+                    </p>
+                    <p>
+                      <strong>Total Price:</strong> ${order.totalPrice}
+                    </p>
                   </div>
                 </div>
-
-                <div className="mb-6">
-                  <h3 className="text-2xl font-semibold mb-2">Items Ordered</h3>
-                  <ul className="space-y-4">
-                    {order.items &&
-                      order.items.map((item, index) => (
-                        <li key={index} className="flex items-center space-x-4">
-                          <img src={item.image} alt={item.title} width={100} height={75} />
-                          <div className="space-y-1">
-                            <p className="font-semibold">{item.title}</p>
-                            <p>
-                              <strong>Quantity:</strong> {item.quantity}
-                            </p>
-                            <p>
-                              <strong>Item Price:</strong> ${item.itemPrice}
-                            </p>
-                          </div>
-                        </li>
-                      ))}
-                  </ul>
-                </div>
-
-                <div className="mb-6">
-                  <h3 className="text-2xl font-semibold mb-2">
-                    Shipping Information
-                  </h3>
-                  {order.address ? (
-                    <div className="text-xl">
-                      <p>
-                        <strong>Address ID:</strong> {order.address._id}
-                      </p>
-                      <p>
-                        <strong>Street:</strong> {order.address.addressLine1}
-                      </p>
-                      <p>
-                        <strong>Near:</strong> {order.address.addressLine2}
-                      </p>
-
-                      <p>
-                        <strong>City:</strong> {order.address.city}
-                      </p>
-                      <p>
-                        <strong>State:</strong> {order.address.state}
-                      </p>
-                      <p>
-                        <strong>Postal Code:</strong> {order.address.pincode}
-                      </p>
-                    </div>
-                  ) : (
-                    <p>No address available</p>
-                  )}
-                </div>
-
-                <div>
-                  <h3 className="text-2xl font-semibold mb-2">Order Summary</h3>
-                  <p className="text-xl">
-                    <strong>Shipping Price:</strong> ${order.shippingPrice}
-                  </p>
-                  <p className="text-xl">
-                    <strong>Total Price:</strong> ${order.totalPrice}
-                  </p>
-                </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </Container>
     </div>
