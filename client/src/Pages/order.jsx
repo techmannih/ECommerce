@@ -51,7 +51,7 @@ const OrdersPage = () => {
                   >
                     <div className="space-y-1">
                       <p className="font-semibold">
-                        Order ID: {order._id}
+                        Order #: {order.orderNumber}
                       </p>
                       <p>
                         Total Price: ${order.totalPrice}

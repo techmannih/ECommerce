@@ -12,7 +12,7 @@ const UpdateStatus = () => {
       dispatch(getOrderDetails(orderId));
       toast.success("Now Update Payment Status!");
     } else {
-      toast.error("Order ID is undefined");
+      toast.error("Order reference is undefined");
     }
   }, [dispatch, orderId]);
 
@@ -21,7 +21,7 @@ const UpdateStatus = () => {
 
   const handlePaymentStatusUpdate = async () => {
     if (!orderId) {
-      toast.error("Cannot update payment status: Order ID is undefined");
+      toast.error("Cannot update payment status: Order reference is undefined");
       return;
     }
     try {
