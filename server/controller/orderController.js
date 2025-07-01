@@ -156,17 +156,21 @@ module.exports.updatePaymentStatus = async (req, res) => {
   }
 
   try {
-    const updatedOrder = await Order.findByIdAndUpdate(
-      id,
-      { paymentInfo: status },
-      { new: true }
-    );
+    const order = await Order.findById(id);
 
-    if (!updatedOrder) {
+    if (!order) {
       return res.status(404).json({
         status: "error",
         message: "Order not found",
       });
+    }
+
+    order.paymentInfo = status;
+    const updatedOrder = await order.save();
+
+    // If payment completed, clear the associated cart
+    if (status === "paid" && order.cart) {
+      await Cart.findByIdAndDelete(order.cart);
     }
 
     res.json({
