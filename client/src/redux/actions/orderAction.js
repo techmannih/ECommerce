@@ -31,7 +31,7 @@ export const createOrder = (orderData) => async (dispatch) => {
     console.log("Order data data:", data);
 
     if (!response.ok) {
-      throw new Error(data.message || "Failed to create order");
+      throw new Error(data.message || data.error || "Failed to create order");
     }
 
     dispatch({
@@ -69,7 +69,7 @@ export const getOrders = (userId) => async (dispatch) => {
     console.log("get order data", data);
 
     if (!response.ok) {
-      throw new Error(data.message || "Failed to fetch orders");
+      throw new Error(data.message || data.error || "Failed to fetch orders");
     }
 
     dispatch({
@@ -105,7 +105,7 @@ export const getOrderDetails = (orderId) => async (dispatch) => {
     const data = await response.json();
     console.log("order details data", data);
     if (!response.ok) {
-      throw new Error(data.message || "Failed to fetch order details");
+      throw new Error(data.message || data.error || "Failed to fetch order details");
     }
 
     dispatch({
