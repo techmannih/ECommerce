@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOrderDetails } from "../redux/actions/orderAction";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import Container from "../Components/Container";
 
 const OrderDetails = () => {
   const dispatch = useDispatch();
@@ -67,72 +68,56 @@ const OrderDetails = () => {
   }
 
   return (
-    <section className="h-auto p-5">
-      <div className="flex flex-col items-center my-4">
-        <div className="card rounded-lg border-2 w-full max-w-4xl m-2">
-          <div className="card-title text-2xl py-5 px-9 bg-gray-100 rounded-t-lg border-b-2 font-semibold">
-            <h2 className="text-3xl font-semibold mb-6">Order Details</h2>
+    <div className="bg-gray-100 min-h-screen py-8">
+      <Container>
+        <div className="bg-white shadow-md rounded-lg overflow-hidden">
+          <div className="px-6 py-4 border-b">
+            <h2 className="text-2xl font-semibold">Order Details</h2>
           </div>
-          <div className="card-body bg-white shadow-lg rounded-lg p-4">
-            {order && (
+          <div className="p-6">
+              {order && (
               <div>
-                <div className="mb-6 flex max-md:flex-col justify-between">
-                  <div className="">
-                    {" "}
-                    <h3 className="text-2xl font-semibold mb-2">
-                      Order Information
-                    </h3>
-                    <p className="text-xl">
+                <div className="mb-6 flex flex-wrap justify-between">
+                  <div>
+                    <h3 className="text-2xl font-semibold mb-2">Order Information</h3>
+                    <p>
                       <strong>Order ID:</strong> {order._id}
                     </p>
-                    <p className="text-xl">
+                    <p>
                       <strong>Payment Status:</strong> {order.paymentInfo}
                       <p className="text-red-500">{paymentError}</p>
                     </p>
                   </div>
-                  <div className="">
+                  <div>
                     <button
-                      className={`text-white font-semibold m-2 p-2 rounded-lg ${
-                        order.paymentInfo === "paid"
-                          ? "bg-green-500"
-                          : "bg-red-500"
+                      className={`text-white font-semibold px-4 py-2 rounded-lg ${
+                        order.paymentInfo === "paid" ? "bg-green-500" : "bg-red-500"
                       }`}
                       onClick={handlePayment}
                       disabled={order.paymentInfo === "paid" || paymentLoading}
                     >
-                      {order.paymentInfo === "paid"
-                        ? "Paid"
-                        : paymentLoading
-                        ? "Processing..."
-                        : "Pay Now"}
+                      {order.paymentInfo === "paid" ? "Paid" : paymentLoading ? "Processing..." : "Pay Now"}
                     </button>
                   </div>
                 </div>
 
                 <div className="mb-6">
                   <h3 className="text-2xl font-semibold mb-2">Items Ordered</h3>
-                  <ul>
+                  <ul className="space-y-4">
                     {order.items &&
                       order.items.map((item, index) => (
-                        <div key={index} className="text-xl flex text-black">
-                          <div className="rounded-xl m-1 p-1 flex flex-col">
-                            <p className="text-sm font-semibold">
-                              {item.title}
-                            </p>
-                            <img
-                              src={item.image}
-                              alt={item.title}
-                              width={100}
-                              height={75}
-                            />
+                        <li key={index} className="flex items-center space-x-4">
+                          <img src={item.image} alt={item.title} width={100} height={75} />
+                          <div className="space-y-1">
+                            <p className="font-semibold">{item.title}</p>
                             <p>
-                              <strong>Quantity: </strong> {item.quantity}
+                              <strong>Quantity:</strong> {item.quantity}
                             </p>
                             <p>
-                              <strong>Item Price: </strong> ${item.itemPrice}
+                              <strong>Item Price:</strong> ${item.itemPrice}
                             </p>
                           </div>
-                        </div>
+                        </li>
                       ))}
                   </ul>
                 </div>
@@ -181,8 +166,8 @@ const OrderDetails = () => {
             )}
           </div>
         </div>
-      </div>
-    </section>
+      </Container>
+    </div>
   );
 };
 

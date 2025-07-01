@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getOrders } from "../redux/actions/orderAction";
+import Container from "../Components/Container";
 
 const OrdersPage = () => {
   const dispatch = useDispatch();
@@ -34,35 +35,35 @@ const OrdersPage = () => {
   };
 
   return (
-    <section className="h-auto p-5">
-      <div className="flex flex-col items-center my-4">
-        <div className="card rounded-lg border-2 w-full max-w-4xl m-2">
-          <div className="card-title text-2xl py-5 px-9 bg-gray-100 rounded-t-lg border-b-2 font-semibold">
-            <h2 className="text-3xl font-semibold mb-6">All Orders</h2>
+    <div className="bg-gray-100 min-h-screen py-8">
+      <Container>
+        <div className="bg-white shadow-md rounded-lg overflow-hidden">
+          <div className="px-6 py-4 border-b">
+            <h2 className="text-2xl font-semibold">All Orders</h2>
           </div>
-          <div className="card-body">
+          <div className="p-6">
             {orders && orders.length > 0 ? (
-              <ul>
+              <ul className="space-y-4">
                 {orders.map((order) => (
                   <li
                     key={order._id}
-                    className="bg-white shadow-lg rounded-lg p-4 mb-4 flex justify-between items-center max-md:flex-col"
+                    className="flex flex-wrap justify-between items-center bg-gray-50 p-4 rounded-md shadow"
                   >
-                    <div className="m-3">
-                      <p className="text-xl font-semibold">
+                    <div className="space-y-1">
+                      <p className="font-semibold">
                         Order ID: {order._id}
                       </p>
-                      <p className="text-xl">
+                      <p>
                         Total Price: ${order.totalPrice}
                       </p>
-                      <p className="text-xl">
+                      <p>
                         Shipping Price: ${order.shippingPrice}
                       </p>
                       {/* Render other order details as needed */}
                     </div>
-                    <div className="">
+                    <div>
                       <button
-                        className={`text-white font-semibold m-2 p-2 rounded-lg ${
+                        className={`text-white font-semibold px-4 py-2 rounded-lg ${
                           order.paymentInfo === "paid"
                             ? "bg-green-500"
                             : "bg-red-500"
@@ -76,12 +77,12 @@ const OrdersPage = () => {
                 ))}
               </ul>
             ) : (
-              <div className="text-xl font-semibold">No orders found.</div>
+              <div className="text-center text-xl font-semibold">No orders found.</div>
             )}
           </div>
         </div>
-      </div>
-    </section>
+      </Container>
+    </div>
   );
 };
 
