@@ -66,8 +66,8 @@ const Cart = () => {
     const shipping = 10; // Replace with actual shipping cost
     return (
       <section className="h-auto">
-        <div className="py-5 flex justify-between my-4 max-md:flex-col max-md:items-center">
-          <div className="card rounded-lg border-2 w-2/3 max-md:w-72 m-2">
+        <div className="py-5 flex flex-col md:flex-row justify-between my-4 md:items-start items-center">
+          <div className="card rounded-lg border-2 w-full md:w-2/3 m-2">
             <div className="mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
               <h2 className="text-3xl font-semibold mb-6">Shopping Cart</h2>
             </div>
@@ -80,7 +80,7 @@ const Cart = () => {
                   <div className="m-1 p-1">
                     <p className="text-sm font-semibold">{item.title}</p>
                   </div>
-                  <div className="flex justify-between items-center m-3 px-4 max-md:flex-col">
+                  <div className="flex flex-col md:flex-row justify-between items-center m-3 px-4">
                     <div className="rounded-xl m-1 p-1">
                       <img
                         src={item.image}
@@ -132,7 +132,7 @@ const Cart = () => {
             </div>
           </div>
 
-          <div className="card rounded-lg border-2 w-1/3 max-md:w-72 m-2">
+          <div className="card rounded-lg border-2 w-full md:w-1/3 m-2">
             <div className="mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
               <h5 className="mb-0">Order Summary</h5>
             </div>

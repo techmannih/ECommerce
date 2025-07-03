@@ -121,16 +121,16 @@ const Checkout = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <div className="flex justify-between flex-col m-4 p-4">
-          <div className="flex justify-between max-md:flex-col">
+        <div className="flex flex-col md:flex-row justify-between m-4 p-4">
+          <div className="flex flex-col md:flex-row justify-between">
             <form
-              className="card rounded-lg border-2 md:w-2/3 m-2"
+              className="card rounded-lg border-2 w-full md:w-2/3 m-2"
               onSubmit={handleSaveBillingaddress}
             >
               <div className="mb-0 card-title text-2xl py-5 px-3 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
                 <p>Billing address</p>
               </div>
-              <div className="grid grid-cols-2 gap-4 p-2 m-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-2 m-2">
                 <div className="mb-4">
                   <label
                     htmlFor="firstName"
@@ -373,7 +373,7 @@ const Checkout = () => {
                 </button>
               </div>
             </form>
-            <div className="md:w-1/3 m-2">
+            <div className="w-full md:w-1/3 m-2">
               <div className="mb-0 card-title text-2xl py-5 px-3 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
                 <p>Saved addresses</p>
               </div>
@@ -426,7 +426,7 @@ const Checkout = () => {
               </ul>
             </div>
           </div>
-          <div className="p-2">
+          <div className="w-full md:w-1/3 p-2">
             <div className="mb-0 card-title text-2xl py-5 px-3 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
               <p>Order Summary</p>
             </div>
