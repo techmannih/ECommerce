@@ -1,5 +1,7 @@
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
 
+const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
+
 module.exports.makePayment = async (req, res) => {
   try {
     const { totalItems, subtotal, shipping } = req.body;
@@ -27,8 +29,8 @@ module.exports.makePayment = async (req, res) => {
           quantity: 1, // Quantity is set to 1 for the total amount
         },
       ],
-      success_url: `${process.env.CLIENT_URL}/updatePaymentStatus`, //added
-      cancel_url: `${process.env.CLIENT_URL}/orders`,
+      success_url: `${clientUrl}/updatePaymentStatus`,
+      cancel_url: `${clientUrl}/orders`,
     });
 
     res.json({
