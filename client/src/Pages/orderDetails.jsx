@@ -43,7 +43,6 @@ const OrderDetails = () => {
       );
       const data = await response.json();
       if (response.ok) {
-        window.location.href = data.url; // Redirect to Stripe checkout
         // add here code for render to updatePaymentStatus after success
         window.location.href = data.url; // Redirect to Stripe checkout
         sessionStorage.setItem("orderId", id);
