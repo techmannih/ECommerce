@@ -63,7 +63,7 @@ const OrdersPage = () => {
                     </div>
                     <div>
                       <button
-                        className={`text-white font-semibold px-4 py-2 rounded-lg ${
+                        className={`text-white font-semibold px-4 py-2  my-2 rounded-lg ${
                           order.paymentInfo === "paid"
                             ? "bg-green-500"
                             : "bg-red-500"

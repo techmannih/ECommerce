@@ -80,7 +80,7 @@ const OrderDetails = () => {
                 <div className="space-y-2">
                   <h3 className="text-xl font-semibold">Order Information</h3>
                   <p>
-                    <strong>Order ID:</strong> {order._id.slice(-4)}
+                    <strong>Order ID:</strong> {order._id}
                   </p>
                   <p className="flex items-center gap-2">
                     <strong>Payment Status:</strong>
@@ -136,7 +136,7 @@ const OrderDetails = () => {
                     {order.address ? (
                       <div className="text-sm space-y-1">
                         <p>
-                          <strong>Address ID:</strong> {order.address._id.slice(-4)}
+                          <strong>Address ID:</strong> {order.address._id}
                         </p>
                         <p>
                           <strong>Street:</strong> {order.address.addressLine1}

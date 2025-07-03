@@ -130,7 +130,7 @@ const Checkout = () => {
               <div className="mb-0 card-title text-2xl py-5 px-3 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
                 <p>Billing address</p>
               </div>
-              <div className="grid grid-cols-2 gap-4 p-2 m-2">
+              <div className="grid md:grid-cols-2 gap-4 p-2 m-2 flex flex-col">
                 <div className="mb-4">
                   <label
                     htmlFor="firstName"
@@ -270,7 +270,7 @@ const Checkout = () => {
                   className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                 />
               </div>
-              <div className="grid grid-cols-3 gap-4 p-2 m-2">
+              <div className="grid lg:grid-cols-3 gap-4 p-2 m-2 flex flex-col">
                 <div className="mb-4">
                   <label
                     htmlFor="city"
