@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "../redux/store";
@@ -15,8 +15,6 @@ import {
 } from "../Pages";
 
 // Keep user id only for the lifetime of the tab
-const UserId = sessionStorage.getItem("userId");
-
 export default function MainRoutes() {
   // Determine initial login state from sessionStorage so the user
   // remains logged in when the page reloads within the same tab

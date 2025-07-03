@@ -1,4 +1,3 @@
-import React from 'react';
 
 const FormError = ({ message }) => {
   if (!message) return null;

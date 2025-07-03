@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import Container from "../Components/Container";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -127,7 +127,7 @@ const Checkout = () => {
               className="card rounded-lg border-2 md:w-2/3 m-2"
               onSubmit={handleSaveBillingaddress}
             >
-              <div className="mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
+              <div className="mb-0 card-title text-2xl py-5 px-3 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
                 <p>Billing address</p>
               </div>
               <div className="grid grid-cols-2 gap-4 p-2 m-2">
@@ -374,7 +374,7 @@ const Checkout = () => {
               </div>
             </form>
             <div className="md:w-1/3 m-2">
-              <div className="mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
+              <div className="mb-0 card-title text-2xl py-5 px-3 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
                 <p>Saved addresses</p>
               </div>
               <ul className="card rounded-lg border-2 divide-y divide-gray-200">
@@ -427,7 +427,7 @@ const Checkout = () => {
             </div>
           </div>
           <div className="p-2">
-            <div className="mb-0 card-title text-2xl py-5 px-9 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
+            <div className="mb-0 card-title text-2xl py-5 px-3 border-zinc bg-gray-100 rounded-t-lg border-2 font-semibold">
               <p>Order Summary</p>
             </div>
             <div className="card  border-2 divide-y divide-gray-200 p-4 flex flex-col justify-between ">

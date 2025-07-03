@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 
 const InputField = ({ label, name, type = 'text', value, onChange, placeholder = '', autoComplete, autoFocus }) => {
   const [show, setShow] = useState(false);

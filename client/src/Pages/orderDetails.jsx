@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrderDetails } from "../redux/actions/orderAction";
 import { useParams } from "react-router-dom";
@@ -80,7 +80,7 @@ const OrderDetails = () => {
                 <div className="space-y-2">
                   <h3 className="text-xl font-semibold">Order Information</h3>
                   <p>
-                    <strong>Order ID:</strong> {order._id}
+                    <strong>Order ID:</strong> {order._id.slice(-4)}
                   </p>
                   <p className="flex items-center gap-2">
                     <strong>Payment Status:</strong>
@@ -92,7 +92,6 @@ const OrderDetails = () => {
                       {order.paymentInfo}
                     </span>
                   </p>
-                  {paymentError && <p className="text-red-500">{paymentError}</p>}
                 </div>
                 <button
                   className={`mt-4 sm:mt-0 px-4 py-2 rounded-lg text-white font-semibold ${
@@ -137,7 +136,7 @@ const OrderDetails = () => {
                     {order.address ? (
                       <div className="text-sm space-y-1">
                         <p>
-                          <strong>Address ID:</strong> {order.address._id}
+                          <strong>Address ID:</strong> {order.address._id.slice(-4)}
                         </p>
                         <p>
                           <strong>Street:</strong> {order.address.addressLine1}

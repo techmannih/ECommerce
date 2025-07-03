@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getOrders } from "../redux/actions/orderAction";
@@ -51,10 +51,10 @@ const OrdersPage = () => {
                   >
                     <div className="space-y-1">
                       <p className="font-semibold">
-                        Order ID: {order._id}
+                        Order ID: {order._id.slice(-4) }
                       </p>
                       <p>
-                        Total Price: ${order.totalPrice}
+                         Total Price: ${order.totalPrice.toFixed(2)}
                       </p>
                       <p>
                         Shipping Price: ${order.shippingPrice}

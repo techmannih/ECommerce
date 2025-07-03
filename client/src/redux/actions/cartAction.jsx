@@ -107,8 +107,6 @@ export const decreaseItemInCart = (userId, productId) => async (dispatch, getSta
         throw new Error("Failed to decrease item quantity in cart");
       }
 
-      const data = await response.json();
-
       dispatch({
         type: DECREASE_ITEM_FROM_CART,
         payload: { userId, productId }
@@ -169,8 +167,6 @@ export const removeItemFromCart = (userId, productId) => async (dispatch) => {
     if (!response.ok) {
       throw new Error("Failed to remove item from cart");
     }
-
-    const data = await response.json();
 
     dispatch({
       type: ITEM_REMOVE_FROM_CART,

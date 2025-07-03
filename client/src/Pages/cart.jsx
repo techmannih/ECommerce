@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addToCart,
@@ -113,7 +113,7 @@ const Cart = () => {
                       </div>
                       <div className="m-1 p-1">
                         <p className="text-xl font-semibold">
-                          ${item.itemPrice * item.quantity}
+                           ${ (item.itemPrice * item.quantity).toFixed(2) }
                         </p>
                       </div>
                     </div>
@@ -173,10 +173,7 @@ const Cart = () => {
         <Container>
           <div className="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div className="p-6 sm:px-20 bg-white border-b border-gray-200">
-              <div className="text-2xl">Cart</div>
-              {error && (
-                <p className="text-red-600 my-4">{error}</p>
-              )}
+             
               {cartItems ? (
                 <ShowCart />
               ) : (

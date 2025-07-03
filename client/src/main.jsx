@@ -1,5 +1,4 @@
 // index.js or App.js
-import React from 'react';
 import ReactDOM from 'react-dom'; // Make sure the path is correct
 import App from './App';
 
