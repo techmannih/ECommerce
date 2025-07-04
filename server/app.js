@@ -9,7 +9,7 @@ const orderRoutes = require("./routes/orderRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 require('dotenv').config();
 
-const port = process.env.PORT || 3880;
+const port = process.env.PORT || 3000;
 
 connectDB();
 
