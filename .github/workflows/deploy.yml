@@ -45,7 +45,7 @@ jobs:
           --name ecommerce-server \
           --resource-group ecommerce-s \
           --settings PORT=${{ secrets.PORT }} \
-                      dbURL=${{ secrets.DBURL }} \
+                      MONGO_URI=${{ secrets.DBURL }} \
                       SECRET_KEY=${{ secrets.SECRET_KEY }} \
                       STRIPE_PRIVATE_KEY=${{ secrets.STRIPE_PRIVATE_KEY }}
 
