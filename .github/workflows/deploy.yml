@@ -3,52 +3,50 @@ name: Deploy Node Backend to EC2
 on:
   push:
     branches:
-      - main          # change if you deploy from another branch
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣  Pull the commit that triggered the workflow
+      # 1️⃣ Checkout code
       - name: 🛎️  Checkout repository
         uses: actions/checkout@v3
 
-      # 2️⃣  Write the private key from GitHub Secrets → ~/.ssh/id_rsa
+      # 2️⃣ Set up SSH Key
       - name: 🔐  Configure SSH key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          # Pre-add EC2 host to known_hosts so ssh won't ask for confirmation
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      # 3️⃣  SSH into EC2, pull latest code and restart PM2
+      # 3️⃣ Deploy to EC2
       - name: 🚀  Deploy on EC2
-        env:            # makes secrets available inside the heredoc
+        env:
           HOST: ${{ secrets.EC2_HOST }}
           USER: ${{ secrets.EC2_USER }}
         run: |
           ssh -T -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$USER@$HOST" << 'EOF'
-            set -e                           # ⛑️ bail out on any error
-            APP_DIR=~/ECommerce/server       # 📂 update if your path differs
+            set -e
+            APP_DIR=~/ECommerce/server
 
-            # If first time, clone the repo (harmless if folder already exists)
+            # Clone if missing
             if [ ! -d "$APP_DIR" ]; then
-              git clone https://github.com/<YOUR_GITHUB_USERNAME>/<YOUR_REPO>.git "$APP_DIR"
+              git clone https://github.com/techmannih/ECommerce.git "$APP_DIR"
             fi
 
             cd "$APP_DIR"
 
-            # Pull latest commit
+            # Pull changes
             git pull origin main
 
-            # Install only if lock-file or package.json changed
+            # Install dependencies
             npm ci --production
 
-            # Reload if PM2 process exists, otherwise start it
+            # Restart app
             pm2 reload app --update-env || pm2 start app.js --name app
 
-            # Persist process list on reboot
             pm2 save
           EOF
