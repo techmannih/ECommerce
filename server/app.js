@@ -33,11 +33,11 @@ app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
-app.use('/api/users', userRoutes);
-app.use('/api/addresses', addressRoutes);
-app.use('/api/cart', cartRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/payments', paymentRoutes);
+app.use('/api', userRoutes);
+app.use('/api', addressRoutes);
+app.use('/api', cartRoutes);
+app.use('/api', orderRoutes);
+app.use('/api', paymentRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server listening on port ${PORT}`);
