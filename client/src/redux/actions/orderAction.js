@@ -10,14 +10,15 @@ import {
   GET_ORDER_DETAILS_FAIL,
 } from "../../constants/orderConstants";
 import toast from 'react-hot-toast';
+import { backend } from '../../utils/api';
 
 export const createOrder = (orderData) => async (dispatch) => {
   try {
     dispatch({ type: CREATE_ORDER_REQUEST });
 
-    const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_URL}/order/create`,
-      {
+      const response = await fetch(
+        `${backend}/order/create`,
+        {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,9 +52,9 @@ export const createOrder = (orderData) => async (dispatch) => {
 export const getOrders = (userId) => async (dispatch) => {
   try {
     dispatch({ type: GET_ORDERS_REQUEST });
-    const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_URL}/order/all/${userId}`,
-      {
+      const response = await fetch(
+        `${backend}/order/all/${userId}`,
+        {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -86,9 +87,9 @@ export const getOrderDetails = (orderId) => async (dispatch) => {
   try {
     dispatch({ type: GET_ORDER_DETAILS_REQUEST });
 
-    const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_URL}/order/${orderId}`,
-      {
+      const response = await fetch(
+        `${backend}/order/${orderId}`,
+        {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

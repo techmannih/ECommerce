@@ -4,6 +4,7 @@ import { getOrderDetails } from "../redux/actions/orderAction";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import Container from "../Components/Container";
+import { backend } from "../utils/api";
 
 const OrderDetails = () => {
   const dispatch = useDispatch();
@@ -27,9 +28,9 @@ const OrderDetails = () => {
   const handlePayment = async () => {
     try {
       setPaymentLoading(true);
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/payment`,
-        {
+        const response = await fetch(
+          `${backend}/payment`,
+          {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

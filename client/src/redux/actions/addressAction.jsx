@@ -1,4 +1,5 @@
 import toast from 'react-hot-toast';
+import { backend } from '../../utils/api';
 
 export const FETCH_ADDRESSES_REQUEST = "FETCH_ADDRESSES_REQUEST";
 export const FETCH_ADDRESSES_SUCCESS = "FETCH_ADDRESSES_SUCCESS";
@@ -16,7 +17,7 @@ export const fetchAddresses = (userId) => {
   return async (dispatch) => {
     dispatch({ type: FETCH_ADDRESSES_REQUEST });
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/address/${userId}`);
+        const response = await fetch(`${backend}/address/${userId}`);
       if (!response.ok) {
         throw new Error("Failed to fetch addresses");
       }
@@ -40,7 +41,7 @@ export const saveAddress = (address, userId) => {
   return async (dispatch) => {
     dispatch({ type: SAVE_ADDRESS_REQUEST });
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/address/create`
+        const response = await fetch(`${backend}/address/create`
       , {
         method: "POST",
         headers: {
@@ -72,7 +73,7 @@ export const deleteAddress = (addressId) => {
     dispatch({ type: DELETE_ADDRESS_REQUEST });
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/address/delete/${addressId}`,
+          `${backend}/address/delete/${addressId}`,
         {
           method: "DELETE",
         }

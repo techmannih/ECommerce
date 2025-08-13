@@ -2,6 +2,7 @@ import  { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrderDetails } from "../redux/actions/orderAction";
 import toast from "react-hot-toast";
+import { backend } from "../utils/api";
 // import OrdersPage from "./order";
 
 const UpdateStatus = () => {
@@ -25,7 +26,7 @@ const UpdateStatus = () => {
       return;
     }
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/order/updatePaymentStatus`, {
+        const response = await fetch(`${backend}/order/updatePaymentStatus`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

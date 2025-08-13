@@ -8,6 +8,7 @@ import {
   UPDATE_CART_ITEM,
 } from "../../constants/cartConstants";
 import toast from 'react-hot-toast';
+import { backend } from '../../utils/api';
 
 // Action creator function
 export const addToCart = (userId, product) => async (dispatch, getState) => {
@@ -21,9 +22,9 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
 
     // If the item exists, update it; otherwise, add a new item
     if (existingCartItem) {
-      response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/cart/create`,
-        {
+        response = await fetch(
+          `${backend}/cart/create`,
+          {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -40,9 +41,9 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
       );
       toast.success("Item updated in the cart");
     } else {
-      response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/cart/create`,
-        {
+        response = await fetch(
+          `${backend}/cart/create`,
+          {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -92,9 +93,9 @@ export const decreaseItemInCart = (userId, productId) => async (dispatch, getSta
       (item) => String(item.productId) === String(productId)
     );
     if (item.quantity > 1) {
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/cart/decreaseItem`,
-        {
+        const response = await fetch(
+          `${backend}/cart/decreaseItem`,
+          {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -125,9 +126,9 @@ export const decreaseItemInCart = (userId, productId) => async (dispatch, getSta
 
 export const clearCart = (userId) => async (dispatch) => {
   try {
-    const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_URL}/cart/clear`,
-      {
+      const response = await fetch(
+        `${backend}/cart/clear`,
+        {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -153,9 +154,9 @@ export const clearCart = (userId) => async (dispatch) => {
 
 export const removeItemFromCart = (userId, productId) => async (dispatch) => {
   try {
-    const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_URL}/cart/remove`,
-      {
+      const response = await fetch(
+        `${backend}/cart/remove`,
+        {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -187,9 +188,9 @@ export const fetchCartData = () => async (dispatch) => {
       throw new Error("User ID not found. Please log in to view your cart.");
     }
 
-    const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_URL}/cart/${userId}`
-    );
+      const response = await fetch(
+        `${backend}/cart/${userId}`
+      );
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
