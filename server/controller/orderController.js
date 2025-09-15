@@ -6,7 +6,8 @@ const { Address } = require("../models/addressmodel");
 module.exports.createOrder = async (req, res) => {
   try {
     // Extract necessary information from the request body
-    const { cart, user, shippingPrice, totalPrice, address, title, image } =
+    // shippingPrice is optional - we'll compute the order's total on the server
+    const { cart, user, shippingPrice: shippingPriceInput, address, title, image } =
       req.body;
 
     // Basic validation for required fields
@@ -58,9 +59,16 @@ module.exports.createOrder = async (req, res) => {
       });
     }
 
+    // Calculate pricing details on the server to avoid trusting client values
+    const shippingPrice = shippingPriceInput ?? 30; // default shipping cost
+    const itemsSubtotal = cartDetails.items.reduce(
+      (sum, item) => sum + item.itemPrice * item.quantity,
+      0
+    );
+    const totalPrice = itemsSubtotal + shippingPrice;
+
     // Map cart items to order items
     const orderItems = cartDetails.items.map((item) => ({
-      // productName: item.productName,
       quantity: item.quantity,
       itemPrice: item.itemPrice,
       title: item.title,
@@ -77,7 +85,6 @@ module.exports.createOrder = async (req, res) => {
       totalPrice,
       title,
       image,
-    
     });
 
     // Save the order document to the database
