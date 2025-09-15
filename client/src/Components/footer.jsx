@@ -8,7 +8,7 @@ const Footer = () => {
     <footer className="bg-gray-800 text-white pt-6 max-md:text-sm">
       <div className="container mx-auto text-center py-6">
         <p className="text-lg max-md:text-sm">
-          Ecommerce &copy; {currentYear} All rights reserved.
+          Buyora &copy; {currentYear} All rights reserved.
         </p>
         <p className="mt-2 flex justify-center items-center">
           Made by Manish Chaudhry

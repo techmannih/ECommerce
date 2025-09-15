@@ -53,8 +53,8 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                 <div className="flex flex-shrink-0 items-center">
                   <img
                     className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="logo"
+                    src="/buyora-logo.svg"
+                    alt="Buyora logo"
                   />
                 </div>
                 <div className="hidden sm:ml-6 sm:block">

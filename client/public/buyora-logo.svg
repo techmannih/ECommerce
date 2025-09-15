@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120">
+  <g stroke="#1d4ed8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 20h150l20 60H60L40 20z" fill="#f97316" />
+    <circle cx="80" cy="90" r="15" fill="#ef4444" stroke="none" />
+    <circle cx="150" cy="90" r="15" fill="#ef4444" stroke="none" />
+    <path d="M20 20L10 5" />
+  </g>
+  <text x="200" y="80" font-family="Arial, sans-serif" font-size="60" fill="#1d4ed8">Buyora</text>
+</svg>
