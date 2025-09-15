@@ -6,8 +6,7 @@ const { Address } = require("../models/addressmodel");
 module.exports.createOrder = async (req, res) => {
   try {
     // Extract necessary information from the request body
-    const { cart, user, shippingPrice, totalPrice, address, title, image } =
-      req.body;
+    const { cart, user, shippingPrice, address, title, image } = req.body;
 
     // Basic validation for required fields
     if (!cart || !user || !address) {
@@ -58,14 +57,19 @@ module.exports.createOrder = async (req, res) => {
       });
     }
 
-    // Map cart items to order items
+    // Map cart items to order items and calculate prices
     const orderItems = cartDetails.items.map((item) => ({
-      // productName: item.productName,
       quantity: item.quantity,
       itemPrice: item.itemPrice,
       title: item.title,
       image: item.image,
     }));
+
+    const shippingCost = Number(shippingPrice) || 0;
+    const itemsTotal = cartDetails.items.reduce(
+      (acc, item) => acc + item.itemPrice * item.quantity,
+      0
+    );
 
     // Create a new order document using the Order model
     const order = new Order({
@@ -73,11 +77,10 @@ module.exports.createOrder = async (req, res) => {
       user: userDetails,
       address: addressDetails,
       items: orderItems,
-      shippingPrice,
-      totalPrice,
+      shippingPrice: shippingCost,
+      totalPrice: itemsTotal + shippingCost,
       title,
       image,
-    
     });
 
     // Save the order document to the database
