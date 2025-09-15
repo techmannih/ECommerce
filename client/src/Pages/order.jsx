@@ -67,7 +67,7 @@ const OrdersPage = () => {
                         }`}
                         onClick={() => handlePaymentClick(order._id)}
                       >
-                        Payment {order.paymentInfo}
+                        {order.paymentInfo === "paid" ? "Paid" : "Pay Now"}
                       </button>
                     </div>
                   </li>

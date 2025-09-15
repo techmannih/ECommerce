@@ -10,7 +10,6 @@ const OrderDetails = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const [paymentLoading, setPaymentLoading] = useState(false);
-  const [paymentError, setPaymentError] = useState(null);
   const orderDetails = useSelector((state) => state.order);
   const { loading, error, order } = orderDetails;
 
@@ -45,12 +44,14 @@ const OrderDetails = () => {
         sessionStorage.setItem("orderId", id);
         toast.success("Payment initiated successfully!");
       } else {
-        setPaymentError("Unable to initiate payment. Please try again later.");
-        toast.error("Unable to initiate payment. Please try again later.");
+        const message =
+          data.message || "Unable to initiate payment. Please try again later.";
+        toast.error(message);
       }
     } catch (error) {
-      setPaymentError("Unable to initiate payment. Please try again later.");
-      toast.error("Unable to initiate payment. Please try again later.");
+      const message =
+        error.message || "Unable to initiate payment. Please try again later.";
+      toast.error(message);
     } finally {
       setPaymentLoading(false);
     }
