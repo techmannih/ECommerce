@@ -20,8 +20,8 @@ const handleErrors = (err) => {
   }
 
   // invalid email OR password - login
-  if (err.message === "Email not registered. Please create an account first.") {
-    errors.email = "Email not registered. Please create an account first.";
+  if (err.message === "Email not found. Please sign up first.") {
+    errors.email = "Email not found. Please sign up first.";
   }
   if (err.message === "Incorrect password. Please try again.") {
     errors.password = "Incorrect password. Please try again.";

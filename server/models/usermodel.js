@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "",
     },
-    dateRegistered: {
+    dateSignedUp: {
         type: Date,
         default: Date.now
     },
@@ -47,7 +47,7 @@ userSchema.statics.login = async function(email, password) {
         }
         throw new Error("Incorrect password. Please try again.");
     }
-    throw new Error("Email not registered. Please create an account first.");
+    throw new Error("Email not found. Please sign up first.");
 };
 
 const User = mongoose.model('User', userSchema);

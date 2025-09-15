@@ -3,7 +3,7 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "../redux/store";
 import Navbar from "../Components/navbar";
-import { Login, Register } from "../Auth";
+import { Login, Signup } from "../Auth";
 import Footer from "../Components/footer";
 import {
   Home,
@@ -44,7 +44,7 @@ export default function MainRoutes() {
               <Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
             }
           />
-          <Route exact path="/register" element={<Register />} />
+          <Route exact path="/signup" element={<Signup />} />
           <Route
             exact
             path="/cart"
