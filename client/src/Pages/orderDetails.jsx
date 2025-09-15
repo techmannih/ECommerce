@@ -39,9 +39,8 @@ const OrderDetails = () => {
       );
       const data = await response.json();
       if (response.ok) {
-        // add here code for render to updatePaymentStatus after success
         window.location.href = data.url; // Redirect to Stripe checkout
-        sessionStorage.setItem("orderId", id);
+        sessionStorage.setItem("orderId", id); // store for post-payment update
         toast.success("Payment initiated successfully!");
       } else {
         const message =

@@ -50,7 +50,7 @@ module.exports.makePayment = async (req, res) => {
           quantity: 1,
         },
       ],
-      success_url: `${clientUrl}/updatePaymentStatus`,
+      success_url: `${clientUrl}/orders`,
       cancel_url: `${clientUrl}/orders`,
     });
 
