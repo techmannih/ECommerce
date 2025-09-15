@@ -41,48 +41,37 @@ const OrdersPage = () => {
           <div className="p-6">
             {orders && orders.length > 0 ? (
               <ul className="space-y-4">
-                {orders.map((order) => {
-                  const itemsTotal = order.items?.reduce(
-                    (acc, item) => acc + item.itemPrice * (item.quantity || 1),
-                    0
-                  ) || 0;
-                  const total =
-                    order.totalPrice && order.totalPrice > 0
-                      ? order.totalPrice
-                      : itemsTotal + (order.shippingPrice || 0);
-
-                  return (
-                    <li
-                      key={order._id}
-                      className="flex flex-wrap justify-between items-center bg-gray-50 p-4 rounded-md shadow"
-                    >
-                      <div className="space-y-1">
-                        <p className="font-semibold">
-                          Order ID: {order._id.slice(-4)}
-                        </p>
-                        <p>
-                          Total Price: ${total.toFixed(2)}
-                        </p>
-                        <p>
-                          Shipping Price: ${Number(order.shippingPrice || 0).toFixed(2)}
-                        </p>
-                        {/* Render other order details as needed */}
-                      </div>
-                      <div>
-                        <button
-                          className={`text-white font-semibold px-4 py-2  my-2 rounded-lg ${
-                            order.paymentInfo === "paid"
-                              ? "bg-green-500"
-                              : "bg-red-500"
-                          }`}
-                          onClick={() => handlePaymentClick(order._id)}
-                        >
-                          {order.paymentInfo === "paid" ? "Paid" : "Pay Now"}
-                        </button>
-                      </div>
-                    </li>
-                  );
-                })}
+                {orders.map((order) => (
+                  <li
+                    key={order._id}
+                    className="flex flex-wrap justify-between items-center bg-gray-50 p-4 rounded-md shadow"
+                  >
+                    <div className="space-y-1">
+                      <p className="font-semibold">
+                        Order ID: {order._id.slice(-4) }
+                      </p>
+                      <p>
+                         Total Price: ${order.totalPrice.toFixed(2)}
+                      </p>
+                      <p>
+                        Shipping Price: ${order.shippingPrice}
+                      </p>
+                      {/* Render other order details as needed */}
+                    </div>
+                    <div>
+                      <button
+                        className={`text-white font-semibold px-4 py-2  my-2 rounded-lg ${
+                          order.paymentInfo === "paid"
+                            ? "bg-green-500"
+                            : "bg-red-500"
+                        }`}
+                        onClick={() => handlePaymentClick(order._id)}
+                      >
+                        {order.paymentInfo === "paid" ? "Paid" : "Pay Now"}
+                      </button>
+                    </div>
+                  </li>
+                ))}
               </ul>
             ) : (
               <div className="text-center text-xl font-semibold">No orders found.</div>
