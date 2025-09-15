@@ -1,8 +1,9 @@
-import  { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getOrders } from "../redux/actions/orderAction";
 import Container from "../Components/Container";
+import { LoadingSpinner } from "../Components";
 
 const OrdersPage = () => {
   const dispatch = useDispatch();
@@ -15,11 +16,7 @@ const OrdersPage = () => {
   }, [dispatch]);
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        Loading...
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (error) {

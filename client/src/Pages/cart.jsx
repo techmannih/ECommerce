@@ -1,4 +1,4 @@
-import  { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addToCart,
@@ -9,6 +9,7 @@ import {
 } from "../redux/actions/cartAction";
 import { Link } from "react-router-dom";
 import Container from "../Components/Container";
+import { LoadingSpinner } from "../Components";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -177,7 +178,7 @@ const Cart = () => {
               {cartItems ? (
                 <ShowCart />
               ) : (
-                !error && <p>Loading cart...</p>
+                !error && <LoadingSpinner />
               )}
               <button
                 onClick={() => clearCartHandler(sessionStorage.getItem("userId"))}
