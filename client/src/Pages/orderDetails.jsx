@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrderDetails } from "../redux/actions/orderAction";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import Container from "../Components/Container";
 import { LoadingSpinner } from "../Components";
@@ -9,13 +9,37 @@ import { LoadingSpinner } from "../Components";
 const OrderDetails = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const location = useLocation();
   const [paymentLoading, setPaymentLoading] = useState(false);
   const orderDetails = useSelector((state) => state.order);
   const { loading, error, order } = orderDetails;
 
   useEffect(() => {
-    dispatch(getOrderDetails(id));
-  }, [dispatch, id]);
+    const updateStatusAndFetch = async () => {
+      const params = new URLSearchParams(location.search);
+      if (params.get("paid") === "true") {
+        try {
+          const response = await fetch(
+            `${import.meta.env.VITE_BACKEND_URL}/order/updatePaymentStatus`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id, status: "paid" }),
+            }
+          );
+          if (response.ok) {
+            toast.success("Payment status updated successfully!");
+          } else {
+            toast.error("Failed to update payment status.");
+          }
+        } catch (err) {
+          toast.error("Failed to update payment status.");
+        }
+      }
+      dispatch(getOrderDetails(id));
+    };
+    updateStatusAndFetch();
+  }, [dispatch, id, location.search]);
 
   if (loading) {
     return <LoadingSpinner />;
@@ -31,16 +55,16 @@ const OrderDetails = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            totalItems: order.items.length, // Example: Sending the total items count
-            subtotal: order.totalPrice - order.shippingPrice, // Example: Calculating subtotal
-            shipping: order.shippingPrice, // Example: Shipping cost
+            orderId: id,
+            totalItems: order.items.length,
+            subtotal: order.totalPrice - order.shippingPrice,
+            shipping: order.shippingPrice,
           }),
         }
       );
       const data = await response.json();
       if (response.ok) {
         window.location.href = data.url; // Redirect to Stripe checkout
-        sessionStorage.setItem("orderId", id); // store for post-payment update
         toast.success("Payment initiated successfully!");
       } else {
         const message =
