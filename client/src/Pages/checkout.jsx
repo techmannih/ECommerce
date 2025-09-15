@@ -1,5 +1,6 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Container from "../Components/Container";
+import { LoadingSpinner } from "../Components";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchAddresses,
@@ -119,7 +120,7 @@ const Checkout = () => {
       {error && <div className="text-red-500">{error}</div>}
       {/* {orderError && <div className="text-red-500">{orderError}</div>} */}
       {loading ? (
-        <p>Loading...</p>
+        <LoadingSpinner />
       ) : (
         <div className="flex justify-between flex-col m-4 p-4">
           <div className="flex justify-between max-md:flex-col">

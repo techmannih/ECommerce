@@ -7,3 +7,4 @@ export { default as Container } from './Container';
 export { default as InputField } from './InputField';
 export { default as FormError } from './FormError';
 export { default as SubmitButton } from './SubmitButton';
+export { default as LoadingSpinner } from './LoadingSpinner';

@@ -1,9 +1,10 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrderDetails } from "../redux/actions/orderAction";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import Container from "../Components/Container";
+import { LoadingSpinner } from "../Components";
 
 const OrderDetails = () => {
   const dispatch = useDispatch();
@@ -18,11 +19,7 @@ const OrderDetails = () => {
   }, [dispatch, id]);
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        Loading...
-      </div>
-    );
+    return <LoadingSpinner />;
   }
   const handlePayment = async () => {
     try {

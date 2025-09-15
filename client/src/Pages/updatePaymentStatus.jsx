@@ -1,7 +1,8 @@
-import  { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrderDetails } from "../redux/actions/orderAction";
 import toast from "react-hot-toast";
+import { LoadingSpinner } from "../Components";
 // import OrdersPage from "./order";
 
 const UpdateStatus = () => {
@@ -50,7 +51,7 @@ const UpdateStatus = () => {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <LoadingSpinner />;
   }
 
   if (error) {
