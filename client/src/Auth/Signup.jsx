@@ -49,17 +49,17 @@ const SignupForm = () => {
 
       resetForm();
       if (ok) {
-        toast.success("Registration successful! Please log in.");
+        toast.success("Sign up successful! Please log in.");
         setTimeout(() => {
           navigate("/login");
         }, 1000);
       } else {
-        const message = body.errors?.email || "Registration failed. Please try again.";
+        const message = body.errors?.email || "Sign up failed. Please try again.";
         setErrorExist(message);
         toast.error(message);
         setTimeout(() => {
           setErrorExist(null);
-          navigate("/register");
+          navigate("/signup");
         }, 1000);
       }
     } catch (error) {
@@ -121,7 +121,7 @@ const SignupForm = () => {
           </Link>
         </div>
         <div className="text-center">
-          <SubmitButton loading={loading}>Register</SubmitButton>
+          <SubmitButton loading={loading}>Sign Up</SubmitButton>
         </div>
       </form>
     </div>

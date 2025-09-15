@@ -169,7 +169,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                     </Transition>
                   </Menu>
                 ) : (
-                  // User is not logged in, show login and register buttons
+                  // User is not logged in, show login and sign up buttons
                   <div className="flex space-x-4">
                     <Link
                       to="/login"
@@ -178,10 +178,10 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                       Login
                     </Link>
                     <Link
-                      to="/register"
+                      to="/signup"
                       className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                     >
-                      Register
+                      Sign Up
                     </Link>
                   </div>
                 )}
