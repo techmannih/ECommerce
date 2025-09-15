@@ -5,8 +5,12 @@ module.exports.makePayment = async (req, res) => {
   try {
     const { totalItems, subtotal, shipping } = req.body;
 
-    // Validate the presence of required order details
-    if (!totalItems || !subtotal || !shipping) {
+    // Validate the presence of required order details allowing zero values
+    if (
+      totalItems === undefined ||
+      subtotal === undefined ||
+      shipping === undefined
+    ) {
       return res.status(400).json({
         status: "error",
         message: "Invalid or missing order details in the request",
