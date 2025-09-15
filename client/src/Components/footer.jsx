@@ -11,7 +11,7 @@ const Footer = () => {
           Buyora &copy; {currentYear} All rights reserved.
         </p>
         <p className="mt-2 flex justify-center items-center">
-          Made by Manish Chaudhry
+          Made by Manish Chaudhary
           <a
             href="https://www.linkedin.com/in/techmannih"
             target="_blank"
