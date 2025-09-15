@@ -31,6 +31,13 @@ const Checkout = () => {
   });
   const [selectedAddressId, setSelectedAddressId] = useState(null);
 
+  useEffect(() => {
+    const savedAddressId = sessionStorage.getItem("selectedAddressId");
+    if (savedAddressId) {
+      setSelectedAddressId(savedAddressId);
+    }
+  }, []);
+
   const validateBillingAddress = () => {
     const emailRegex = /^\S+@\S+\.\S+$/;
     const phoneRegex = /^\d{10}$/;
@@ -80,7 +87,13 @@ const Checkout = () => {
   };
 
   const handleSelectAddress = (addressId) => {
-    setSelectedAddressId(addressId);
+    if (selectedAddressId === addressId) {
+      setSelectedAddressId(null);
+      sessionStorage.removeItem("selectedAddressId");
+    } else {
+      setSelectedAddressId(addressId);
+      sessionStorage.setItem("selectedAddressId", addressId);
+    }
   };
 
   useEffect(() => {
@@ -411,7 +424,7 @@ const Checkout = () => {
                           }`}
                         >
                           {selectedAddressId === address._id
-                            ? "Selected"
+                            ? "Unselect"
                             : "Select"}
                         </button>
                         <button
