@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { getOrders } from "../redux/actions/orderAction";
 import Container from "../Components/Container";
 import { LoadingSpinner } from "../Components";
@@ -12,7 +13,36 @@ const OrdersPage = () => {
 
   useEffect(() => {
     const userId = sessionStorage.getItem("userId");
-    dispatch(getOrders(userId));
+    const orderId = sessionStorage.getItem("orderId");
+
+    const fetchData = async () => {
+      if (orderId) {
+        try {
+          const response = await fetch(
+            `${import.meta.env.VITE_BACKEND_URL}/order/updatePaymentStatus`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ id: orderId, status: "paid" }),
+            }
+          );
+          if (response.ok) {
+            toast.success("Payment status updated successfully!");
+          } else {
+            toast.error("Failed to update payment status.");
+          }
+        } catch (err) {
+          toast.error("Failed to update payment status.");
+        } finally {
+          sessionStorage.removeItem("orderId");
+        }
+      }
+      dispatch(getOrders(userId));
+    };
+
+    fetchData();
   }, [dispatch]);
 
   if (loading) {

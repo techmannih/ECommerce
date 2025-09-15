@@ -11,7 +11,6 @@ import {
   Checkout,
   OrderDetails,
   Order,
-  UpdatePaymentStatus,
 } from "../Pages";
 
 // Keep user id only for the lifetime of the tab
@@ -59,10 +58,6 @@ export default function MainRoutes() {
           />
           <Route path="/order/:id" element={<OrderDetails />} />
           <Route path="/orders" element={<Order />} />
-          <Route
-            path="/updatePaymentStatus"
-            element={<UpdatePaymentStatus />}
-          />
         </Routes>
         </main>
         <Footer />
