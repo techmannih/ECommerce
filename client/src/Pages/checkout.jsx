@@ -105,8 +105,8 @@ const Checkout = () => {
       Items: cartItems,
       totalPrice: subtotal + shipping,
     };
-    if(!selectedAddressId){
-      toast.error("Please select an address to place the order");
+    if (!selectedAddressId) {
+      toast.error("Please select an address before placing the order.");
       return;
     }
     
