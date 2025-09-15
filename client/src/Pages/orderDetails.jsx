@@ -46,14 +46,14 @@ const OrderDetails = () => {
         // add here code for render to updatePaymentStatus after success
         window.location.href = data.url; // Redirect to Stripe checkout
         sessionStorage.setItem("orderId", id);
-        toast.success("Payment initiated successfully");
+        toast.success("Payment initiated successfully!");
       } else {
-        setPaymentError("Failed to initiate payment. Please try again later.");
-        toast.error("Failed to initiate payment. Please try again later.");
+        setPaymentError("Unable to initiate payment. Please try again later.");
+        toast.error("Unable to initiate payment. Please try again later.");
       }
     } catch (error) {
-      setPaymentError("Failed to initiate payment. Please try again later.");
-      toast.error("Failed to initiate payment. Please try again later.");
+      setPaymentError("Unable to initiate payment. Please try again later.");
+      toast.error("Unable to initiate payment. Please try again later.");
     } finally {
       setPaymentLoading(false);
     }

@@ -21,7 +21,11 @@ const SignupForm = () => {
   const handleInputChange = (e) => {
     handleChange(e);
     if (e.target.name === "email") {
-      setEmailError(validateEmail(e.target.value) ? null : "Invalid email");
+      setEmailError(
+        validateEmail(e.target.value)
+          ? null
+          : "Please enter a valid email address."
+      );
     }
   };
 

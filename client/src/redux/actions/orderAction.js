@@ -36,7 +36,7 @@ export const createOrder = (orderData) => async (dispatch) => {
       payload: data,
     });
 
-    toast.success("Order created successfully!");
+    toast.success("Order placed successfully.");
     window.location.href = "/orders";
   } catch (error) {
     dispatch({
@@ -44,7 +44,7 @@ export const createOrder = (orderData) => async (dispatch) => {
       payload: error.message,
     });
     const msg = error.message || "Failed to place order. Please try again.";
-    toast.error(`Unable to place order: ${msg}`);
+    toast.error(`Couldn't place order: ${msg}`);
   }
 };
 
@@ -71,14 +71,14 @@ export const getOrders = (userId) => async (dispatch) => {
       payload: data.data,
     });
 
-    toast.success("Orders fetched successfully!");
+    toast.success("Orders retrieved successfully.");
   } catch (error) {
     dispatch({
       type: GET_ORDERS_FAIL,
       payload: error.message,
     });
     const msg = error.message || "Failed to fetch orders.";
-    toast.error(`Unable to fetch orders: ${msg}`);
+    toast.error(`Couldn't fetch orders: ${msg}`);
   }
 };
 
@@ -106,13 +106,13 @@ export const getOrderDetails = (orderId) => async (dispatch) => {
       payload: data.data,
     });
 
-    toast.success("Order details fetched successfully!");
+    toast.success("Order details retrieved successfully.");
   } catch (error) {
     dispatch({
       type: GET_ORDER_DETAILS_FAIL,
       payload: error.message,
     });
     const msg = error.message || "Failed to fetch order details.";
-    toast.error(`Unable to fetch order details: ${msg}`);
+    toast.error(`Couldn't fetch order details: ${msg}`);
   }
 };

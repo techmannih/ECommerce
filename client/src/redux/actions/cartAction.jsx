@@ -38,7 +38,7 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
           }),
         }
       );
-      toast.success("Item updated in the cart");
+      toast.success("Updated item in your cart.");
     } else {
       response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/cart/create`,
@@ -57,7 +57,7 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
           }),
         }
       );
-      toast.success("Item added to the cart");
+      toast.success("Added item to your cart.");
     }
 
     if (!response.ok) {
@@ -81,7 +81,7 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
 
     return true;
   } catch (error) {
-    toast.error("Unable to update cart item.");
+    toast.error("Couldn't update cart item.");
   }
 };
 
@@ -112,13 +112,13 @@ export const decreaseItemInCart = (userId, productId) => async (dispatch, getSta
         payload: { userId, productId }
       });
 
-      toast.success("Item quantity decreased in cart");
+      toast.success("Reduced item quantity in your cart.");
       return true;
     } else {
       dispatch(removeItemFromCart(userId, productId));
     }
   } catch (error) {
-    toast.error("Unable to decrease item quantity.");
+    toast.error("Couldn't decrease item quantity.");
     return false;
   }
 };
@@ -145,9 +145,9 @@ export const clearCart = (userId) => async (dispatch) => {
       payload: [], // Clear the cart
     });
 
-    toast.success("Cart cleared successfully");
+    toast.success("Cart cleared successfully.");
   } catch (error) {
-    toast.error("Unable to clear cart.");
+    toast.error("Couldn't clear cart.");
   }
 };
 
@@ -173,9 +173,9 @@ export const removeItemFromCart = (userId, productId) => async (dispatch) => {
       payload: productId,
     });
 
-    toast.success("Item removed from cart");
+    toast.success("Removed item from your cart.");
   } catch (error) {
-    toast.error("Unable to remove item from cart.");
+    toast.error("Couldn't remove item from cart.");
   }
 };
 
@@ -213,10 +213,10 @@ export const fetchCartData = () => async (dispatch) => {
       },
     });
 
-    toast.success("Cart data fetched successfully");
+    toast.success("Cart data loaded successfully.");
     return cartItems; // Return cartItems to handle in component
   } catch (error) {
-    const errorMessage = error.message || "Unable to fetch cart data.";
+    const errorMessage = error.message || "Couldn't fetch cart data.";
     toast.error(errorMessage);
     dispatch({
       type: FETCH_CART_FAILURE,

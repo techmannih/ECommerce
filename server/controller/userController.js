@@ -20,11 +20,11 @@ const handleErrors = (err) => {
   }
 
   // invalid email OR password - login
-  if (err.message == "Invalid email") {
-    errors.email = "Invalid email";
+  if (err.message === "Email not registered. Please create an account first.") {
+    errors.email = "Email not registered. Please create an account first.";
   }
-  if (err.message == "Invalid password") {
-    errors.password = "Invalid password";
+  if (err.message === "Incorrect password. Please try again.") {
+    errors.password = "Incorrect password. Please try again.";
   }
 
   // validation of email & password - signup
@@ -44,7 +44,7 @@ module.exports.signup = async (req, res) => {
     if (!emailRegex.test(email) || !password || password.length < 6) {
       return res.status(400).json({
         errors: {
-          email: !emailRegex.test(email) ? "Invalid email" : undefined,
+          email: !emailRegex.test(email) ? "Please enter a valid email address." : undefined,
           password: !password || password.length < 6 ? "Password must be at least 6 characters" : undefined,
         },
       });
@@ -90,7 +90,7 @@ module.exports.login = async (req, res) => {
     if (!emailRegex.test(email) || !password) {
       return res.status(400).json({
         errors: {
-          email: !emailRegex.test(email) ? "Invalid email" : undefined,
+          email: !emailRegex.test(email) ? "Please enter a valid email address." : undefined,
           password: !password ? "Password is required" : undefined,
         },
       });

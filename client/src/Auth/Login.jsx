@@ -25,7 +25,11 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
   const handleInputChange = (e) => {
     handleChange(e);
     if (e.target.name === "email") {
-      setEmailError(validateEmail(e.target.value) ? null : "Invalid email");
+      setEmailError(
+        validateEmail(e.target.value)
+          ? null
+          : "Please enter a valid email address."
+      );
     }
   };
 
@@ -53,7 +57,10 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
         }, 1000);
       } else {
         setIsLoggedIn(false);
-        const message = body.errors?.email || body.errors?.password || "Invalid email or password. Please try again.";
+        const message =
+          body.errors?.email ||
+          body.errors?.password ||
+          "Incorrect email or password. Please try again.";
         setError(message);
         toast.error(message);
         setTimeout(() => setError(null), 1000);
