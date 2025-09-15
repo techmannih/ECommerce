@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Container from "./Container";
 
 const navigation = [
@@ -18,6 +19,7 @@ function classNames(...classes) {
 
 export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   const location = useLocation();
+  const { cartItems } = useSelector((state) => state.cart);
   // Utility function to delete a cookie by name
   const deleteCookie = (name) => {
     document.cookie = `${name}=; Max-Age=0; path=/;`;
@@ -85,23 +87,28 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                   // User is logged in, show profile dropdown
                   <Menu as="div" className="relative ml-3">
                     <div className="flex items-center">
-                      <div class="m-2 text-white flex justify-center items-center">
+                      <div className="m-2 text-white flex justify-center items-center">
                         <Link to="./cart">
-                          <div class="relative">
+                          <div className="relative">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
                               viewBox="0 0 24 24"
-                              stroke-width="1.5"
+                              strokeWidth="1.5"
                               stroke="currentColor"
-                              class="file:  m-1 h-8 w-8"
+                              className="m-1 h-8 w-8"
                             >
                               <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                                 d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
                               />
                             </svg>
+                            {cartItems && cartItems.length > 0 && (
+                              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                                {cartItems.length}
+                              </span>
+                            )}
                           </div>
                         </Link>
                       </div>
