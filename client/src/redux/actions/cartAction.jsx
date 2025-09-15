@@ -184,7 +184,7 @@ export const fetchCartData = () => async (dispatch) => {
     const userId = sessionStorage.getItem("userId");
 
     if (!userId) {
-      throw new Error("User ID not found. Please log in to view your cart.");
+      throw new Error("User ID not found. Please login to view your cart.");
     }
 
     const response = await fetch(

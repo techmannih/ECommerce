@@ -95,7 +95,7 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
         <FormError message={error} />
         <div>
           New User?{' '}
-          <Link to="/register" className="text-sm text-blue-500 hover:underline">
+          <Link to="/signup" className="text-sm text-blue-500 hover:underline">
             Create an Account
           </Link>
         </div>

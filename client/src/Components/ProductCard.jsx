@@ -25,7 +25,7 @@ const ProductCard = ({ product, isLoggedIn, onAddToCart }) => {
         </button>
       ) : (
         <Link to="/login" className="mt-3 text-blue-500 underline">
-          Log in to buy
+          Login to buy
         </Link>
       )}
     </div>
