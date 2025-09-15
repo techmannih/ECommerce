@@ -2,7 +2,7 @@ const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
 
 module.exports.makePayment = async (req, res) => {
   try {
-    const { totalItems, subtotal, shipping } = req.body;
+    const { orderId, totalItems, subtotal, shipping } = req.body;
 
     // Determine the client URL either from env or request header
     const clientUrl =
@@ -14,6 +14,7 @@ module.exports.makePayment = async (req, res) => {
 
     // Validate the presence of required order details allowing zero values
     if (
+      !orderId ||
       totalItems === undefined ||
       subtotal === undefined ||
       shipping === undefined ||
@@ -50,8 +51,8 @@ module.exports.makePayment = async (req, res) => {
           quantity: 1,
         },
       ],
-      success_url: `${clientUrl}/orders`,
-      cancel_url: `${clientUrl}/orders`,
+      success_url: `${clientUrl}/order/${orderId}?paid=true`,
+      cancel_url: `${clientUrl}/order/${orderId}?paid=false`,
     });
 
     res.json({
