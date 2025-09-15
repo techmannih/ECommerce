@@ -1,19 +1,37 @@
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
-const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
 
 module.exports.makePayment = async (req, res) => {
   try {
     const { totalItems, subtotal, shipping } = req.body;
 
+    // Determine the client URL either from env or request header
+    const clientUrl =
+      process.env.CLIENT_URL || req.headers.origin || "http://localhost:5173";
+
+    // Convert values to numbers to avoid string concatenation issues
+    const subtotalNum = Number(subtotal);
+    const shippingNum = Number(shipping);
+
     // Validate the presence of required order details allowing zero values
     if (
       totalItems === undefined ||
       subtotal === undefined ||
-      shipping === undefined
+      shipping === undefined ||
+      Number.isNaN(subtotalNum) ||
+      Number.isNaN(shippingNum)
     ) {
       return res.status(400).json({
         status: "error",
         message: "Invalid or missing order details in the request",
+      });
+    }
+
+    const amount = Math.round((subtotalNum + shippingNum) * 100); // in cents
+
+    if (amount <= 0) {
+      return res.status(400).json({
+        status: "error",
+        message: "Total amount must be greater than zero",
       });
     }
 
@@ -27,9 +45,9 @@ module.exports.makePayment = async (req, res) => {
             product_data: {
               name: "Order Summary",
             },
-            unit_amount: (subtotal + shipping) * 100, // Total amount in cents
+            unit_amount: amount,
           },
-          quantity: 1, // Quantity is set to 1 for the total amount
+          quantity: 1,
         },
       ],
       success_url: `${clientUrl}/updatePaymentStatus`,
