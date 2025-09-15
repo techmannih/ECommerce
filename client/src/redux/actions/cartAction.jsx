@@ -38,7 +38,6 @@ export const addToCart = (userId, product) => async (dispatch, getState) => {
           }),
         }
       );
-      toast.success("Updated item in your cart.");
     } else {
       response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/cart/create`,
@@ -112,7 +111,6 @@ export const decreaseItemInCart = (userId, productId) => async (dispatch, getSta
         payload: { userId, productId }
       });
 
-      toast.success("Reduced item quantity in your cart.");
       return true;
     } else {
       dispatch(removeItemFromCart(userId, productId));
@@ -144,8 +142,6 @@ export const clearCart = (userId) => async (dispatch) => {
       type: CLEAR_CART,
       payload: [], // Clear the cart
     });
-
-    toast.success("Cart cleared successfully.");
   } catch (error) {
     toast.error("Couldn't clear cart.");
   }
@@ -172,8 +168,6 @@ export const removeItemFromCart = (userId, productId) => async (dispatch) => {
       type: ITEM_REMOVE_FROM_CART,
       payload: productId,
     });
-
-    toast.success("Removed item from your cart.");
   } catch (error) {
     toast.error("Couldn't remove item from cart.");
   }
@@ -213,7 +207,6 @@ export const fetchCartData = () => async (dispatch) => {
       },
     });
 
-    toast.success("Cart data loaded successfully.");
     return cartItems; // Return cartItems to handle in component
   } catch (error) {
     const errorMessage = error.message || "Couldn't fetch cart data.";
