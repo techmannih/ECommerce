@@ -70,8 +70,6 @@ export const getOrders = (userId) => async (dispatch) => {
       type: GET_ORDERS_SUCCESS,
       payload: data.data,
     });
-
-    toast.success("Orders retrieved successfully.");
   } catch (error) {
     dispatch({
       type: GET_ORDERS_FAIL,
@@ -105,8 +103,6 @@ export const getOrderDetails = (orderId) => async (dispatch) => {
       type: GET_ORDER_DETAILS_SUCCESS,
       payload: data.data,
     });
-
-    toast.success("Order details retrieved successfully.");
   } catch (error) {
     dispatch({
       type: GET_ORDER_DETAILS_FAIL,

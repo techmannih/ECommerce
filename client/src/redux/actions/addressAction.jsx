@@ -25,7 +25,6 @@ export const fetchAddresses = (userId) => {
         type: FETCH_ADDRESSES_SUCCESS,
         payload: data.data, // Assuming the response structure has a 'data' field containing addresses
       });
-      toast.success("Addresses loaded successfully.");
     } catch (error) {
       dispatch({
         type: FETCH_ADDRESSES_FAILURE,
@@ -56,7 +55,6 @@ export const saveAddress = (address, userId) => {
         type: SAVE_ADDRESS_SUCCESS,
         payload: data.data,
       });
-      toast.success("Address saved successfully.");
     } catch (error) {
       dispatch({
         type: SAVE_ADDRESS_FAILURE,
@@ -84,7 +82,6 @@ export const deleteAddress = (addressId) => {
         type: DELETE_ADDRESS_SUCCESS,
         payload: addressId,
       });
-      toast.success("Address removed successfully.");
     } catch (error) {
       dispatch({
         type: DELETE_ADDRESS_FAILURE,
