@@ -19,7 +19,6 @@ app.use(express.json());
 const allowedOrigins = [
   'http://localhost:5173',
   'https://e-commerce-chi-olive.vercel.app',
-  'https://e-commerce-git-code-3dcfd9-manishchaudharytttgmailcoms-projects.vercel.app/',
 ];
 
 app.use(

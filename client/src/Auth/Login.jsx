@@ -99,7 +99,6 @@ const LoginForm = ({ isLoggedIn, setIsLoggedIn }) => {
           placeholder="Your Password"
           autoComplete="current-password"
         />
-        <FormError message={error} />
         <div>
           New User?{' '}
           <Link to="/signup" className="text-sm text-blue-500 hover:underline">

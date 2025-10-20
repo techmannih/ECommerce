@@ -38,7 +38,6 @@ const handleErrors = (err) => {
 
 module.exports.signup = async (req, res) => {
   const { fullName, email, password } = req.body;
-  console.log("Signing up");
 
   try {
     if (!emailRegex.test(email) || !password || password.length < 6) {
@@ -51,7 +50,6 @@ module.exports.signup = async (req, res) => {
     }
     // Check if user with the same email already exists
     const existingUser = await User.findOne({ email });
-    console.log("existing user", existingUser);
     if (existingUser) {
       // User with the same email already exists
       return res.status(400).json({
@@ -71,7 +69,6 @@ module.exports.signup = async (req, res) => {
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
       });
-      console.log("new user", user);
       res.status(201).json({ success: "Signed up successfully" });
     }
   } catch (err) {
@@ -85,7 +82,6 @@ module.exports.signup = async (req, res) => {
 
 module.exports.login = async (req, res) => {
   const { email, password } = req.body;
-  console.log("Logging in");
   try {
     if (!emailRegex.test(email) || !password) {
       return res.status(400).json({
@@ -111,7 +107,6 @@ module.exports.login = async (req, res) => {
       sameSite: "strict",
     });
     res.status(200).json({ success: user._id });
-    console.log("Logged data", user);
   } catch (err) {
     console.error("Error logging in:", err.message);
     const errors = handleErrors(err);

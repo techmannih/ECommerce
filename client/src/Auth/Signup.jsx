@@ -39,6 +39,7 @@ const SignupForm = () => {
 
     if (formData.password !== formData.confirmPassword) {
       setErrorExist("Passwords do not match.");
+      toast.error("Passwords do not match.");
       setTimeout(() => setErrorExist(null), 1000);
       return;
     }
@@ -73,7 +74,7 @@ const SignupForm = () => {
 
   return (
     <div className="max-sm:mx-6 m-24">
-      {errorExist && <div className="text-red-500 text-center">{errorExist}</div>}
+      {/* {errorExist && <div className="text-red-500 text-center">{errorExist}</div>} */}
       <h2 className="text-4xl font-semibold mb-4 text-center">Sign Up</h2>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
         <InputField
@@ -113,7 +114,6 @@ const SignupForm = () => {
           placeholder="Confirm Password"
           autoComplete="new-password"
         />
-        <FormError message={errorExist} />
         <div className="items-center mb-4">
           Already have an account?{' '}
           <Link to="/login" className="text-sm text-blue-500 hover:underline">

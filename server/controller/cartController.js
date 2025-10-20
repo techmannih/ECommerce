@@ -4,11 +4,9 @@ module.exports.createOrUpdateCart = async (req, res) => {
   try {
     const { userId, productId, quantity, itemPrice, image, title } = req.body;
 
-    console.log("Received userId:", req.body);
 
     if (!productId || !quantity || !itemPrice || !image || !title) {
       
-      console.log("Missing required fields");
       return res.status(400).json({
         success: false,
         error: "Missing required fields",
@@ -16,19 +14,16 @@ module.exports.createOrUpdateCart = async (req, res) => {
     }
 
     let cart = await Cart.findOne({ user: userId });
-    console.log("cart", cart);
 
     if (!cart) {
       // Create a new cart if it doesn't exist
       cart = new Cart({ user: userId, items: [] });
-      console.log("new cart", cart);
     }
 
     // Check if the product is already in the cart
     const existingItem = cart.items.find(
       (item) => String(item.productId) === String(productId)
     );
-    console.log("existingItem", existingItem);
 
     if (existingItem) {
       // Increase the quantity of the product and update total item price
@@ -41,7 +36,7 @@ module.exports.createOrUpdateCart = async (req, res) => {
     }
 
     const updatedCart = await cart.save();
-    console.log("updatedCart", updatedCart);
+    // console.log("updatedCart", updatedCart);
 
     res.status(200).json({
       success: true,
@@ -102,8 +97,7 @@ module.exports.getAllCart = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    console.log("Received userId:", userId);
-
+    
     // Check if userId is provided and valid
     if (!userId) {
       return res
@@ -120,7 +114,6 @@ module.exports.getAllCart = async (req, res) => {
         .json({ success: false, error: "No cart found for the user" });
     }
 
-    console.log("userCart", userCart);
 
     res.status(200).json({ success: true, data: userCart.items });
   } catch (error) {
@@ -197,7 +190,6 @@ module.exports.getCartById = async (req, res) => {
         .json({ success: false, error: "No cart found for the user" });
     }
 
-    console.log("userCart", userCart);
 
     res.status(200).json({ success: true, data: userCart.items });
   } catch (error) {
